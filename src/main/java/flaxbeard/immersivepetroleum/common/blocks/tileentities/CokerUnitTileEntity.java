@@ -373,6 +373,43 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 		if(update){
 			updateMasterBlock(null, true);
 		}
+		
+		updateComparatorOutput();
+	}
+	
+	int lastCompared = 0;
+	private void updateComparatorOutput(){
+		boolean update = false;
+		
+		ItemStack stack = getInventory(Inventory.INPUT);
+		if(!stack.isEmpty()){
+			int compared = MathHelper.clamp(MathHelper.floor(stack.getCount() / (float) Math.min(getSlotLimit(Inventory.INPUT.id()), stack.getMaxStackSize()) * 15), 0, 15);
+			if(compared != lastCompared){
+				lastCompared = compared;
+				update = true;
+			}
+		}else if(lastCompared != 0){
+			lastCompared = 0;
+			update = true;
+		}
+		
+		if(update){
+			getRedstonePos().forEach(pos -> {
+				BlockPos p = getBlockPosForPos(pos);
+				world.notifyNeighborsOfStateChange(p, world.getBlockState(p).getBlock());
+			});
+		}
+	}
+	
+	@Override
+	public int getComparatorInputOverride(){
+		if(this.isRedstonePos()){
+			CokerUnitTileEntity master = master();
+			if(master != null){
+				return master.lastCompared;
+			}
+		}
+		return 0;
 	}
 	
 	private FluidStack copyFluid(FluidStack fluid, int amount){
@@ -380,7 +417,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 		copy.setAmount(amount);
 		return copy;
 	}
-	
+
 	private ItemStack copyStack(ItemStack stack, int amount){
 		ItemStack copy = stack.copy();
 		copy.setCount(amount);
@@ -472,20 +509,6 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 	@Override
 	public int getComparatedSize(){
 		return 1;
-	}
-	
-	@Override
-	public int getComparatorInputOverride(){
-		if(this.isRedstonePos()){
-			CokerUnitTileEntity master = master();
-			if(master != null && !master.getInventory(Inventory.INPUT).isEmpty()){
-				ItemStack stack = master.getInventory(Inventory.INPUT);
-				int out = MathHelper.floor(stack.getCount() / (float) Math.min(master.getSlotLimit(Inventory.INPUT.id()), stack.getMaxStackSize()) * 15);
-				return MathHelper.clamp(out, 0, 15);
-			}
-		}
-		
-		return 0;
 	}
 	
 	@Override
