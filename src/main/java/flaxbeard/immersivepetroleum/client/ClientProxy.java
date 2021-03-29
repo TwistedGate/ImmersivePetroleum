@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +32,7 @@ import blusunrize.lib.manual.TextSplitter;
 import blusunrize.lib.manual.Tree.InnerNode;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.crafting.DistillationRecipe;
+import flaxbeard.immersivepetroleum.api.crafting.FlarestackHandler;
 import flaxbeard.immersivepetroleum.api.crafting.pumpjack.PumpjackHandler;
 import flaxbeard.immersivepetroleum.api.crafting.pumpjack.PumpjackHandler.ReservoirType;
 import flaxbeard.immersivepetroleum.api.energy.FuelHandler;
@@ -75,9 +77,12 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ITag.INamedTag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -141,14 +146,16 @@ public class ClientProxy extends CommonProxy{
 					int oil_min = 1000000;
 					int oil_max = 5000000;
 					for(ReservoirType type:PumpjackHandler.reservoirs.values()){
-						if(type.name.equals("resAmount")){
+						if(type.name.equals("oil")){
 							oil_min = type.minSize;
 							oil_max = type.maxSize;
 							break;
 						}
 					}
 					
-					return Integer.valueOf((((oil_max + oil_min) / 2) + oil_min) / (IPServerConfig.EXTRACTION.pumpjack_speed.get() * 24000));
+					float averageSize = (oil_min + oil_max) / 2F;
+					float pumpspeed = IPServerConfig.EXTRACTION.pumpjack_speed.get();
+					return Integer.valueOf(MathHelper.floor((averageSize / pumpspeed) / 24000F));
 				}
 				case "autolubricant_speedup":{
 					return Double.valueOf(1.25D);
@@ -300,6 +307,24 @@ public class ClientProxy extends CommonProxy{
 		
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(man);
 		builder.addSpecialElement("flarestack0", 0, new ManualElementCrafting(man, new ItemStack(IPContent.Blocks.flarestack)));
+		builder.addSpecialElement("flarestack1", 0, () -> {
+			Set<ITag<Fluid>> fluids = FlarestackHandler.getSet();
+			List<ITextComponent[]> list = new ArrayList<ITextComponent[]>();
+			for(ITag<Fluid> tag:fluids){
+				if(tag instanceof INamedTag){
+					List<Fluid> fl = ((INamedTag<Fluid>) tag).getAllElements();
+					for(Fluid f:fl){
+						ITextComponent[] entry = new ITextComponent[]{
+								StringTextComponent.EMPTY, new FluidStack(f, 1).getDisplayName()
+						};
+						
+						list.add(entry);
+					}
+				}
+			}
+			
+			return new ManualElementTable(man, list.toArray(new ITextComponent[0][]), false);
+		});
 		builder.readFromFile(location);
 		man.addEntry(IP_CATEGORY, builder.create(), priority);
 	}
@@ -361,22 +386,23 @@ public class ClientProxy extends CommonProxy{
 		builder.addSpecialElement("distillationtower0", 0, () -> new ManualElementMultiblock(man, DistillationTowerMultiblock.INSTANCE));
 		builder.addSpecialElement("distillationtower1", 0, () -> {
 			Collection<DistillationRecipe> recipeList = DistillationRecipe.recipes.values();
-			List<ITextComponent[]> l = new ArrayList<ITextComponent[]>();
+			List<ITextComponent[]> list = new ArrayList<ITextComponent[]>();
 			for(DistillationRecipe recipe:recipeList){
 				boolean first = true;
 				for(FluidStack output:recipe.getFluidOutputs()){
-					String inputName = recipe.getInputFluid().getMatchingFluidStacks().get(0).getDisplayName().getUnformattedComponentText();
-					String outputName = output.getDisplayName().getUnformattedComponentText();
-					ITextComponent[] array = new ITextComponent[]{
-							new StringTextComponent(first ? recipe.getInputFluid().getAmount() + "mB " + inputName : ""),
-							new StringTextComponent(output.getAmount() + "mB " + outputName)
+					ITextComponent outputName = output.getDisplayName();
+					
+					ITextComponent[] entry = new ITextComponent[]{
+							first ? new StringTextComponent(recipe.getInputFluid().getAmount() + "mB ").appendSibling(recipe.getInputFluid().getMatchingFluidStacks().get(0).getDisplayName()) : StringTextComponent.EMPTY,
+									new StringTextComponent(output.getAmount() + "mB ").appendSibling(outputName)
 					};
-					l.add(array);
+					
+					list.add(entry);
 					first = false;
 				}
 			}
 			
-			return new ManualElementTable(man, l.toArray(new ITextComponent[0][]), false);
+			return new ManualElementTable(man, list.toArray(new ITextComponent[0][]), false);
 		});
 		builder.readFromFile(location);
 		man.addEntry(IP_CATEGORY, builder.create(), priority);
@@ -480,7 +506,7 @@ public class ClientProxy extends CommonProxy{
 			String fluidName = "";
 			Fluid fluid = type.getFluid();
 			if(fluid != null){
-				fluidName = new FluidStack(fluid, 1).getDisplayName().getUnformattedComponentText();
+				fluidName = new FluidStack(fluid, 1).getDisplayName().getString();
 			}
 			
 			String repRate = "";
