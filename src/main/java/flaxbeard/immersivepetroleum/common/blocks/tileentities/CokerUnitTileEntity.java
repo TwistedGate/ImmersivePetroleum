@@ -251,15 +251,12 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(debug || this.chambers[i].isDumping()){
 					BlockPos cOutPos = getBlockPosForPos(i == 0 ? Chamber_A_OUT : Chamber_B_OUT);
 					Vector3d origin = new Vector3d(cOutPos.getX() + 0.5, cOutPos.getY() + 0.125, cOutPos.getZ() + 0.5);
-					for(int j = 0;j < 8;j++){
+					for(int j = 0;j < 10;j++){
 						double rX = (Math.random() - 0.5) * 0.4;
 						double rY = (Math.random() - 0.5) * 0.5;
 						double rdx = (Math.random() - 0.5) * 0.05;
 						double rdy = (Math.random() - 0.5) * 0.05;
 						
-						world.addParticle(ParticleTypes.ASH,
-								origin.x + rX, origin.y, origin.z + rY,
-								rdx, 0.0, rdy);
 						world.addParticle(ParticleTypes.SMOKE,
 								origin.x + rX, origin.y, origin.z + rY,
 								rdx, -(Math.random() * 0.06 + 0.11), rdy);
