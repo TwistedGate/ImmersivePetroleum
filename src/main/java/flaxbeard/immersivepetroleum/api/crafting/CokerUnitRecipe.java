@@ -94,7 +94,7 @@ public class CokerUnitRecipe extends MultiblockRecipe{
 	protected int totalProcessTime;
 	protected int totalProcessEnergy;
 	
-	public CokerUnitRecipe(ResourceLocation id, ItemStack outputItem, FluidTagInput outputFluid, IngredientWithSize inputItem, FluidTagInput inputFluid, int energy){
+	public CokerUnitRecipe(ResourceLocation id, ItemStack outputItem, FluidTagInput outputFluid, IngredientWithSize inputItem, FluidTagInput inputFluid, int energy, int time){
 		super(ItemStack.EMPTY, TYPE, id);
 		this.inputFluid = inputFluid;
 		this.inputItem = inputItem;
@@ -102,7 +102,7 @@ public class CokerUnitRecipe extends MultiblockRecipe{
 		this.outputItem = outputItem;
 		
 		this.totalProcessEnergy = (int) Math.floor(energy * IPServerConfig.REFINING.cokerUnit_energyModifier.get());
-		this.totalProcessTime = (int) Math.floor(40 * IPServerConfig.REFINING.cokerUnit_timeModifier.get());
+		this.totalProcessTime = (int) Math.floor(time * IPServerConfig.REFINING.cokerUnit_timeModifier.get());
 	}
 	
 	@Override

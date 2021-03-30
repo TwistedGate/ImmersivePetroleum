@@ -37,15 +37,7 @@ public class CokerUnitRecipeBuilder extends IEFinishedRecipe<CokerUnitRecipeBuil
 		return addFluidTag("resultfluid", new FluidTagInput(fluidTag.getName(), amount));
 	}
 	
-	/** Defaults to 1 when loading the recipe in-game (including reload) */
-	@Override
-	public CokerUnitRecipeBuilder setTime(int time){
-		return super.setTime(time);
-	}
-	
-	/** Defaults to 2048 when loading the recipe in-game (including reload) */
-	@Override
-	public CokerUnitRecipeBuilder setEnergy(int energy){
-		return super.setEnergy(energy);
+	public CokerUnitRecipeBuilder setTimeAndEnergy(int time, int energy){
+		return setTime(time).setEnergy(energy);
 	}
 }

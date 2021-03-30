@@ -22,10 +22,10 @@ public class CokerUnitRecipeSerializer extends IERecipeSerializer<CokerUnitRecip
 		ItemStack outputItem = readOutput(json.get("result"));
 		IngredientWithSize inputItem = IngredientWithSize.deserialize(JSONUtils.getJsonObject(json, "input"));
 		
-		int energy = 96;
-		if(json.has("energy")) energy = JSONUtils.getInt(json, "energy");
+		int energy = JSONUtils.getInt(json, "energy");
+		int time = JSONUtils.getInt(json, "time");
 		
-		return new CokerUnitRecipe(recipeId, outputItem, outputFluid, inputItem, inputFluid, energy);
+		return new CokerUnitRecipe(recipeId, outputItem, outputFluid, inputItem, inputFluid, energy, time);
 	}
 	
 	@Override
@@ -37,8 +37,9 @@ public class CokerUnitRecipeSerializer extends IERecipeSerializer<CokerUnitRecip
 		FluidTagInput outputFluid = FluidTagInput.read(buffer);
 		
 		int energy = buffer.readInt();
+		int time = buffer.readInt();
 		
-		return new CokerUnitRecipe(recipeId, outputItem, outputFluid, inputItem, inputFluid, energy);
+		return new CokerUnitRecipe(recipeId, outputItem, outputFluid, inputItem, inputFluid, energy, time);
 	}
 	
 	@Override
@@ -50,6 +51,7 @@ public class CokerUnitRecipeSerializer extends IERecipeSerializer<CokerUnitRecip
 		recipe.outputFluid.write(buffer);
 		
 		buffer.writeInt(recipe.getTotalProcessEnergy());
+		buffer.writeInt(recipe.getTotalProcessTime());
 	}
 	
 	@Override
