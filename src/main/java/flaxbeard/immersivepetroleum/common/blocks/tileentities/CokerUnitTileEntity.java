@@ -377,8 +377,14 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 		updateComparatorOutput();
 	}
 	
+	int updateDelay = 0;
 	int lastCompared = 0;
 	private void updateComparatorOutput(){
+		if(updateDelay-- > 0){
+			return;
+		}
+		updateDelay = 15;
+		
 		boolean update = false;
 		
 		ItemStack stack = getInventory(Inventory.INPUT);
