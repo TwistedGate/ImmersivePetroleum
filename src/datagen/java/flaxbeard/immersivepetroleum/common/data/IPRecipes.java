@@ -109,10 +109,10 @@ public class IPRecipes extends RecipeProvider{
 			.setTime(12000)
 			.build(this.out, rl("blastfurnace/fuel_petcoke_block"));
 		
-		CokerUnitRecipeBuilder.builder(new ItemStack(IPContent.Items.petcoke), IPTags.Fluids.diesel, 5)
-			.addInputItem(IPTags.Items.bitumen, 1)
+		CokerUnitRecipeBuilder.builder(new ItemStack(IPContent.Items.petcoke), IPTags.Fluids.diesel, 25)
+			.addInputItem(IPTags.Items.bitumen, 2)
 			.addInputFluid(FluidTags.WATER, 125)
-			.setTimeAndEnergy(40, 96)
+			.setTimeAndEnergy(20, 1024)
 			.build(this.out, rl("coking/petcoke"));
 	}
 	

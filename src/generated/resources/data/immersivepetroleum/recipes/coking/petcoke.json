@@ -5,13 +5,18 @@
   },
   "resultfluid": {
     "tag": "forge:diesel",
-    "amount": 5
+    "amount": 25
   },
   "input": {
-    "tag": "forge:bitumen"
+    "count": 2,
+    "base_ingredient": {
+      "tag": "forge:bitumen"
+    }
   },
   "inputfluid": {
     "tag": "minecraft:water",
     "amount": 125
-  }
+  },
+  "time": 20,
+  "energy": 1024
 }
