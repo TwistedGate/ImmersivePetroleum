@@ -64,17 +64,6 @@ public class CokerUnitScreen extends IEContainerScreen<CokerUnitContainer>{
 		CokingChamber chamber = tile.chambers[chamberId];
 		// TODO Chamber Visuals
 		
-		switch(chamberId){
-			case CHAMBER_A:{
-				break;
-			}
-			case CHAMBER_B:{
-				break;
-			}
-			default:
-				break;
-		}
-		
 		// Vertical Bar for Content amount.
 		ClientUtils.bindTexture(GUI_TEXTURE);
 		int scale = 38;
@@ -91,9 +80,9 @@ public class CokerUnitScreen extends IEContainerScreen<CokerUnitContainer>{
 			float remaining = 100 * chamber.getRemaining();
 			
 			tooltip.add(new StringTextComponent("State: ")
-					.append(new StringTextComponent("Active").mergeStyle(chamber.isActive() ? TextFormatting.GREEN : TextFormatting.RED))
+					.appendSibling(new StringTextComponent("Active").mergeStyle(chamber.isActive() ? TextFormatting.GREEN : TextFormatting.RED))
 					.appendString(" | ")
-					.append(new StringTextComponent("Dumping").mergeStyle(chamber.isDumping() ? TextFormatting.GREEN : TextFormatting.RED)));
+					.appendSibling(new StringTextComponent("Dumping").mergeStyle(chamber.isDumping() ? TextFormatting.GREEN : TextFormatting.RED)));
 			
 			tooltip.add(new StringTextComponent("Items: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()));
 			tooltip.add(new StringTextComponent("Input: ").appendString(chamber.getInputItem().getDisplayName().getString()));
@@ -105,7 +94,7 @@ public class CokerUnitScreen extends IEContainerScreen<CokerUnitContainer>{
 			ClientUtils.handleGuiTank(matrix, chamber.inputTank, x, y, w, x, 0, 0, 0, 0, mx, my, GUI_TEXTURE, tooltip);
 			ClientUtils.handleGuiTank(matrix, chamber.outputTank, x, y, w, x, 0, 0, 0, 0, mx, my, GUI_TEXTURE, tooltip);
 		}
-		*/
+		//*/
 	}
 	
 	@Override
