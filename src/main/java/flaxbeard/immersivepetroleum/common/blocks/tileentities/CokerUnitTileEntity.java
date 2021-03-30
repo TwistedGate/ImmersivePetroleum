@@ -1113,6 +1113,21 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 		}
 	}
 	
+	// TODO Rewrite CokingChamber from scratch to implement this? This should be easier then making the GUI do the visuals that Flax wanted it to do
+	public static enum CokingState{
+		/** Turning Bitumen to Petcoke */
+		PROCESSING,
+		
+		/** Draining Diesel */
+		DRAIN_RESIDUE,
+		
+		/** Filling up the chamber with water */
+		FLOODING,
+		
+		/** Dumping the Petcoke and voiding the water */
+		DUMPING;
+	}
+	
 	public static class CokingChamber{
 		@Nullable
 		protected CokerUnitRecipe recipe = null;
