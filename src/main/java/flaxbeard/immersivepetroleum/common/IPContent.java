@@ -117,6 +117,7 @@ public class IPContent{
 		public static IPItemBase speedboat;
 		public static IPItemBase oil_can;
 		public static IPItemBase petcoke;
+		public static IPItemBase petcokedust;
 	}
 	
 	public static class BoatUpgrades{
@@ -173,6 +174,7 @@ public class IPContent{
 				return 3200;
 			}
 		};
+		Items.petcokedust = new IPItemBase("petcoke_dust");
 		
 		BoatUpgrades.reinforced_hull = new IPUpgradeItem("reinforced_hull", "BOAT");
 		BoatUpgrades.ice_breaker = new IPUpgradeItem("icebreaker", "BOAT");

@@ -7,7 +7,9 @@ import java.util.function.Consumer;
 import blusunrize.immersiveengineering.api.EnumMetals;
 import blusunrize.immersiveengineering.api.IETags;
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
+import blusunrize.immersiveengineering.api.crafting.builders.ArcFurnaceRecipeBuilder;
 import blusunrize.immersiveengineering.api.crafting.builders.BlastFurnaceFuelBuilder;
+import blusunrize.immersiveengineering.api.crafting.builders.CrusherRecipeBuilder;
 import blusunrize.immersiveengineering.api.crafting.builders.MixerRecipeBuilder;
 import blusunrize.immersiveengineering.common.blocks.IEBlocks;
 import blusunrize.immersiveengineering.common.crafting.fluidaware.IngredientFluidStack;
@@ -89,6 +91,7 @@ public class IPRecipes extends RecipeProvider{
 			.build(this.out, rl("distillationtower/oilcracking"));
 	}
 	
+	/** Contains everything related to Petcoke */
 	private void cokerRecipes(){
 		ShapedRecipeBuilder.shapedRecipe(IPContent.Blocks.petcoke)
 			.key('c', IPTags.Items.petcoke)
@@ -114,6 +117,24 @@ public class IPRecipes extends RecipeProvider{
 			.addInputFluid(FluidTags.WATER, 125)
 			.setTimeAndEnergy(20, 1024)
 			.build(this.out, rl("coking/petcoke"));
+		
+		
+		CrusherRecipeBuilder.builder(IPTags.Items.petcokeDust, 1)
+			.addInput(IPTags.Items.petcoke)
+			.setEnergy(2400)
+			.build(this.out, rl("crusher/petcoke"));
+		CrusherRecipeBuilder.builder(IPTags.Items.petcokeDust, 9)
+			.addInput(IPTags.Items.petcokeStorage)
+			.setEnergy(4800)
+			.build(this.out, rl("crusher/petcoke_block"));
+		
+		ArcFurnaceRecipeBuilder.builder(IETags.getTagsFor(EnumMetals.STEEL).ingot, 1)
+			.addIngredient("input", Tags.Items.INGOTS_IRON)
+			.addInput(IPTags.Items.petcokeDust)
+			.addSlag(IETags.slag, 1)
+			.setTime(400)
+			.setEnergy(204800)
+			.build(out, rl("arcfurnace/steel"));
 	}
 	
 	private void speedboatUpgradeRecipes(){

@@ -40,6 +40,7 @@ public class IPItemModels extends ItemModelProvider{
 		
 		genericItem(IPContent.Items.bitumen);
 		genericItem(IPContent.Items.petcoke);
+		genericItem(IPContent.Items.petcokedust);
 		genericItem(IPContent.Items.oil_can);
 		genericItem(IPContent.Items.speedboat);
 		
