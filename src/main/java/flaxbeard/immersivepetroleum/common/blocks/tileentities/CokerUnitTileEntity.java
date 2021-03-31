@@ -1322,16 +1322,21 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 					break;
 				}
 				case FLOODING:{
-					int max = getTotalAmount() * this.recipe.inputFluid.getAmount();
-					if(this.tank.getFluidAmount() < max){
-						FluidStack accepted = cokerunit.bufferTanks[TANK_INPUT].drain(this.recipe.inputFluid.getAmount(), FluidAction.SIMULATE);
-						if(accepted.getAmount() >= this.recipe.inputFluid.getAmount()){
-							cokerunit.bufferTanks[TANK_INPUT].drain(this.recipe.inputFluid.getAmount(), FluidAction.EXECUTE);
-							this.tank.fill(accepted, FluidAction.EXECUTE);
+					this.timer++;
+					if(this.timer >= 2){
+						this.timer = 0;
+						
+						int max = getTotalAmount() * this.recipe.inputFluid.getAmount();
+						if(this.tank.getFluidAmount() < max){
+							FluidStack accepted = cokerunit.bufferTanks[TANK_INPUT].drain(this.recipe.inputFluid.getAmount(), FluidAction.SIMULATE);
+							if(accepted.getAmount() >= this.recipe.inputFluid.getAmount()){
+								cokerunit.bufferTanks[TANK_INPUT].drain(this.recipe.inputFluid.getAmount(), FluidAction.EXECUTE);
+								this.tank.fill(accepted, FluidAction.EXECUTE);
+							}
+						}else if(this.tank.getFluidAmount() >= max){
+							this.state = CokingState.DUMPING;
+							return true;
 						}
-					}else if(this.tank.getFluidAmount() >= max){
-						this.state = CokingState.DUMPING;
-						return true;
 					}
 					break;
 				}
@@ -1339,12 +1344,12 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 					boolean update = false;
 					
 					this.timer++;
-					if(this.timer >= 4){ // Output speed will always be fixed
+					if(this.timer >= 5){ // Output speed will always be fixed
 						this.timer = 0;
 						
 						if(this.outputAmount > 0){
 							World world = cokerunit.getWorldNonnull();
-							int amount = Math.min(this.outputAmount, 2);
+							int amount = Math.min(this.outputAmount, 1);
 							ItemStack copy = this.recipe.outputItem.copy();
 							copy.setCount(amount);
 							
@@ -1362,7 +1367,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 					
 					// Void washing fluid
 					if(this.tank.getFluidAmount() > 0){
-						this.tank.drain(75, FluidAction.EXECUTE);
+						this.tank.drain(25, FluidAction.EXECUTE);
 						
 						update = true;
 					}
