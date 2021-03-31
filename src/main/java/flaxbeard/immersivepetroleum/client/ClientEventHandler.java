@@ -358,7 +358,7 @@ public class ClientEventHandler{
 							
 							debugOut.add(toText("Chamber " + i).mergeStyle(TextFormatting.UNDERLINE, TextFormatting.AQUA));
 							debugOut.add(toText("State: " + chamber.getState().toString()));
-							debugOut.add(toText("  Items: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()).appendString(" (" + chamber.getInputItem().getDisplayName().getString() + ")"));
+							debugOut.add(toText("  Content: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()).appendString(" (" + chamber.getInputItem().getDisplayName().getString() + ")"));
 							debugOut.add(toText("  Out: " + chamber.getOutputItem().getDisplayName().getString()));
 							debugOut.add(toText("  " + MathHelper.floor(completed) + "% Completed. (Raw: " + completed + ")"));
 						}

@@ -18,7 +18,6 @@ import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEnti
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity.CokingChamber;
 import flaxbeard.immersivepetroleum.common.gui.CokerUnitContainer;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -63,7 +62,6 @@ public class CokerUnitScreen extends IEContainerScreen<CokerUnitContainer>{
 	
 	private void chamberDisplay(MatrixStack matrix, int x, int y, int w, int h, int chamberId, int mx, int my, float partialTicks, List<ITextComponent> tooltip){
 		CokingChamber chamber = tile.chambers[chamberId];
-		// TODO Chamber Visuals
 		
 		// Vertical Bar for Content amount.
 		ClientUtils.bindTexture(GUI_TEXTURE);
@@ -71,15 +69,19 @@ public class CokerUnitScreen extends IEContainerScreen<CokerUnitContainer>{
 		int off = (int) (chamber.getTotalAmount() / (float) chamber.getCapacity() * scale);
 		this.blit(matrix, x, y + scale - off, 200, 51, 6, off);
 		
+		// Vertical Overlay to visualize progress
+		off = (int)(chamber.getTotalAmount() > 0 ? scale * (chamber.getOutputAmount() / (float)chamber.getCapacity()) : 0);
+		this.blit(matrix, x, y + scale - off, 206, 51 + (scale - off), 6, off);
+		
 		// Chamber Tank
 		ClientUtils.handleGuiTank(matrix, chamber.getTank(), x, y, 6, 38, 0, 0, 0, 0, mx, my, GUI_TEXTURE, null);
 		
 		// Debugging Tooltip
-		if((mx >= x && mx < x + w) && (my >= y && my < y + h)){
+		/*if((mx >= x && mx < x + w) && (my >= y && my < y + h)){
 			float completed = chamber.getTotalAmount() > 0 ? 100 * (chamber.getOutputAmount() / (float)chamber.getTotalAmount()) : 0;
 			
 			tooltip.add(new StringTextComponent("State: " + chamber.getState().toString()));
-			tooltip.add(new StringTextComponent("Items: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()));
+			tooltip.add(new StringTextComponent("Content: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()));
 			tooltip.add(new StringTextComponent("Input: ").appendString(chamber.getInputItem().getDisplayName().getString()));
 			tooltip.add(new StringTextComponent("Output: ").appendString(chamber.getOutputItem().getDisplayName().getString()));
 			tooltip.add(new StringTextComponent(MathHelper.floor(completed) + "% Completed. (Raw: " + completed + ")"));
