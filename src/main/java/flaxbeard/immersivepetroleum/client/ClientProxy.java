@@ -136,6 +136,9 @@ public class ClientProxy extends CommonProxy{
 				case "distillationtower_operationcost":{
 					return Integer.valueOf((int) (2048 * IPServerConfig.REFINING.distillationTower_energyModifier.get()));
 				}
+				case "coker_operationcost":{
+					return Integer.valueOf((int) (1024 * IPServerConfig.REFINING.cokerUnit_energyModifier.get()));
+				}
 				case "pumpjack_consumption":{
 					return IPServerConfig.EXTRACTION.pumpjack_consumption.get();
 				}
