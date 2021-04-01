@@ -350,17 +350,20 @@ public class ClientEventHandler{
 							debugOut.add(toText("Out Buffer: " + (fs.getAmount() + "/" + tank.getCapacity() + "mB " + (fs.isEmpty() ? "" : "(" + fs.getDisplayName().getString() + ")"))));
 						}
 						
-						// FIXME Debug text for Coking Display
 						for(int i = 0;i < coker.chambers.length;i++){
 							CokingChamber chamber = coker.chambers[i];
+							FluidTank tank = chamber.getTank();
+							FluidStack fs = tank.getFluid();
 							
 							float completed = chamber.getTotalAmount() > 0 ? 100 * (chamber.getOutputAmount() / (float)chamber.getTotalAmount()) : 0;
 							
 							debugOut.add(toText("Chamber " + i).mergeStyle(TextFormatting.UNDERLINE, TextFormatting.AQUA));
 							debugOut.add(toText("State: " + chamber.getState().toString()));
+							debugOut.add(toText("  Tank: " + (fs.getAmount() + "/" + tank.getCapacity() + "mB " + (fs.isEmpty() ? "" : "(" + fs.getDisplayName().getString() + ")"))));
 							debugOut.add(toText("  Content: " + chamber.getTotalAmount() + " / " + chamber.getCapacity()).appendString(" (" + chamber.getInputItem().getDisplayName().getString() + ")"));
 							debugOut.add(toText("  Out: " + chamber.getOutputItem().getDisplayName().getString()));
 							debugOut.add(toText("  " + MathHelper.floor(completed) + "% Completed. (Raw: " + completed + ")"));
+							
 						}
 					}
 					
