@@ -8,7 +8,7 @@ import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
 import blusunrize.immersiveengineering.common.gui.IESlot;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
-import flaxbeard.immersivepetroleum.common.entity.SpeedboatEntity;
+import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.util.IPItemStackHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -18,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
@@ -42,9 +41,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SpeedboatItem extends IPItemBase implements IUpgradeableTool{
+public class MotorboatItem extends IPItemBase implements IUpgradeableTool{
 	static final String Upgrade_Type = "BOAT";
-	public SpeedboatItem(String name){
+	public MotorboatItem(String name){
 		super(name, new Item.Properties().maxStackSize(1).group(ImmersivePetroleum.creativeTab));
 	}
 	
@@ -152,7 +151,7 @@ public class SpeedboatItem extends IPItemBase implements IUpgradeableTool{
 				Vector3d hit = raytraceresult.getHitVec();
 				Block block = worldIn.getBlockState(new BlockPos(hit.add(0, .5, 0))).getBlock();
 				boolean flag1 = block == Blocks.WATER;
-				SpeedboatEntity entityboat = new SpeedboatEntity(worldIn, hit.x, flag1 ? hit.y - 0.12D : hit.y, hit.z);
+				MotorboatEntity entityboat = new MotorboatEntity(worldIn, hit.x, flag1 ? hit.y - 0.12D : hit.y, hit.z);
 				{
 					entityboat.rotationYaw = playerIn.rotationYaw;
 					entityboat.setUpgrades(getContainedItems(itemstack));
@@ -220,8 +219,6 @@ public class SpeedboatItem extends IPItemBase implements IUpgradeableTool{
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-		tooltip.add(new StringTextComponent("DO NOT USE! It's broken!").mergeStyle(TextFormatting.RED, TextFormatting.BOLD, TextFormatting.UNDERLINE));
-		
 		if(ItemNBTHelper.hasKey(stack, "tank")){
 			FluidStack fs = FluidStack.loadFluidStackFromNBT(ItemNBTHelper.getTagCompound(stack, "tank"));
 			if(fs != null){
@@ -245,10 +242,5 @@ public class SpeedboatItem extends IPItemBase implements IUpgradeableTool{
 		}
 		
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-	}
-	
-	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items){
-		// TODO Speedboat is Functional? REMOVE THIS!
 	}
 }

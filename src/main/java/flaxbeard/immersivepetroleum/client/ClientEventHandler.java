@@ -12,6 +12,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.client.ClientUtils;
+import blusunrize.immersiveengineering.client.ItemOverlayUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IBlockOverlayText;
 import blusunrize.immersiveengineering.common.blocks.generic.MultiblockPartTileEntity;
 import blusunrize.immersiveengineering.common.blocks.stone.CoresampleTileEntity;
@@ -19,6 +20,10 @@ import blusunrize.immersiveengineering.common.items.BuzzsawItem;
 import blusunrize.immersiveengineering.common.items.ChemthrowerItem;
 import blusunrize.immersiveengineering.common.items.CoresampleItem;
 import blusunrize.immersiveengineering.common.items.DrillItem;
+import blusunrize.immersiveengineering.common.items.IEShieldItem;
+import blusunrize.immersiveengineering.common.items.RailgunItem;
+import blusunrize.immersiveengineering.common.items.RevolverItem;
+import blusunrize.immersiveengineering.common.items.SpeedloaderItem;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.util.inventory.MultiFluidTank;
@@ -32,7 +37,7 @@ import flaxbeard.immersivepetroleum.common.blocks.AutoLubricatorBlock;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity.CokingChamber;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DistillationTowerTileEntity;
-import flaxbeard.immersivepetroleum.common.entity.SpeedboatEntity;
+import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.items.DebugItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -457,8 +462,8 @@ public class ClientEventHandler{
 						}
 						case ENTITY:{
 							EntityRayTraceResult rtr = (EntityRayTraceResult) mop;
-							if(rtr.getEntity() instanceof SpeedboatEntity){
-								String[] text = ((SpeedboatEntity) rtr.getEntity()).getOverlayText(player, mop);
+							if(rtr.getEntity() instanceof MotorboatEntity){
+								String[] text = ((MotorboatEntity) rtr.getEntity()).getOverlayText(player, mop);
 								
 								if(text != null && text.length > 0){
 									FontRenderer font = ClientUtils.font();
@@ -482,14 +487,13 @@ public class ClientEventHandler{
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onRenderOverlayPost(RenderGameOverlayEvent.Post event){
 		if(ClientUtils.mc().player != null && event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
 			PlayerEntity player = ClientUtils.mc().player;
-			MatrixStack transform = event.getMatrixStack();
+			MatrixStack matrix = event.getMatrixStack();
 			
-			if(player.getRidingEntity() instanceof SpeedboatEntity){
+			if(player.getRidingEntity() instanceof MotorboatEntity){
 				int offset = 0;
 				boolean holdingDebugItem = false;
 				for(Hand hand:Hand.values()){
@@ -497,65 +501,89 @@ public class ClientEventHandler{
 						ItemStack equipped = player.getHeldItem(hand);
 						if((equipped.getItem() instanceof DrillItem) || (equipped.getItem() instanceof ChemthrowerItem) || (equipped.getItem() instanceof BuzzsawItem)){
 							offset -= 85;
+						}else if((equipped.getItem() instanceof RevolverItem) || (equipped.getItem() instanceof SpeedloaderItem)){
+							offset -= 65;
+						}else if(equipped.getItem() instanceof RailgunItem){
+							offset -= 50;
+						}else if(equipped.getItem() instanceof IEShieldItem){
+							offset -= 40;
 						}
+						
 						if(equipped.getItem() instanceof DebugItem){
 							holdingDebugItem = true;
 						}
 					}
 				}
 				
-				transform.push();
+				matrix.push();
 				{
-					float dx = event.getWindow().getScaledWidth() - 16;
-					float dy = event.getWindow().getScaledHeight();
-					int w = 31;
-					int h = 62;
+					int scaledWidth = ClientUtils.mc().getMainWindow().getScaledWidth();
+					int scaledHeight = ClientUtils.mc().getMainWindow().getScaledHeight();
 					
-					double uMin = 179 / 256f;
-					double uMax = 210 / 256f;
-					double vMin = 9 / 256f;
-					double vMax = 71 / 256f;
+					MotorboatEntity boat = (MotorboatEntity) player.getRidingEntity();
+					IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+					IVertexBuilder builder = ItemOverlayUtils.getHudElementsBuilder(buffer);
 					
-					ClientUtils.bindTexture("immersivepetroleum:textures/gui/hud_elements.png");
-					// transform.color4f(1, 1, 1, 1);
-					transform.translate(dx, dy + offset, 0);
-					// ClientUtils.drawTexturedRect(-24, -68, w, h, uMin, uMax, vMin, vMax); // FIXME
+					int rightOffset = 0;
+					if(ClientUtils.mc().gameSettings.showSubtitles)
+						rightOffset += 100;
+					float dx = scaledWidth - rightOffset - 16;
+					float dy = scaledHeight + offset;
+					matrix.push();
+					{
+						matrix.translate(dx, dy, 0);
+						int w = 31;
+						int h = 62;
+						float uMin = 179 / 256f;
+						float uMax = 210 / 256f;
+						float vMin = 9 / 256f;
+						float vMax = 71 / 256f;
+						ClientUtils.drawTexturedRect(builder, matrix, -24, -68, w, h, 1, 1, 1, 1, uMin, uMax, vMin, vMax);
+						
+						matrix.translate(-23, -37, 0);
+						int capacity = boat.getMaxFuel();
+						if(capacity > 0){
+							FluidStack fuel = boat.getContainedFluid();
+							int amount = fuel.getAmount();
+							float cap = (float) capacity;
+							float angle = 83 - (166 * amount / cap);
+							matrix.push();
+							matrix.rotate(new Quaternion(0, 0, angle, true));
+							ClientUtils.drawTexturedRect(builder, matrix, 6, -2, 24, 4, 1, 1, 1, 1, 91 / 256f, 123 / 256f, 80 / 256f, 87 / 256f);
+							matrix.pop();
+							matrix.translate(23, 37, 0);
+							
+							ClientUtils.drawTexturedRect(builder, matrix, -41, -73, 53, 72, 1, 1, 1, 1, 8 / 256f, 61 / 256f, 4 / 256f, 76 / 256f);
+						}
+					}
+					matrix.pop();
 					
-					GL11.glTranslated(-23, -37, 0);
-					SpeedboatEntity boat = (SpeedboatEntity) player.getRidingEntity();
-					int capacity = boat.getMaxFuel();
-					
-					FluidStack fs = boat.getContainedFluid();
-					int amount = fs == FluidStack.EMPTY || fs.getFluid() == null ? 0 : fs.getAmount();
-					
-					float cap = (float) capacity;
-					float angle = 83 - (166 * amount / cap);
-					transform.rotate(new Quaternion(0, 0, angle, true));
-					// ClientUtils.drawTexturedRect(6, -2, 24, 4, 91 / 256f, 123 / 256f, 80 / 256f, 87 / 256f); // FIXME
-					transform.rotate(new Quaternion(0, 0, -angle, true));
-					
-					transform.translate(23, 37, 0);
-					// ClientUtils.drawTexturedRect(-41, -73, 53, 72, 8 / 256f, 61 / 256f, 4 / 256f, 76 / 256f); // FIXME
+					buffer.finish();
 					
 					if(holdingDebugItem){
-						transform.push();
+						matrix.push();
 						{
-							FontRenderer font=Minecraft.getInstance().fontRenderer;
-							if(font!=null){
-								Vector3d vec=boat.getMotion();
+							matrix.translate(dx, dy, 0);
+							FontRenderer font = Minecraft.getInstance().fontRenderer;
+							if(font != null){
+								int capacity = boat.getMaxFuel();
+								FluidStack fs = boat.getContainedFluid();
+								int amount = fs == FluidStack.EMPTY || fs.getFluid() == null ? 0 : fs.getAmount();
+								
+								Vector3d vec = boat.getMotion();
 								
 								float speed=(float)(Math.sqrt(vec.x*vec.x + vec.z*vec.z));
 								
-								String out0=String.format(Locale.US, "Fuel: %s/%sMB", amount,capacity);
-								String out1=String.format(Locale.US, "Speed: %.2f", speed);
-								font.drawStringWithShadow(transform, out0, -65, -94, 0xFFFFFFFF);
-								font.drawStringWithShadow(transform, out1, -65, -85, 0xFFFFFFFF);
+								String out0 = String.format(Locale.US, "Fuel: %s/%sMB", amount, capacity);
+								String out1 = String.format(Locale.US, "Speed: %.2f", speed);
+								font.drawStringWithShadow(matrix, out0, -90, -94, 0xFFFFFFFF);
+								font.drawStringWithShadow(matrix, out1, -90, -85, 0xFFFFFFFF);
 							}
 						}
-						transform.pop();
+						matrix.pop();
 					}
 				}
-				transform.pop();
+				matrix.pop();
 			}
 		}
 	}
@@ -563,8 +591,8 @@ public class ClientEventHandler{
 	@SubscribeEvent
 	public void handleBoatImmunity(RenderBlockOverlayEvent event){
 		PlayerEntity entity = event.getPlayer();
-		if(event.getOverlayType() == OverlayType.FIRE && entity.isBurning() && entity.getRidingEntity() instanceof SpeedboatEntity){
-			SpeedboatEntity boat = (SpeedboatEntity) entity.getRidingEntity();
+		if(event.getOverlayType() == OverlayType.FIRE && entity.isBurning() && entity.getRidingEntity() instanceof MotorboatEntity){
+			MotorboatEntity boat = (MotorboatEntity) entity.getRidingEntity();
 			if(boat.isFireproof){
 				event.setCanceled(true);
 			}
@@ -574,8 +602,8 @@ public class ClientEventHandler{
 	@SubscribeEvent
 	public void handleFireRender(RenderPlayerEvent.Pre event){
 		PlayerEntity entity = event.getPlayer();
-		if(entity.isBurning() && entity.getRidingEntity() instanceof SpeedboatEntity){
-			SpeedboatEntity boat = (SpeedboatEntity) entity.getRidingEntity();
+		if(entity.isBurning() && entity.getRidingEntity() instanceof MotorboatEntity){
+			MotorboatEntity boat = (MotorboatEntity) entity.getRidingEntity();
 			if(boat.isFireproof){
 				entity.extinguish();
 			}

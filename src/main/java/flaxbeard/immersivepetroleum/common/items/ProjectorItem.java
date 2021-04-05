@@ -32,7 +32,6 @@ import flaxbeard.immersivepetroleum.common.util.projector.Settings;
 import flaxbeard.immersivepetroleum.common.util.projector.Settings.Mode;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -428,23 +427,24 @@ public class ProjectorItem extends IPItemBase{
 						return true; // breaks the internal loop
 					}
 					
-					if(isPlaced.booleanValue()){ // Render only slices when
-													// placed
+					if(isPlaced.booleanValue()){ // Render only slices when placed
 						if(layer == currentLayer.getValue()){
 							boolean skip = false;
 							BlockState toCompare = world.getBlockState(info.tPos.add(hit));
-							if(info.blockAccess.getBlockState(info.templatePos).getBlock() == toCompare.getBlock()){
+							BlockState tState = info.blockAccess.getBlockState(info.templatePos).rotate(world, info.tPos.add(hit), info.settings.getRotation());
+							if(tState == toCompare){
 								toRender.add(new RenderInfo(RenderInfo.Layer.PERFECT, info.blockAccess, info.templatePos, info.settings, info.tPos));
 								goodBlocks.increment();
 								skip = true;
 							}else{
 								// Making it this far only needs an air check,
 								// the other already proved to be false.
-								if(toCompare.getBlock() != Blocks.AIR){
+								if(!toCompare.isAir(info.blockAccess, info.tPos.add(hit))){
 									toRender.add(new RenderInfo(RenderInfo.Layer.BAD, info.blockAccess, info.templatePos, info.settings, info.tPos));
 									skip = true;
+								}else{
+									badBlocks.increment();
 								}
-								badBlocks.increment();
 							}
 							
 							if(!skip){
@@ -479,11 +479,16 @@ public class ProjectorItem extends IPItemBase{
 				for(RenderInfo rInfo:toRender){
 					switch(rInfo.layer){
 						case ALL:{ // All / Slice
-							float alpha = heldStack.getItem() == rInfo.getState().getBlock().asItem() ? 0.75F : 0.25F;
+							boolean held = heldStack.getItem() == rInfo.getState().getBlock().asItem();
+							float alpha = held ? 0.55F : 0.25F;
 							
 							matrix.push();
 							{
 								renderPhantom(matrix, projection.getMultiblockBlockAccess(), world, rInfo.templatePos, rInfo.worldPos, rInfo.settings.getRotation(), settings.isMirrored(), flicker, alpha, partialTicks);
+								
+								if(held){
+									renderCenteredOutlineBox(matrix, 0xAFAFAF, flicker);
+								}
 							}
 							matrix.pop();
 							break;

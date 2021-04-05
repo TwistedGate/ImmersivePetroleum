@@ -42,13 +42,13 @@ import flaxbeard.immersivepetroleum.common.blocks.tileentities.GasGeneratorTileE
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
 import flaxbeard.immersivepetroleum.common.cfg.ConfigUtils;
 import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
-import flaxbeard.immersivepetroleum.common.entity.SpeedboatEntity;
+import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.items.DebugItem;
 import flaxbeard.immersivepetroleum.common.items.IPItemBase;
 import flaxbeard.immersivepetroleum.common.items.IPUpgradeItem;
+import flaxbeard.immersivepetroleum.common.items.MotorboatItem;
 import flaxbeard.immersivepetroleum.common.items.OilCanItem;
 import flaxbeard.immersivepetroleum.common.items.ProjectorItem;
-import flaxbeard.immersivepetroleum.common.items.SpeedboatItem;
 import flaxbeard.immersivepetroleum.common.lubehandlers.CrusherLubricationHandler;
 import flaxbeard.immersivepetroleum.common.lubehandlers.ExcavatorLubricationHandler;
 import flaxbeard.immersivepetroleum.common.lubehandlers.PumpjackLubricationHandler;
@@ -167,7 +167,7 @@ public class IPContent{
 		
 		Items.bitumen = new IPItemBase("bitumen");
 		Items.oil_can = new OilCanItem("oil_can");
-		Items.speedboat = new SpeedboatItem("speedboat");
+		Items.speedboat = new MotorboatItem("speedboat");
 		Items.petcoke = new IPItemBase("petcoke"){
 			@Override
 			public int getBurnTime(ItemStack itemStack){
@@ -197,10 +197,16 @@ public class IPContent{
 		ChemthrowerHandler.registerEffect(IPTags.Fluids.lubricant, new LubricantEffect());
 		ChemthrowerHandler.registerEffect(IPTags.Fluids.lubricant, new ChemthrowerEffect_Potion(null, 0, IEPotions.slippery, 60, 1));
 		ChemthrowerHandler.registerEffect(IETags.fluidPlantoil, new LubricantEffect());
-		ChemthrowerHandler.registerEffect(IPTags.Fluids.gasoline, new ChemthrowerEffect_Potion(null, 0, IEPotions.flammable, 60, 1));
+
+		ChemthrowerHandler.registerFlammable(IPTags.Fluids.crudeOil);
+		ChemthrowerHandler.registerEffect(IPTags.Fluids.crudeOil, new ChemthrowerEffect_Potion(null, 0, IEPotions.flammable, 60, 1));
+		
 		ChemthrowerHandler.registerFlammable(IPTags.Fluids.gasoline);
-		ChemthrowerHandler.registerEffect(IPTags.Fluids.napalm, new ChemthrowerEffect_Potion(null, 0, IEPotions.flammable, 60, 2));
+		ChemthrowerHandler.registerEffect(IPTags.Fluids.gasoline, new ChemthrowerEffect_Potion(null, 0, IEPotions.flammable, 60, 1));
+		
 		ChemthrowerHandler.registerFlammable(IPTags.Fluids.napalm);
+		ChemthrowerHandler.registerEffect(IPTags.Fluids.napalm, new ChemthrowerEffect_Potion(null, 0, IEPotions.flammable, 60, 2));
+		
 		
 		MultiblockHandler.registerMultiblock(DistillationTowerMultiblock.INSTANCE);
 		MultiblockHandler.registerMultiblock(PumpjackMultiblock.INSTANCE);
@@ -313,7 +319,7 @@ public class IPContent{
 	@SubscribeEvent
 	public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event){
 		try{
-			event.getRegistry().register(SpeedboatEntity.TYPE);
+			event.getRegistry().register(MotorboatEntity.TYPE);
 		}catch(Throwable e){
 			log.error("Failed to register Speedboat Entity. {}", e.getMessage());
 			throw e;

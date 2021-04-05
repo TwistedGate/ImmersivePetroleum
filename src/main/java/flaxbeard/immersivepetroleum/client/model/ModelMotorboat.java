@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.google.common.collect.ImmutableList;
 
-import flaxbeard.immersivepetroleum.common.entity.SpeedboatEntity;
+import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.item.BoatEntity;
@@ -13,18 +13,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelSpeedboat extends SegmentedModel<SpeedboatEntity>{
+public class ModelMotorboat extends SegmentedModel<MotorboatEntity>{
 	private final ImmutableList<ModelRenderer> list;
 	
-	public ModelRenderer[] boatSides = new ModelRenderer[5];
 	/**
 	 * Part of the model rendered to make it seem like there's no water in the
 	 * boat
 	 */
-	public ModelRenderer noWater;
-	public ModelRenderer motor;
-	public ModelRenderer propeller;
-	public ModelRenderer propellerAssembly;
+	private ModelRenderer noWater;
+	
+	private ModelRenderer[] boatSides = new ModelRenderer[5];
+	private ModelRenderer motor;
+	private ModelRenderer propeller;
+	private ModelRenderer propellerAssembly;
+	
 	public ModelRenderer icebreak;
 	public ModelRenderer coreSampleBoat;
 	public ModelRenderer coreSampleBoatDrill;
@@ -34,7 +36,7 @@ public class ModelSpeedboat extends SegmentedModel<SpeedboatEntity>{
 	public ModelRenderer ruddersBase;
 	public ModelRenderer[] paddles = new ModelRenderer[2];
 	
-	public ModelSpeedboat(){
+	public ModelMotorboat(){
 		this.boatSides[0] = (new ModelRenderer(this, 0, 0)).setTextureSize(128, 64);
 		this.boatSides[1] = (new ModelRenderer(this, 0, 19)).setTextureSize(128, 64);
 		this.boatSides[2] = (new ModelRenderer(this, 0, 27)).setTextureSize(128, 64);
@@ -72,16 +74,9 @@ public class ModelSpeedboat extends SegmentedModel<SpeedboatEntity>{
 		ImmutableList.Builder<ModelRenderer> builder = ImmutableList.builder();
 		
 		builder.addAll(Arrays.asList(this.boatSides));
-		builder.addAll(Arrays.asList(this.paddles));
 		builder.addAll(Arrays.asList(
 				this.motor,
-				this.propeller,
-				this.propellerAssembly,
-				this.icebreak,
-				this.tank,
-				this.rudder1,
-				this.rudder1,
-				this.ruddersBase));
+				this.propellerAssembly));
 		
 		this.list = builder.build();
 	}
@@ -213,20 +208,11 @@ public class ModelSpeedboat extends SegmentedModel<SpeedboatEntity>{
 	}
 	
 	@Override
-	public void setRotationAngles(SpeedboatEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		SpeedboatEntity boatEntity = (SpeedboatEntity) entityIn;
+	public void setRotationAngles(MotorboatEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+		MotorboatEntity boatEntity = (MotorboatEntity) entityIn;
 		
 		this.setPaddleRotationAngles(boatEntity, 0, limbSwing, boatEntity.isEmergency());
 		this.setPaddleRotationAngles(boatEntity, 1, limbSwing, boatEntity.isEmergency());
-	}
-	
-	@Override
-	public Iterable<ModelRenderer> getParts(){
-		return this.list;
-	}
-	
-	public ModelRenderer noWaterRenderer(){
-		return this.noWater;
 	}
 	
 	public void setPaddleRotationAngles(BoatEntity boat, int paddle, float limbSwing, boolean rowing){
@@ -256,82 +242,15 @@ public class ModelSpeedboat extends SegmentedModel<SpeedboatEntity>{
 		}
 	}
 	
-	// TODO Speedboat: This whole section below; Move to SpeedboatRenderer?
-	/*
-	public void render(Entity entityIn, MatrixStack transform, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale){
-		transform.rotate(new Quaternion(0.0F, 90.0F, 0.0F, true));
-		SpeedboatEntity BoatEntity = (SpeedboatEntity) entityIn;
-		
-		for(int i = 0;i < 5;++i){
-			this.boatSides[i].render(scale);
-		}
-		
-		float f1 = ((SpeedboatEntity) entityIn).getRowingTime(0, limbSwing) * 100.0F;
-		this.propeller.rotateAngleX = BoatEntity.isEmergency() ? 0 : f1;
-		float pr = BoatEntity.isEmergency() ? 0f : BoatEntity.propellerRotation;
-		
-		if(BoatEntity.isLeftInDown() && pr > -1)
-			pr = pr - 0.1F * Minecraft.getInstance().getRenderPartialTicks();
-		
-		if(BoatEntity.isRightInDown() && pr < 1)
-			pr = pr + 0.1F * Minecraft.getInstance().getRenderPartialTicks();
-		
-		if(!BoatEntity.isLeftInDown() && !BoatEntity.isRightInDown())
-			pr = (float) (pr * Math.pow(0.7, Minecraft.getInstance().getRenderPartialTicks()));
-		
-		this.propellerAssembly.rotateAngleY = (float) Math.toRadians(pr * 15);
-		this.propellerAssembly.render(scale);
-		
-		// this.coreSampleBoat.render(scale);
-		
-		transform.push();
-		
-		if(BoatEntity.isBeingRidden() && !BoatEntity.isEmergency())
-			transform.translate((entityIn.world.rand.nextFloat() - 0.5F) * 0.01F, (entityIn.world.rand.nextFloat() - 0.5F) * 0.01F, (entityIn.world.rand.nextFloat() - 0.5F) * 0.01F);
-		
-		this.motor.render(scale);
-		transform.pop();
+	/**
+	 * Only contains the base shape
+	 */
+	@Override
+	public Iterable<ModelRenderer> getParts(){
+		return this.list;
 	}
 	
-	public void renderIcebreaker(float scale){
-		this.icebreak.render(scale);
+	public ModelRenderer noWaterRenderer(){
+		return this.noWater;
 	}
-	
-	public void renderTank(float scale){
-		this.tank.render(scale);
-	}
-	
-	public void renderRudders(Entity entityIn, float scale){
-		this.ruddersBase.render(scale);
-		
-		SpeedboatEntity BoatEntity = (SpeedboatEntity) entityIn;
-		float pr = BoatEntity.propellerRotation;
-		
-		if(BoatEntity.isLeftInDown() && pr > -1)
-			pr = pr - 0.1F * Minecraft.getInstance().getRenderPartialTicks();
-		
-		if(BoatEntity.isRightInDown() && pr < 1)
-			pr = pr + 0.1F * Minecraft.getInstance().getRenderPartialTicks();
-		
-		if(!BoatEntity.isLeftInDown() && !BoatEntity.isRightInDown())
-			pr = (float) (pr * Math.pow(0.7F, Minecraft.getInstance().getRenderPartialTicks()));
-		
-		this.rudder2.rotateAngleY = (float) Math.toRadians(pr * 20f);
-		this.rudder1.rotateAngleY = (float) Math.toRadians(pr * 20f);
-		
-		this.rudder1.render(scale);
-		this.rudder2.render(scale);
-	}
-	
-	public void renderBoatDrill(float scale){
-		this.coreSampleBoatDrill.render(scale);
-	}
-	
-	public void renderMultipass(float scale){
-		GlStateManager.rotatef(90.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.colorMask(false, false, false, false);
-		this.noWater.render(scale);
-		GlStateManager.colorMask(true, true, true, true);
-	}
-	*/
 }
