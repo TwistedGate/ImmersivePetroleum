@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 public class CokerUnitRecipe extends MultiblockRecipe{
-	public static final IRecipeType<CokerUnitRecipe> TYPE = IRecipeType.register(ImmersivePetroleum.MODID + ":coking");
+	public static final IRecipeType<CokerUnitRecipe> TYPE = IRecipeType.register(ImmersivePetroleum.MODID + ":cokerunit");
 	
 	public static Map<ResourceLocation, CokerUnitRecipe> recipes = new HashMap<>();
 	
