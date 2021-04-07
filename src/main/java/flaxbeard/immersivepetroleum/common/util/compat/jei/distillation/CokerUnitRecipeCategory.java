@@ -54,7 +54,7 @@ public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		if(recipe.inputFluid != null){
+		{
 			int total = 0;
 			List<FluidStack> list = recipe.inputFluid.getMatchingFluidStacks();
 			if(!list.isEmpty()){
@@ -68,19 +68,20 @@ public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 			guiFluidStacks.set(0, list);
 		}
 		
-		int total = 0;
-		List<FluidStack> list = recipe.outputFluid.getMatchingFluidStacks();
-		if(!list.isEmpty()){
-			for(FluidStack f:list){
-				total += f.getAmount();
+		{
+			int total = 0;
+			List<FluidStack> list = recipe.outputFluid.getMatchingFluidStacks();
+			if(!list.isEmpty()){
+				for(FluidStack f:list){
+					total += f.getAmount();
+				}
+			}else{
+				total = 100;
 			}
-		}else{
-			total = 100;
+			guiFluidStacks.init(1, false, 50, 2, 20, 51, total, false, this.tankOverlay);
+			guiFluidStacks.set(1, list);
 		}
-		guiFluidStacks.init(1, false, 50, 2, 20, 51, total, false, this.tankOverlay);
-		guiFluidStacks.set(1, list);
 		
-
 		guiItemStacks.init(0, true, 3, 57);
 		guiItemStacks.set(0, Arrays.asList(recipe.inputItem.getMatchingStacks()));
 		
