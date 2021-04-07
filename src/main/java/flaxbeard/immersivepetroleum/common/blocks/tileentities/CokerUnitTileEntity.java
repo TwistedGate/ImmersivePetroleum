@@ -867,22 +867,21 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 			// Top 2 Vertical Pipes
 			if(bY >= 13 && bY <= 22){
 				if(bX == 3 && bZ == 2){
-					main.add(new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75).offset(-(4/16F), 0, 0)); // Pipe Y
+					main.add(new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75).offset(-0.25, 0, 0)); // Pipe Y
 					if(bY == 13){
-						main.add(new AxisAlignedBB(0.125, 0.0, 0.875, 0.875, 0.125, 0.125).offset(-(4/16F), 0, 0)); // Pipe Connector -Y
+						main.add(new AxisAlignedBB(0.125, 0.0, 0.875, 0.875, 0.125, 0.125).offset(-0.25, 0, 0)); // Pipe Connector -Y
 					}
 				}
 				
 				if(bX == 5 && bZ == 2){
-					main.add(new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75).offset(4/16F, 0, 0)); // Pipe Y
+					main.add(new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75).offset(0.25, 0, 0)); // Pipe Y
 					if(bY == 13){
-						main.add(new AxisAlignedBB(0.125, 0.0, 0.875, 0.875, 0.125, 0.125).offset(4/16F, 0, 0)); // Pipe Connector -Y
+						main.add(new AxisAlignedBB(0.125, 0.0, 0.875, 0.875, 0.125, 0.125).offset(0.25, 0, 0)); // Pipe Connector -Y
 					}
 				}
 			}
 		}
 		
-		// TODO Remember to convert all the X/16F to something like 0.0625!
 		// Frame below top platform
 		{
 			// When viewed from the side with the power inputs
@@ -891,29 +890,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 2){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 4/16F, 5/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.25, 0.3125, 1.0, 0.5625));
 							
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 0/16F, 5/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 4/16F, 16/16F, 4/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.0, 0.3125, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.25, 1.0, 0.25, 0.5));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 5/16F, 5/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.3125, 0.3125, 1.0, 0.625));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 6/16F, 5/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.375, 0.3125, 1.0, 0.6875));
 							
-							main.add(new AxisAlignedBB(1/16F, 4/16F, 6/16F, 5/16F, 8/16F, 16/16F));
-							main.add(new AxisAlignedBB(1/16F, 4/16F, 7/16F, 16/16F, 8/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.25, 0.375, 0.3125, 0.5, 1.0));
+							main.add(new AxisAlignedBB(0.0625, 0.25, 0.4375, 1.0, 0.5, 0.6875));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 7/16F, 5/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.4375, 0.3125, 1.0, 0.75));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 8/16F, 5/16F, 16/16F, 13/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.5, 0.3125, 1.0, 0.8125));
 							break;
 						}
 					}
@@ -923,29 +922,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 4){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 4/16F, 10/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.25, 0.625, 1.0, 0.5625));
 							
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 0/16F, 10/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 4/16F, 16/16F, 4/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.0, 0.625, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.25, 1.0, 0.25, 0.5));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 5/16F, 10/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.3125, 0.625, 1.0, 0.625));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 6/16F, 10/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.375, 0.625, 1.0, 0.6875));
 							
-							main.add(new AxisAlignedBB(0/16F, 4/16F, 7/16F, 16/16F, 8/16F, 11/16F));
-							main.add(new AxisAlignedBB(6/16F, 4/16F, 8/16F, 10/16F, 8/16F, 16/16F));
+							main.add(new AxisAlignedBB(0.0, 0.25, 0.4375, 1.0, 0.5, 0.6875));
+							main.add(new AxisAlignedBB(0.375, 0.25, 0.5, 0.625, 0.5, 1.0));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 7/16F, 10/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.4375, 0.625, 1.0, 0.75));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 8/16F, 10/16F, 16/16F, 13/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.5, 0.625, 1.0, 0.8125));
 							break;
 						}
 					}
@@ -955,29 +954,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 6){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 4/16F, 15/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.25, 0.9375, 1.0, 0.5625));
 							
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 0/16F, 15/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 4/16F, 16/16F, 4/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.0, 0.9375, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.25, 1.0, 0.25, 0.5));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 5/16F, 15/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.3125, 0.9375, 1.0, 0.625));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 6/16F, 15/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.375, 0.9375, 1.0, 0.6875));
 							
-							main.add(new AxisAlignedBB(11/16F, 4/16F, 6/16F, 15/16F, 8/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 4/16F, 7/16F, 12/16F, 8/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.25, 0.375, 0.9375, 0.5, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.25, 0.4375, 0.75, 0.5, 0.6875));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 7/16F, 15/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.4375, 0.9375, 1.0, 0.75));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 8/16F, 15/16F, 16/16F, 13/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.5, 0.9375, 1.0, 0.8125));
 							break;
 						}
 					}
@@ -990,29 +989,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 2){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 7/16F, 5/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.4375, 0.3125, 1.0, 0.75));
 							
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 0/16F, 5/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 8/16F, 16/16F, 4/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.0, 0.3125, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 0.25, 0.75));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 6/16F, 5/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.375, 0.3125, 1.0, 0.6875));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 5/16F, 5/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.3125, 0.3125, 1.0, 0.625));
 							
-							main.add(new AxisAlignedBB(1/16F, 4/16F, 0/16F, 5/16F, 8/16F, 8/16F));
-							main.add(new AxisAlignedBB(1/16F, 4/16F, 5/16F, 16/16F, 8/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.25, 0.0, 0.3125, 0.5, 0.5));
+							main.add(new AxisAlignedBB(0.0625, 0.25, 0.3125, 1.0, 0.5, 0.5625));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 4/16F, 5/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.25, 0.3125, 1.0, 0.5625));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(1/16F, 0/16F, 3/16F, 5/16F, 16/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.0625, 0.0, 0.1875, 0.3125, 1.0, 0.5));
 							break;
 						}
 					}
@@ -1022,29 +1021,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 4){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 7/16F, 10/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.4375, 0.625, 1.0, 0.75));
 							
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 0/16F, 10/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 8/16F, 16/16F, 4/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.0, 0.625, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 0.25, 0.75));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 6/16F, 10/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.375, 0.625, 1.0, 0.6875));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 5/16F, 10/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.3125, 0.625, 1.0, 0.625));
 							
-							main.add(new AxisAlignedBB(0/16F, 4/16F, 5/16F, 16/16F, 8/16F, 9/16F));
-							main.add(new AxisAlignedBB(6/16F, 4/16F, 0/16F, 10/16F, 8/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.0, 0.25, 0.3125, 1.0, 0.5, 0.5625));
+							main.add(new AxisAlignedBB(0.375, 0.25, 0.0, 0.625, 0.5, 0.5));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 4/16F, 10/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.25, 0.625, 1.0, 0.5625));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(6/16F, 0/16F, 3/16F, 10/16F, 16/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.375, 0.0, 0.1875, 0.625, 1.0, 0.5));
 							break;
 						}
 					}
@@ -1054,29 +1053,29 @@ public class CokerUnitTileEntity extends PoweredMultiblockTileEntity<CokerUnitTi
 				if(bX == 6){
 					switch(bY){
 						case 13:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 7/16F, 15/16F, 16/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.4375, 0.9375, 1.0, 0.75));
 							
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 0/16F, 15/16F, 4/16F, 16/16F));
-							main.add(new AxisAlignedBB(0/16F, 0/16F, 8/16F, 16/16F, 4/16F, 12/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.0, 0.9375, 0.25, 1.0));
+							main.add(new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 0.25, 0.75));
 							break;
 						}
 						case 14:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 6/16F, 15/16F, 16/16F, 11/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.375, 0.9375, 1.0, 0.6875));
 							break;
 						}
 						case 15:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 5/16F, 15/16F, 16/16F, 10/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.3125, 0.9375, 1.0, 0.625));
 							
-							main.add(new AxisAlignedBB(11/16F, 4/16F, 0/16F, 15/16F, 8/16F, 8/16F));
-							main.add(new AxisAlignedBB(0/16F, 4/16F, 5/16F, 12/16F, 8/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.25, 0.0, 0.9375, 0.5, 0.5));
+							main.add(new AxisAlignedBB(0.0, 0.25, 0.3125, 0.75, 0.5, 0.5625));
 							break;
 						}
 						case 16:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 4/16F, 15/16F, 16/16F, 9/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.25, 0.9375, 1.0, 0.5625));
 							break;
 						}
 						case 17:{
-							main.add(new AxisAlignedBB(11/16F, 0/16F, 3/16F, 15/16F, 16/16F, 8/16F));
+							main.add(new AxisAlignedBB(0.6875, 0.0, 0.1875, 0.9375, 1.0, 0.5));
 							break;
 						}
 					}
