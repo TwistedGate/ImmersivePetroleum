@@ -21,6 +21,7 @@ import flaxbeard.immersivepetroleum.common.blocks.tileentities.AutoLubricatorTil
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DistillationTowerTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.GasGeneratorTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydroTreaterTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
 import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.network.IPPacketHandler;
@@ -202,7 +203,12 @@ public class DebugItem extends IPItemBase{
 					CokerUnitTileEntity.updateShapes = true;
 					return ActionResultType.SUCCESS;
 				}
-
+				
+				if(te instanceof HydroTreaterTileEntity){
+					HydroTreaterTileEntity.updateShapes = true;
+					return ActionResultType.SUCCESS;
+				}
+				
 				return ActionResultType.PASS;
 			}
 			case INFO_TE_DISTILLATION_TOWER:{

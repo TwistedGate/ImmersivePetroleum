@@ -37,6 +37,7 @@ import flaxbeard.immersivepetroleum.common.blocks.AutoLubricatorBlock;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEntity.CokingChamber;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DistillationTowerTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydroTreaterTileEntity;
 import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.items.DebugItem;
 import net.minecraft.block.BlockState;
@@ -370,6 +371,16 @@ public class ClientEventHandler{
 							debugOut.add(toText("  " + MathHelper.floor(completed) + "% Completed. (Raw: " + completed + ")"));
 							
 						}
+					}else if(te instanceof HydroTreaterTileEntity){
+						HydroTreaterTileEntity treater = (HydroTreaterTileEntity) te;
+						if(!treater.offsetToMaster.equals(BlockPos.ZERO)){
+							treater = treater.master();
+						}
+						
+						debugOut.add(toText("Coker Unit ").mergeStyle(TextFormatting.GOLD)
+								.appendSibling(toText(treater.isRSDisabled() ? " (Redstoned)" : "").mergeStyle(TextFormatting.RED))
+								.appendSibling(toText(treater.shouldRenderAsActive() ? " (Active)" : "").mergeStyle(TextFormatting.GREEN)));
+						debugOut.add(toText(treater.energyStorage.getEnergyStored() + "/" + treater.energyStorage.getMaxEnergyStored() + "RF"));
 					}
 					
 					if(!debugOut.isEmpty()){

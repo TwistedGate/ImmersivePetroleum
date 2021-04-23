@@ -58,6 +58,7 @@ public class IPRecipes extends RecipeProvider{
 		speedboatUpgradeRecipes();
 		distillationRecipes();
 		cokerRecipes();
+		hydrotreaterRecipes();
 		reservoirs();
 		
 		MixerRecipeBuilder.builder(IPContent.Fluids.napalm, 500)
@@ -148,6 +149,10 @@ public class IPRecipes extends RecipeProvider{
 			.addInput(new IngredientWithSize(IPTags.Items.petcokeDust, 8))
 			.setEnergy(19200)
 			.build(out, rl("squeezer/graphite_dust"));
+	}
+	
+	private void hydrotreaterRecipes(){
+		// TODO Hydrotreater Recipes
 	}
 	
 	private void speedboatUpgradeRecipes(){
