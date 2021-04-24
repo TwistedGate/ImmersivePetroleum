@@ -66,18 +66,18 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void hydrotreaterItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.hydrotreater, "multiblock/obj/hydrotreater.obj")
+		ItemModelBuilder model = obj(IPContent.Multiblock.hydrotreater, "multiblock/obj/hydrotreater_mirrored.obj")
 				.texture("texture", modLoc("multiblock/hydrotreater"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
-		doTransform(trans, Perspective.FIRSTPERSON_LEFT, new Vector3f(0, 0, 0), new Vector3f(0, 225, 0), 0.03125F);
-		doTransform(trans, Perspective.FIRSTPERSON_RIGHT, new Vector3f(0, 0, 0), new Vector3f(0, 45, 0), 0.03125F);
-		doTransform(trans, Perspective.THIRDPERSON_LEFT, new Vector3f(0, 2.5F, 0), new Vector3f(75, 225, 0), 0.03125F);
-		doTransform(trans, Perspective.THIRDPERSON_RIGHT, new Vector3f(0, 2.5F, 0), new Vector3f(75, 45, 0), 0.03125F);
-		doTransform(trans, Perspective.HEAD, new Vector3f(0, 12, 0), null, 0.125F);
-		doTransform(trans, Perspective.GUI, new Vector3f(0, -4, 0), new Vector3f(30, 225, 0), 0.0625F);
-		doTransform(trans, Perspective.GROUND, new Vector3f(0, -8, 0), null, 0.03125F);
-		doTransform(trans, Perspective.FIXED, new Vector3f(0, -8, 0), null, 0.0625F);
+		doTransform(trans, Perspective.FIRSTPERSON_LEFT, new Vector3f(0, 0, 0), new Vector3f(0, 225, 0), 0.0625F);
+		doTransform(trans, Perspective.FIRSTPERSON_RIGHT, new Vector3f(0, 0, 0), new Vector3f(0, 45, 0), 0.0625F);
+		doTransform(trans, Perspective.THIRDPERSON_LEFT, new Vector3f(0, 2.5F, 0), new Vector3f(75, 225, 0), 0.0625F);
+		doTransform(trans, Perspective.THIRDPERSON_RIGHT, new Vector3f(0, 2.5F, 0), new Vector3f(75, 45, 0), 0.0625F);
+		doTransform(trans, Perspective.HEAD, new Vector3f(0, 8, 0), null, 0.125F);
+		doTransform(trans, Perspective.GUI, new Vector3f(-1, -1, 0), new Vector3f(30, 225, 0), 0.15625F);
+		doTransform(trans, Perspective.GROUND, new Vector3f(0, 0, 0), null, 0.125F);
+		doTransform(trans, Perspective.FIXED, new Vector3f(0, -1, 0), null, 0.125F);
 	}
 	
 	private void cokerunitItem(){

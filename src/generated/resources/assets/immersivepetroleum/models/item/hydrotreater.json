@@ -7,9 +7,9 @@
         0
       ],
       "scale": [
-        0.03125,
-        0.03125,
-        0.03125
+        0.0625,
+        0.0625,
+        0.0625
       ]
     },
     "firstperson_righthand": {
@@ -19,9 +19,9 @@
         0
       ],
       "scale": [
-        0.03125,
-        0.03125,
-        0.03125
+        0.0625,
+        0.0625,
+        0.0625
       ]
     },
     "thirdperson_lefthand": {
@@ -36,9 +36,9 @@
         0
       ],
       "scale": [
-        0.03125,
-        0.03125,
-        0.03125
+        0.0625,
+        0.0625,
+        0.0625
       ]
     },
     "thirdperson_righthand": {
@@ -53,15 +53,15 @@
         0
       ],
       "scale": [
-        0.03125,
-        0.03125,
-        0.03125
+        0.0625,
+        0.0625,
+        0.0625
       ]
     },
     "head": {
       "translation": [
         0,
-        12,
+        8,
         0
       ],
       "scale": [
@@ -77,38 +77,33 @@
         0
       ],
       "translation": [
-        0,
-        -4,
+        -1,
+        -1,
         0
       ],
       "scale": [
-        0.0625,
-        0.0625,
-        0.0625
+        0.15625,
+        0.15625,
+        0.15625
       ]
     },
     "ground": {
-      "translation": [
-        0,
-        -8,
-        0
-      ],
       "scale": [
-        0.03125,
-        0.03125,
-        0.03125
+        0.125,
+        0.125,
+        0.125
       ]
     },
     "fixed": {
       "translation": [
         0,
-        -8,
+        -1,
         0
       ],
       "scale": [
-        0.0625,
-        0.0625,
-        0.0625
+        0.125,
+        0.125,
+        0.125
       ]
     }
   },
@@ -116,6 +111,6 @@
     "texture": "immersivepetroleum:multiblock/hydrotreater"
   },
   "loader": "forge:obj",
-  "model": "immersivepetroleum:models/multiblock/obj/hydrotreater.obj",
+  "model": "immersivepetroleum:models/multiblock/obj/hydrotreater_mirrored.obj",
   "flip-v": true
 }
