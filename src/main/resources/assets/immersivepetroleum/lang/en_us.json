@@ -19,6 +19,7 @@
 	"block.immersivepetroleum.pumpjack": "Pumpjack",
 	"block.immersivepetroleum.distillationtower": "Distillation Tower",
 	"block.immersivepetroleum.cokerunit": "Coker",
+	"block.immersivepetroleum.hydrotreater": "Sulfur Recovery Unit",
 	
 	"fluid.immersivepetroleum.diesel": "Diesel",
 	"fluid.immersivepetroleum.oil": "Crude Oil",
@@ -54,6 +55,7 @@
 	"desc.immersiveengineering.info.multiblock.IE:DistillationTower": "Distillation Tower",
 	"desc.immersiveengineering.info.multiblock.IE:Pumpjack": "Pumpjack",
 	"desc.immersiveengineering.info.multiblock.IE:CokerUnit": "Coker",
+	"desc.immersiveengineering.info.multiblock.IE:HydroTreater": "Sulfur Recovery Unit",
 	
 	"desc.immersivepetroleum.info.reservoir.oil": "Oil Reservoir",
 	"desc.immersivepetroleum.info.reservoir.aquifer": "Aquifer",
