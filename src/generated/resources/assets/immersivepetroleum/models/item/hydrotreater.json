@@ -111,6 +111,6 @@
     "texture": "immersivepetroleum:multiblock/hydrotreater"
   },
   "loader": "forge:obj",
-  "model": "immersivepetroleum:models/multiblock/obj/hydrotreater_mirrored.obj",
+  "model": "immersivepetroleum:models/multiblock/obj/hydrotreater.obj",
   "flip-v": true
 }

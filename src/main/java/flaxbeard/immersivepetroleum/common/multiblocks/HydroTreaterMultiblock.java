@@ -27,7 +27,7 @@ public class HydroTreaterMultiblock extends IETemplateMultiblock{
 	
 	@Override
 	public float getManualScale(){
-		return 6.0F;
+		return 16.0F;
 	}
 	
 	@Override
@@ -43,6 +43,9 @@ public class HydroTreaterMultiblock extends IETemplateMultiblock{
 	public void renderFormedStructure(MatrixStack transform, IRenderTypeBuffer buffer){
 		if(renderStack == null)
 			renderStack = new ItemStack(Multiblock.hydrotreater);
+		
+		// "Undo" the GUI Perspective Transform
+		transform.translate(1.5, 0.5, 2.5);
 		
 		ClientUtils.mc().getItemRenderer().renderItem(
 				renderStack,

@@ -66,7 +66,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void hydrotreaterItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.hydrotreater, "multiblock/obj/hydrotreater_mirrored.obj")
+		ItemModelBuilder model = obj(IPContent.Multiblock.hydrotreater, "multiblock/obj/hydrotreater.obj")
 				.texture("texture", modLoc("multiblock/hydrotreater"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
