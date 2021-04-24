@@ -79,17 +79,19 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	@Override
 	public void readCustomNBT(CompoundNBT nbt, boolean descPacket){
 		super.readCustomNBT(nbt, descPacket);
-		
+
 		this.tanks[TANK_INPUT_A].readFromNBT(nbt.getCompound("tank0"));
-		this.tanks[TANK_OUTPUT].readFromNBT(nbt.getCompound("tank1"));
+		this.tanks[TANK_INPUT_B].readFromNBT(nbt.getCompound("tank1"));
+		this.tanks[TANK_OUTPUT].readFromNBT(nbt.getCompound("tank2"));
 	}
 	
 	@Override
 	public void writeCustomNBT(CompoundNBT nbt, boolean descPacket){
 		super.writeCustomNBT(nbt, descPacket);
-		
+
 		nbt.put("tank0", this.tanks[TANK_INPUT_A].writeToNBT(new CompoundNBT()));
-		nbt.put("tank1", this.tanks[TANK_OUTPUT].writeToNBT(new CompoundNBT()));
+		nbt.put("tank1", this.tanks[TANK_INPUT_B].writeToNBT(new CompoundNBT()));
+		nbt.put("tank2", this.tanks[TANK_OUTPUT].writeToNBT(new CompoundNBT()));
 	}
 	
 	@Override
