@@ -38,24 +38,35 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	 */
 	public static TileEntityType<HydroTreaterTileEntity> TYPE;
 
-	/** Template-Location of the Fluid Input Port. (1 0 0)<br> */
+	/** Input Fluid Tank A<br> */
+	public static final int TANK_INPUT_A = 0;
+	
+	/** Input Fluid Tank B<br> */
+	public static final int TANK_INPUT_B = 1;
+	
+	/** Output Fluid Tank<br> */
+	public static final int TANK_OUTPUT = 2;
+
+	/** Template-Location of the Fluid Input Port. (1 0 3)<br> */
 	public static final BlockPos Fluid_IN_A = new BlockPos(1, 0, 3);
 	
-	/** Template-Location of the Fluid Input Port. (1 0 0)<br> */
+	/** Template-Location of the Fluid Input Port. (2 2 1)<br> */
 	public static final BlockPos Fluid_IN_B = new BlockPos(2, 2, 1);
 	
-	/** Template-Location of the Fluid Output Port. (0 1 1)<br> */
+	/** Template-Location of the Fluid Output Port. (0 1 2)<br> */
 	public static final BlockPos Fluid_OUT = new BlockPos(0, 1, 2);
 	
-	/** Template-Location of the Item Output Port. (0 0 1)<br> */
+	/** Template-Location of the Item Output Port. (0 0 2)<br> */
 	public static final BlockPos Item_OUT = new BlockPos(0, 0, 2);
 	
-	/** Template-Location of the Energy Input Ports. (2 2 0)<br> */
+	/** Template-Location of the Energy Input Ports. (2 2 3)<br> */
 	public static final Set<BlockPos> Energy_IN = ImmutableSet.of(new BlockPos(2, 2, 3));
 	
-	/** Template-Location of the Redstone Input Port. (0 1 0)<br> */
+	/** Template-Location of the Redstone Input Port. (0 1 3)<br> */
 	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
 	
+	
+	public final FluidTank[] tanks = new FluidTank[]{new FluidTank(12000), new FluidTank(12000), new FluidTank(12000)};
 	public HydroTreaterTileEntity(){
 		super(HydroTreaterMultiblock.INSTANCE, 8000, true, null);
 	}
@@ -68,11 +79,17 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	@Override
 	public void readCustomNBT(CompoundNBT nbt, boolean descPacket){
 		super.readCustomNBT(nbt, descPacket);
+		
+		this.tanks[TANK_INPUT_A].readFromNBT(nbt.getCompound("tank0"));
+		this.tanks[TANK_OUTPUT].readFromNBT(nbt.getCompound("tank1"));
 	}
 	
 	@Override
 	public void writeCustomNBT(CompoundNBT nbt, boolean descPacket){
 		super.writeCustomNBT(nbt, descPacket);
+		
+		nbt.put("tank0", this.tanks[TANK_INPUT_A].writeToNBT(new CompoundNBT()));
+		nbt.put("tank1", this.tanks[TANK_OUTPUT].writeToNBT(new CompoundNBT()));
 	}
 	
 	@Override
@@ -121,7 +138,7 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	
 	@Override
 	public IFluidTank[] getInternalTanks(){
-		return null;
+		return this.tanks;
 	}
 	
 	@Override
@@ -136,7 +153,7 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	
 	@Override
 	public int[] getOutputTanks(){
-		return null;
+		return new int[]{TANK_OUTPUT};
 	}
 	
 	@Override
@@ -183,11 +200,47 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	
 	@Override
 	protected IFluidTank[] getAccessibleFluidTanks(Direction side){
-		return new FluidTank[0];
+		HydroTreaterTileEntity master = master();
+		if(master != null){
+			if(this.posInMultiblock.equals(Fluid_IN_A) && (side == null || side == getFacing().getOpposite())){
+				return new IFluidTank[]{master.tanks[TANK_INPUT_A]};
+			}
+			if(this.posInMultiblock.equals(Fluid_IN_B) && (side == null || side == Direction.UP)){
+				return new IFluidTank[]{master.tanks[TANK_INPUT_B]};
+			}
+			if(this.posInMultiblock.equals(Fluid_OUT) && (side == null || side == Direction.UP)){
+				return new IFluidTank[]{master.tanks[TANK_OUTPUT]};
+			}
+		}
+		return new IFluidTank[0];
 	}
 	
 	@Override
 	protected boolean canFillTankFrom(int iTank, Direction side, FluidStack resource){
+		if(this.posInMultiblock.equals(Fluid_IN_A) && (side == null || side == getFacing().getOpposite())){
+			HydroTreaterTileEntity master = master();
+			
+			if(master != null && master.tanks[TANK_INPUT_A].getFluidAmount() < master.tanks[TANK_INPUT_A].getCapacity()){
+				if(master.tanks[TANK_INPUT_A].isEmpty()){
+					// TODO Recipe Part
+					return false;	
+				}else{
+					return resource.isFluidEqual(master.tanks[TANK_INPUT_A].getFluid());
+				}
+			}
+		}
+		if(this.posInMultiblock.equals(Fluid_IN_B) && (side == null || side == Direction.UP)){
+			HydroTreaterTileEntity master = master();
+			
+			if(master != null && master.tanks[TANK_INPUT_B].getFluidAmount() < master.tanks[TANK_INPUT_B].getCapacity()){
+				if(master.tanks[TANK_INPUT_B].isEmpty()){
+					// TODO Recipe Part
+					return false;
+				}else{
+					return resource.isFluidEqual(master.tanks[TANK_INPUT_B].getFluid());
+				}
+			}
+		}
 		return false;
 	}
 	
