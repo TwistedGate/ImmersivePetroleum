@@ -84,6 +84,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class ClientEventHandler{
@@ -377,10 +378,18 @@ public class ClientEventHandler{
 							treater = treater.master();
 						}
 						
-						debugOut.add(toText("Coker Unit ").mergeStyle(TextFormatting.GOLD)
+						debugOut.add(toText("Sulfur Recovery Unit ").mergeStyle(TextFormatting.GOLD)
 								.appendSibling(toText(treater.isRSDisabled() ? " (Redstoned)" : "").mergeStyle(TextFormatting.RED))
 								.appendSibling(toText(treater.shouldRenderAsActive() ? " (Active)" : "").mergeStyle(TextFormatting.GREEN)));
 						debugOut.add(toText(treater.energyStorage.getEnergyStored() + "/" + treater.energyStorage.getMaxEnergyStored() + "RF"));
+						
+						IFluidTank[] tanks = treater.getInternalTanks();
+						if(tanks != null && tanks.length > 0){
+							for(int i = 0;i < tanks.length;i++){
+								FluidStack fs = tanks[i].getFluid();
+								debugOut.add(toText("Tank " + i + ": " + (fs.getAmount() + "/" + tanks[i].getCapacity() + "mB " + (fs.isEmpty() ? "" : "(" + fs.getDisplayName().getString() + ")"))));
+							}
+						}
 					}
 					
 					if(!debugOut.isEmpty()){
