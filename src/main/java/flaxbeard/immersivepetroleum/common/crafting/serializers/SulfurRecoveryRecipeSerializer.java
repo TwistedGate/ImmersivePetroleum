@@ -56,8 +56,8 @@ public class SulfurRecoveryRecipeSerializer extends IERecipeSerializer<SulfurRec
 		buffer.writeDouble(recipe.chance);
 		
 		buffer.writeFluidStack(recipe.output);
-		recipe.inputFluid0.write(buffer);
-		recipe.inputFluid1.write(buffer);
+		recipe.inputFluid.write(buffer);
+		recipe.inputFluidSecondary.write(buffer);
 		
 		buffer.writeInt(recipe.getTotalProcessEnergy());
 		buffer.writeInt(recipe.getTotalProcessTime());

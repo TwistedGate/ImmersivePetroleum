@@ -1,5 +1,6 @@
 package flaxbeard.immersivepetroleum.api.crafting;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,7 +28,7 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 	
 	public static SulfurRecoveryRecipe findRecipe(FluidStack input, @Nullable FluidStack secondary){
 		for(SulfurRecoveryRecipe recipe:recipes.values()){
-			if((recipe.inputFluid0 != null && recipe.inputFluid0.test(input)) && (secondary == null || (recipe.inputFluid1 != null && secondary != null && recipe.inputFluid1.test(secondary)))){
+			if((recipe.inputFluid != null && recipe.inputFluid.test(input)) && (secondary == null || (recipe.inputFluidSecondary != null && secondary != null && recipe.inputFluidSecondary.test(secondary)))){
 				return recipe;
 			}
 		}
@@ -39,8 +40,8 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 		
 		if(!fluid.isEmpty()){
 			for(SulfurRecoveryRecipe recipe:recipes.values()){
-				if(recipe.inputFluid0 != null){
-					if((!ignoreAmount && recipe.inputFluid0.test(fluid)) || (ignoreAmount && recipe.inputFluid0.testIgnoringAmount(fluid))){
+				if(recipe.inputFluid != null){
+					if((!ignoreAmount && recipe.inputFluid.test(fluid)) || (ignoreAmount && recipe.inputFluid.testIgnoringAmount(fluid))){
 						return true;
 					}
 				}
@@ -54,8 +55,8 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 		
 		if(!fluid.isEmpty()){
 			for(SulfurRecoveryRecipe recipe:recipes.values()){
-				if(recipe.inputFluid1 != null){
-					if((!ignoreAmount && recipe.inputFluid1.test(fluid)) || (ignoreAmount && recipe.inputFluid1.testIgnoringAmount(fluid))){
+				if(recipe.inputFluidSecondary != null){
+					if((!ignoreAmount && recipe.inputFluidSecondary.test(fluid)) || (ignoreAmount && recipe.inputFluidSecondary.testIgnoringAmount(fluid))){
 						return true;
 					}
 				}
@@ -69,24 +70,27 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 	
 	public final FluidStack output;
 	
-	public final FluidTagInput inputFluid0;
+	public final FluidTagInput inputFluid;
 	@Nullable
-	public final FluidTagInput inputFluid1;
+	public final FluidTagInput inputFluidSecondary;
 	
 	
 	protected int totalProcessTime;
 	protected int totalProcessEnergy;
 	
-	public SulfurRecoveryRecipe(ResourceLocation id, FluidStack output, ItemStack outputItem, FluidTagInput inputFluid0, @Nullable FluidTagInput inputFluid1, double chance, int energy, int time){
+	public SulfurRecoveryRecipe(ResourceLocation id, FluidStack output, ItemStack outputItem, FluidTagInput inputFluid, @Nullable FluidTagInput inputFluidSecondary, double chance, int energy, int time){
 		super(ItemStack.EMPTY, TYPE, id);
 		this.output = output;
 		this.outputItem = outputItem;
-		this.inputFluid0 = inputFluid0;
-		this.inputFluid1 = inputFluid1;
+		this.inputFluid = inputFluid;
+		this.inputFluidSecondary = inputFluidSecondary;
 		this.chance = chance;
 		
 		this.totalProcessEnergy = (int) Math.floor(energy * IPServerConfig.REFINING.hydrotreater_energyModifier.get());
 		this.totalProcessTime = (int) Math.floor(time * IPServerConfig.REFINING.hydrotreater_timeModifier.get());
+		
+		this.fluidOutputList = Arrays.asList(output);
+		this.fluidInputList = Arrays.asList(inputFluid, inputFluidSecondary);
 	}
 	
 	@Override
@@ -102,6 +106,15 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 	@Override
 	public int getTotalProcessEnergy(){
 		return this.totalProcessEnergy;
+	}
+	
+	public FluidTagInput getInputFluid(){
+		return this.inputFluid;
+	}
+	
+	@Nullable
+	public FluidTagInput getSecondaryInputFluid(){
+		return this.inputFluidSecondary;
 	}
 	
 	@Override
