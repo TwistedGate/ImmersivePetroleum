@@ -208,9 +208,12 @@ public class IPContent{
 		
 		ConfigUtils.addFuel(IPServerConfig.GENERATION.fuels.get());
 		ConfigUtils.addBoatFuel(IPServerConfig.MISCELLANEOUS.boat_fuels.get());
-		
+
 		DieselHandler.registerFuel(IPTags.Fluids.diesel, 320);
 		DieselHandler.registerDrillFuel(IPTags.Fluids.diesel);
+		
+		DieselHandler.registerFuel(IPTags.Fluids.diesel_sulfur, 320);
+		DieselHandler.registerDrillFuel(IPTags.Fluids.diesel_sulfur);
 		
 		LubricantHandler.register(IPTags.Fluids.lubricant, 3);
 		LubricantHandler.register(IETags.fluidPlantoil, 12);
