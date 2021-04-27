@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import blusunrize.immersiveengineering.api.EnumMetals;
 import blusunrize.immersiveengineering.api.IETags;
+import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
 import blusunrize.immersiveengineering.api.crafting.builders.ArcFurnaceRecipeBuilder;
 import blusunrize.immersiveengineering.api.crafting.builders.BlastFurnaceFuelBuilder;
@@ -155,10 +156,11 @@ public class IPRecipes extends RecipeProvider{
 	private void hydrotreaterRecipes(){
 		// TODO Hydrotreater Recipes
 		
-		SulfurRecoveryRecipeBuilder.builder(
-				new FluidStack(IPContent.Fluids.diesel, 10),
-				new ItemStack(IEItems.Ingredients.dustSulfur), 0.02,
-				new FluidStack(IPContent.Fluids.diesel_sulfur, 10), 512, 1);
+		SulfurRecoveryRecipeBuilder.builder(new FluidStack(IPContent.Fluids.diesel, 10), 512, 1)
+			.addInputFluid(new FluidTagInput(IPTags.Fluids.diesel_sulfur, 10))
+			.addSecondaryInputFluid(FluidTags.WATER, 10)
+			.addItemWithChance(new ItemStack(IEItems.Ingredients.dustSulfur), 0.02)
+			.build(out, rl("hydrotreater/sulfur_recovery"));
 	}
 	
 	private void speedboatUpgradeRecipes(){

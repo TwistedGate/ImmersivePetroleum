@@ -2,26 +2,58 @@ package flaxbeard.immersivepetroleum.api.crafting.builders;
 
 import com.google.gson.JsonObject;
 
+import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.builders.IEFinishedRecipe;
 import flaxbeard.immersivepetroleum.common.crafting.Serializers;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraftforge.fluids.FluidStack;
 
 public class SulfurRecoveryRecipeBuilder extends IEFinishedRecipe<SulfurRecoveryRecipeBuilder>{
 	
-	public static SulfurRecoveryRecipeBuilder builder(FluidStack fluidOutput, ItemStack itemOutput, double chance, FluidStack fluidInput, int energy, int time){
-		SulfurRecoveryRecipeBuilder builder = new SulfurRecoveryRecipeBuilder();
-		builder.addFluid("resultfluid", fluidOutput);
-		builder.addFluid("fluidinput", fluidInput);
-		builder.addWriter(jsonObject -> {
-			builder.serializerItemStackWithChance(itemOutput, chance);
-		});
-		builder.setTimeAndEnergy(time, energy);
-		return builder;
+	public static SulfurRecoveryRecipeBuilder builder(FluidStack fluidOutput, int energy, int time){
+		return new SulfurRecoveryRecipeBuilder()
+				.setTimeAndEnergy(time, energy)
+				.addResultFluid(fluidOutput);
 	}
 	
 	protected SulfurRecoveryRecipeBuilder(){
 		super(Serializers.HYDROTREATER_SERIALIZER.get());
+	}
+	
+	public SulfurRecoveryRecipeBuilder addResultFluid(FluidStack fluid){
+		return addFluid("result", fluid);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addInputFluid(FluidStack fluid){
+		return addFluid("input", fluid);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addInputFluid(FluidTagInput fluid){
+		return addFluidTag("input", fluid);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addInputFluid(ITag.INamedTag<Fluid> fluid, int amount){
+		return addFluidTag("input", fluid, amount);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(FluidStack fluid){
+		return addFluid("secondary_input", fluid);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(FluidTagInput fluid){
+		return addFluidTag("secondary_input", fluid);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(ITag.INamedTag<Fluid> fluid, int amount){
+		return addFluidTag("secondary_input", fluid, amount);
+	}
+	
+	public SulfurRecoveryRecipeBuilder addItemWithChance(ItemStack item, double chance){
+		return addWriter(jsonObject -> {
+			jsonObject.add("secondary_result", this.serializerItemStackWithChance(item, chance));
+		});
 	}
 	
 	protected SulfurRecoveryRecipeBuilder setTimeAndEnergy(int time, int energy){

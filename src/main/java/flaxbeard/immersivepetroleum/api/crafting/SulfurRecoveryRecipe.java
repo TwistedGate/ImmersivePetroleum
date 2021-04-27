@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
@@ -24,9 +25,9 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 	
 	public static Map<ResourceLocation, SulfurRecoveryRecipe> recipes = new HashMap<>();
 	
-	public static SulfurRecoveryRecipe findRecipe(FluidStack fluid0, FluidStack fluid1){
+	public static SulfurRecoveryRecipe findRecipe(FluidStack input, @Nullable FluidStack secondary){
 		for(SulfurRecoveryRecipe recipe:recipes.values()){
-			if((recipe.inputFluid0 != null && recipe.inputFluid0.test(fluid0)) && (recipe.inputFluid0 != null && recipe.inputFluid0.test(fluid1))){
+			if((recipe.inputFluid0 != null && recipe.inputFluid0.test(input)) && (secondary == null || (recipe.inputFluid1 != null && secondary != null && recipe.inputFluid1.test(secondary)))){
 				return recipe;
 			}
 		}
@@ -48,17 +49,35 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 		return false;
 	}
 	
-	public ItemStack outputItem;
-	public FluidStack output;
-	public FluidTagInput inputFluid0;
-	public FluidTagInput inputFluid1;
+	public static boolean hasRecipeWithSecondaryInput(@Nonnull FluidStack fluid, boolean ignoreAmount){
+		Objects.requireNonNull(fluid);
+		
+		if(!fluid.isEmpty()){
+			for(SulfurRecoveryRecipe recipe:recipes.values()){
+				if(recipe.inputFluid1 != null){
+					if((!ignoreAmount && recipe.inputFluid1.test(fluid)) || (ignoreAmount && recipe.inputFluid1.testIgnoringAmount(fluid))){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
-	public float chance;
+	public final ItemStack outputItem;
+	public final double chance;
+	
+	public final FluidStack output;
+	
+	public final FluidTagInput inputFluid0;
+	@Nullable
+	public final FluidTagInput inputFluid1;
+	
 	
 	protected int totalProcessTime;
 	protected int totalProcessEnergy;
 	
-	public SulfurRecoveryRecipe(ResourceLocation id, FluidStack output, ItemStack outputItem, FluidTagInput inputFluid0, FluidTagInput inputFluid1, float chance, int energy, int time){
+	public SulfurRecoveryRecipe(ResourceLocation id, FluidStack output, ItemStack outputItem, FluidTagInput inputFluid0, @Nullable FluidTagInput inputFluid1, double chance, int energy, int time){
 		super(ItemStack.EMPTY, TYPE, id);
 		this.output = output;
 		this.outputItem = outputItem;

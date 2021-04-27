@@ -407,12 +407,11 @@ public class ClientEventHandler{
 							int yOff = i * (ClientUtils.font().FONT_HEIGHT + 2);
 							
 							matrix.push();
-							matrix.translate(0, 0, -1);
-							ClientUtils.drawColouredRect(1, 1 + yOff, w+1, 10, 0xAF_4F4F4F, matrix);
-							matrix.pop();
-							
+							matrix.translate(0, 0, 1);
+							ClientUtils.drawColouredRect(1, 1 + yOff, w+1, 10, 0xAF_000000, matrix);
 							// Draw string without shadow
 							ClientUtils.font().drawText(matrix, debugOut.get(i), 2, 2 + yOff, -1);
+							matrix.pop();
 						}
 						matrix.pop();
 					}

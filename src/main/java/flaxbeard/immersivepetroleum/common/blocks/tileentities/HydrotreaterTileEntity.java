@@ -9,7 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.collect.ImmutableSet;
 
 import blusunrize.immersiveengineering.api.IEEnums.IOSideConfig;
-import blusunrize.immersiveengineering.api.crafting.MultiblockRecipe;
 import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IBlockBounds;
 import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockTileEntity;
@@ -32,7 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<HydrotreaterTileEntity, MultiblockRecipe> implements IBlockBounds{
+public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<HydrotreaterTileEntity, SulfurRecoveryRecipe> implements IBlockBounds{
 	/**
 	 * Do not Touch! Taken care of by
 	 * {@link IPContent#registerTile(RegistryEvent.Register, Class, Block...)}
@@ -96,8 +95,8 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	@Override
-	protected MultiblockRecipe getRecipeForId(ResourceLocation id){
-		return null;
+	protected SulfurRecoveryRecipe getRecipeForId(ResourceLocation id){
+		return SulfurRecoveryRecipe.recipes.get(id);
 	}
 	
 	@Override
@@ -145,7 +144,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	@Override
-	public MultiblockRecipe findRecipeForInsertion(ItemStack inserting){
+	public SulfurRecoveryRecipe findRecipeForInsertion(ItemStack inserting){
 		return null;
 	}
 	
@@ -160,7 +159,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	@Override
-	public boolean additionalCanProcessCheck(MultiblockProcess<MultiblockRecipe> process){
+	public boolean additionalCanProcessCheck(MultiblockProcess<SulfurRecoveryRecipe> process){
 		return false;
 	}
 	
@@ -173,7 +172,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	@Override
-	public void onProcessFinish(MultiblockProcess<MultiblockRecipe> process){
+	public void onProcessFinish(MultiblockProcess<SulfurRecoveryRecipe> process){
 	}
 	
 	@Override
@@ -192,7 +191,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	@Override
-	public float getMinProcessDistance(MultiblockProcess<MultiblockRecipe> process){
+	public float getMinProcessDistance(MultiblockProcess<SulfurRecoveryRecipe> process){
 		return 0;
 	}
 	
@@ -236,7 +235,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 			
 			if(master != null && master.tanks[TANK_INPUT_B].getFluidAmount() < master.tanks[TANK_INPUT_B].getCapacity()){
 				if(master.tanks[TANK_INPUT_B].isEmpty()){
-					return SulfurRecoveryRecipe.hasRecipeWithInput(resource, true);
+					return SulfurRecoveryRecipe.hasRecipeWithSecondaryInput(resource, true);
 				}else{
 					return resource.isFluidEqual(master.tanks[TANK_INPUT_B].getFluid());
 				}
