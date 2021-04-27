@@ -40,7 +40,7 @@ import flaxbeard.immersivepetroleum.common.blocks.tileentities.CokerUnitTileEnti
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DistillationTowerTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.FlarestackTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.GasGeneratorTileEntity;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydroTreaterTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydrotreaterTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
 import flaxbeard.immersivepetroleum.common.cfg.ConfigUtils;
 import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
@@ -60,6 +60,7 @@ import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
 import flaxbeard.immersivepetroleum.common.multiblocks.PumpjackMultiblock;
 import flaxbeard.immersivepetroleum.common.util.IPEffects;
 import flaxbeard.immersivepetroleum.common.util.fluids.CrudeOilFluid;
+import flaxbeard.immersivepetroleum.common.util.fluids.DieselFluid;
 import flaxbeard.immersivepetroleum.common.util.fluids.IPFluid;
 import flaxbeard.immersivepetroleum.common.util.fluids.NapalmFluid;
 import net.minecraft.block.Block;
@@ -93,6 +94,7 @@ public class IPContent{
 	public static class Fluids{
 		public static IPFluid crudeOil;
 		public static IPFluid diesel;
+		public static IPFluid diesel_sulfur;
 		public static IPFluid lubricant;
 		public static IPFluid gasoline;
 		public static IPFluid napalm;
@@ -135,7 +137,8 @@ public class IPContent{
 		IPContent.debugItem = new DebugItem();
 		
 		Fluids.crudeOil = new CrudeOilFluid();
-		Fluids.diesel = new IPFluid("diesel", 789, 1750);
+		Fluids.diesel = new DieselFluid("diesel");
+		Fluids.diesel_sulfur = new DieselFluid("diesel_sulfur");
 		Fluids.lubricant = new IPFluid("lubricant", 925, 1000);
 		Fluids.gasoline = new IPFluid("gasoline", 789, 1200);
 		Fluids.napalm = new NapalmFluid();
@@ -224,7 +227,7 @@ public class IPContent{
 		registerTile(event, DistillationTowerTileEntity.class, Multiblock.distillationtower);
 		registerTile(event, PumpjackTileEntity.class, Multiblock.pumpjack);
 		registerTile(event, CokerUnitTileEntity.class, Multiblock.cokerunit);
-		registerTile(event, HydroTreaterTileEntity.class, Multiblock.hydrotreater);
+		registerTile(event, HydrotreaterTileEntity.class, Multiblock.hydrotreater);
 		registerTile(event, FlarestackTileEntity.class, Blocks.flarestack);
 		registerTile(event, AutoLubricatorTileEntity.class, Blocks.auto_lubricator);
 		registerTile(event, GasGeneratorTileEntity.class, Blocks.gas_generator);

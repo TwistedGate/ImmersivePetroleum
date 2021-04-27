@@ -22,6 +22,7 @@ import flaxbeard.immersivepetroleum.api.IPTags;
 import flaxbeard.immersivepetroleum.api.crafting.builders.CokerUnitRecipeBuilder;
 import flaxbeard.immersivepetroleum.api.crafting.builders.DistillationRecipeBuilder;
 import flaxbeard.immersivepetroleum.api.crafting.builders.ReservoirTypeBuilder;
+import flaxbeard.immersivepetroleum.api.crafting.builders.SulfurRecoveryRecipeBuilder;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.IPContent.Blocks;
 import flaxbeard.immersivepetroleum.common.IPContent.BoatUpgrades;
@@ -87,7 +88,7 @@ public class IPRecipes extends RecipeProvider{
 		
 		DistillationRecipeBuilder.builder(new FluidStack[]{
 				new FluidStack(IPContent.Fluids.lubricant, 9),
-				new FluidStack(IPContent.Fluids.diesel, 27),
+				new FluidStack(IPContent.Fluids.diesel_sulfur, 27),
 				new FluidStack(IPContent.Fluids.gasoline, 39)})
 			.addByproduct(new ItemStack(IPContent.Items.bitumen), 0.07)
 			.addInput(IPTags.Fluids.crudeOil, 75)
@@ -153,6 +154,11 @@ public class IPRecipes extends RecipeProvider{
 	
 	private void hydrotreaterRecipes(){
 		// TODO Hydrotreater Recipes
+		
+		SulfurRecoveryRecipeBuilder.builder(
+				new FluidStack(IPContent.Fluids.diesel, 10),
+				new ItemStack(IEItems.Ingredients.dustSulfur), 0.02,
+				new FluidStack(IPContent.Fluids.diesel_sulfur, 10), 512, 1);
 	}
 	
 	private void speedboatUpgradeRecipes(){

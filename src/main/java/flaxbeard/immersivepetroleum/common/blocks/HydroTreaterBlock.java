@@ -1,6 +1,6 @@
 package flaxbeard.immersivepetroleum.common.blocks;
 
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydroTreaterTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydrotreaterTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
@@ -9,9 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class HydroTreaterBlock extends IPMetalMultiblock<HydroTreaterTileEntity>{
+public class HydroTreaterBlock extends IPMetalMultiblock<HydrotreaterTileEntity>{
 	public HydroTreaterBlock(){
-		super("hydrotreater", () -> HydroTreaterTileEntity.TYPE);
+		super("hydrotreater", () -> HydrotreaterTileEntity.TYPE);
 	}
 	
 	@Override

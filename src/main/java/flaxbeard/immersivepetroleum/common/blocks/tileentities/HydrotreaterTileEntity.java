@@ -13,6 +13,7 @@ import blusunrize.immersiveengineering.api.crafting.MultiblockRecipe;
 import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IBlockBounds;
 import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockTileEntity;
+import flaxbeard.immersivepetroleum.api.crafting.SulfurRecoveryRecipe;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
 import net.minecraft.block.Block;
@@ -31,12 +32,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTreaterTileEntity, MultiblockRecipe> implements IBlockBounds{
+public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<HydrotreaterTileEntity, MultiblockRecipe> implements IBlockBounds{
 	/**
 	 * Do not Touch! Taken care of by
 	 * {@link IPContent#registerTile(RegistryEvent.Register, Class, Block...)}
 	 */
-	public static TileEntityType<HydroTreaterTileEntity> TYPE;
+	public static TileEntityType<HydrotreaterTileEntity> TYPE;
 
 	/** Input Fluid Tank A<br> */
 	public static final int TANK_INPUT_A = 0;
@@ -67,7 +68,7 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	
 	
 	public final FluidTank[] tanks = new FluidTank[]{new FluidTank(12000), new FluidTank(12000), new FluidTank(12000)};
-	public HydroTreaterTileEntity(){
+	public HydrotreaterTileEntity(){
 		super(HydroTreaterMultiblock.INSTANCE, 8000, true, null);
 	}
 	
@@ -202,7 +203,7 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	
 	@Override
 	protected IFluidTank[] getAccessibleFluidTanks(Direction side){
-		HydroTreaterTileEntity master = master();
+		HydrotreaterTileEntity master = master();
 		if(master != null){
 			if(this.posInMultiblock.equals(Fluid_IN_A) && (side == null || side == getFacing().getOpposite())){
 				return new IFluidTank[]{master.tanks[TANK_INPUT_A]};
@@ -220,24 +221,22 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 	@Override
 	protected boolean canFillTankFrom(int iTank, Direction side, FluidStack resource){
 		if(this.posInMultiblock.equals(Fluid_IN_A) && (side == null || side == getFacing().getOpposite())){
-			HydroTreaterTileEntity master = master();
+			HydrotreaterTileEntity master = master();
 			
 			if(master != null && master.tanks[TANK_INPUT_A].getFluidAmount() < master.tanks[TANK_INPUT_A].getCapacity()){
 				if(master.tanks[TANK_INPUT_A].isEmpty()){
-					// TODO Recipe Part
-					return false;	
+					return SulfurRecoveryRecipe.hasRecipeWithInput(resource, true);
 				}else{
 					return resource.isFluidEqual(master.tanks[TANK_INPUT_A].getFluid());
 				}
 			}
 		}
 		if(this.posInMultiblock.equals(Fluid_IN_B) && (side == null || side == Direction.UP)){
-			HydroTreaterTileEntity master = master();
+			HydrotreaterTileEntity master = master();
 			
 			if(master != null && master.tanks[TANK_INPUT_B].getFluidAmount() < master.tanks[TANK_INPUT_B].getCapacity()){
 				if(master.tanks[TANK_INPUT_B].isEmpty()){
-					// TODO Recipe Part
-					return false;
+					return SulfurRecoveryRecipe.hasRecipeWithInput(resource, true);
 				}else{
 					return resource.isFluidEqual(master.tanks[TANK_INPUT_B].getFluid());
 				}
@@ -251,14 +250,14 @@ public class HydroTreaterTileEntity extends PoweredMultiblockTileEntity<HydroTre
 		return false;
 	}
 	
-	private static CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(HydroTreaterTileEntity::getShape);
+	private static CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(HydrotreaterTileEntity::getShape);
 	public static boolean updateShapes = false;
 	
 	@Override
 	public VoxelShape getBlockBounds(ISelectionContext ctx){
 		if(updateShapes){
 			updateShapes = false;
-			SHAPES = CachedShapesWithTransform.createForMultiblock(HydroTreaterTileEntity::getShape);
+			SHAPES = CachedShapesWithTransform.createForMultiblock(HydrotreaterTileEntity::getShape);
 		}
 		
 		return SHAPES.get(this.posInMultiblock, Pair.of(getFacing(), getIsMirrored()));

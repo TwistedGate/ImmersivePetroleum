@@ -17,7 +17,8 @@ public class IPFluidTags extends FluidTagsProvider{
 	@Override
 	protected void registerTags(){
 		getOrCreateBuilder(IPTags.Fluids.diesel)
-			.add(IPContent.Fluids.diesel);
+			.add(IPContent.Fluids.diesel)
+			.add(IPContent.Fluids.diesel_sulfur);
 		
 		getOrCreateBuilder(IPTags.Fluids.gasoline)
 			.add(IPContent.Fluids.gasoline);
