@@ -36,6 +36,7 @@ public class BlockRenderLayers{
 		
 		RenderTypeLookup.setRenderLayer(IPContent.Fluids.crudeOil.getFlowingFluid(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(IPContent.Fluids.diesel.getFlowingFluid(), RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(IPContent.Fluids.diesel_sulfur.getFlowingFluid(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(IPContent.Fluids.gasoline.getFlowingFluid(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(IPContent.Fluids.lubricant.getFlowingFluid(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(IPContent.Fluids.napalm.getFlowingFluid(), RenderType.getTranslucent());
