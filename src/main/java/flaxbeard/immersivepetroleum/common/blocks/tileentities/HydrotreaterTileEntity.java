@@ -12,6 +12,7 @@ import blusunrize.immersiveengineering.api.IEEnums.IOSideConfig;
 import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IBlockBounds;
 import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockTileEntity;
+import blusunrize.immersiveengineering.common.util.Utils;
 import flaxbeard.immersivepetroleum.api.crafting.SulfurRecoveryRecipe;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
@@ -28,7 +29,9 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<HydrotreaterTileEntity, SulfurRecoveryRecipe> implements IBlockBounds{
@@ -160,7 +163,12 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	
 	@Override
 	public boolean additionalCanProcessCheck(MultiblockProcess<SulfurRecoveryRecipe> process){
-		return false;
+		int outputAmount = 0;
+		for(FluidStack outputFluid:process.recipe.getFluidOutputs()){
+			outputAmount += outputFluid.getAmount();
+		}
+		
+		return this.tanks[TANK_OUTPUT].getCapacity() >= (this.tanks[TANK_OUTPUT].getFluidAmount() + outputAmount);
 	}
 	
 	@Override
@@ -177,7 +185,69 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	
 	@Override
 	public void tick(){
+		checkForNeedlessTicking();
+		
+		if(this.world.isRemote || isDummy() || isRSDisabled()){
+			return;
+		}
+		
+		boolean update = false;
+		
+		if(this.energyStorage.getEnergyStored() > 0 && this.processQueue.size() < getProcessQueueMaxLength()){
+			if(this.tanks[TANK_INPUT_A].getFluidAmount() > 0 && this.tanks[TANK_INPUT_B].getFluidAmount() > 0){
+				SulfurRecoveryRecipe recipe = SulfurRecoveryRecipe.findRecipe(this.tanks[TANK_INPUT_A].getFluid(), this.tanks[TANK_INPUT_B].getFluid());
+				
+				if(recipe != null && this.energyStorage.getEnergyStored() >= recipe.getTotalProcessEnergy()){
+					if(this.tanks[TANK_INPUT_A].getFluidAmount() >= recipe.getInputFluid().getAmount() && (recipe.getSecondaryInputFluid() == null || (this.tanks[TANK_INPUT_B].getFluidAmount() >= recipe.getSecondaryInputFluid().getAmount()))){
+						int[] inputs, inputAmounts;
+						
+						if(recipe.getSecondaryInputFluid() != null){
+							inputs = new int[]{TANK_INPUT_A, TANK_INPUT_B};
+							inputAmounts = new int[]{recipe.getInputFluid().getAmount(), recipe.getSecondaryInputFluid().getAmount()};
+						}else{
+							inputs = new int[]{TANK_INPUT_A};
+							inputAmounts = new int[]{recipe.getInputFluid().getAmount()};
+						}
+						
+						MultiblockProcessInMachine<SulfurRecoveryRecipe> process = new MultiblockProcessInMachine<SulfurRecoveryRecipe>(recipe)
+								.setInputTanks(inputs)
+								.setInputAmounts(inputAmounts);
+						if(addProcessToQueue(process, true)){
+							addProcessToQueue(process, false);
+							update = true;
+						}
+					}
+				}
+			}
+		}
+		
+		if(!this.processQueue.isEmpty()){
+			update = true;
+		}
+		
 		super.tick();
+		
+		if(this.tanks[TANK_OUTPUT].getFluidAmount() > 0){
+			update |= FluidUtil.getFluidHandler(this.world, getBlockPosForPos(Fluid_OUT).up(), Direction.DOWN).map(output -> {
+				boolean ret = false;
+				FluidStack target = this.tanks[TANK_OUTPUT].getFluid();
+				target = Utils.copyFluidStackWithAmount(target, Math.min(target.getAmount(), 100), false);
+				
+				int accepted = output.fill(target, FluidAction.SIMULATE);
+				if(accepted > 0){
+					int drained = output.fill(Utils.copyFluidStackWithAmount(target, Math.min(target.getAmount(), accepted), false), FluidAction.EXECUTE);
+					
+					this.tanks[TANK_OUTPUT].drain(new FluidStack(target.getFluid(), drained), FluidAction.EXECUTE);
+					ret |= true;
+				}
+				
+				return ret;
+			}).orElse(false);
+		}
+		
+		if(update){
+			updateMasterBlock(null, true);
+		}
 	}
 	
 	@Override
@@ -192,7 +262,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	
 	@Override
 	public float getMinProcessDistance(MultiblockProcess<SulfurRecoveryRecipe> process){
-		return 0;
+		return 1.0F;
 	}
 	
 	@Override
