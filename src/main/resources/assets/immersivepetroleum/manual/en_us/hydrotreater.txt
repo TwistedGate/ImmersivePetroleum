@@ -1,3 +1,13 @@
 Sulfur Recovery Unit
- 
-<&hydrotreater0>Sample Text
+! NOT FINAL !
+<&hydrotreater0>Built as shown, trigger is the Heavy Engineering block in the center.
+
+Water is pumped into the port at the top (marked with blue dot)
+
+Sulfurized Diesel is pumped into the port at the front (also marked with blue dot)
+
+Sulfur is dumped out the left side
+
+Diesel is pumped out of the port on the left side (marked with orange dot)
+
+Uses <config;i;hydrotreater_operationcost> Flux per operation
