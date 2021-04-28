@@ -17,8 +17,10 @@ import flaxbeard.immersivepetroleum.api.crafting.SulfurRecoveryRecipe;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -33,6 +35,9 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<HydrotreaterTileEntity, SulfurRecoveryRecipe> implements IBlockBounds{
 	/**
@@ -173,6 +178,34 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	
 	@Override
 	public void doProcessOutput(ItemStack output){
+		Direction outputdir = (getIsMirrored() ? getFacing().rotateY() : getFacing().rotateYCCW());
+		BlockPos outputpos = getBlockPosForPos(Item_OUT).offset(outputdir);
+		
+		TileEntity te = world.getTileEntity(outputpos);
+		if(te != null){
+			IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			if(handler != null){
+				output = ItemHandlerHelper.insertItem(handler, output, false);
+			}
+		}
+		
+		if(!output.isEmpty()){
+			double x = outputpos.getX() + 0.5;
+			double y = outputpos.getY() + 0.25;
+			double z = outputpos.getZ() + 0.5;
+			
+			Direction facing = getIsMirrored() ? getFacing().getOpposite() : getFacing();
+			if(facing != Direction.EAST && facing != Direction.WEST){
+				x = outputpos.getX() + (facing == Direction.SOUTH ? 0.15 : 0.85);
+			}
+			if(facing != Direction.NORTH && facing != Direction.SOUTH){
+				z = outputpos.getZ() + (facing == Direction.WEST ? 0.15 : 0.85);
+			}
+			
+			ItemEntity ei = new ItemEntity(world, x, y, z, output.copy());
+			ei.setMotion(0.075 * outputdir.getXOffset(), 0.025, 0.075 * outputdir.getZOffset());
+			world.addEntity(ei);
+		}
 	}
 	
 	@Override
