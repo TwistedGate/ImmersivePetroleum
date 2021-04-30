@@ -353,15 +353,9 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	}
 	
 	private static CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(HydrotreaterTileEntity::getShape);
-	public static boolean updateShapes = false;
 	
 	@Override
 	public VoxelShape getBlockBounds(ISelectionContext ctx){
-		if(updateShapes){
-			updateShapes = false;
-			SHAPES = CachedShapesWithTransform.createForMultiblock(HydrotreaterTileEntity::getShape);
-		}
-		
 		return SHAPES.get(this.posInMultiblock, Pair.of(getFacing(), getIsMirrored()));
 	}
 	
