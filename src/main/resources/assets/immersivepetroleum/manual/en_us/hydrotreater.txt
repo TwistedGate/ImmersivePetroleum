@@ -1,5 +1,5 @@
 Sulfur Recovery Unit
- 
+Smell of Fireworks
 <&hydrotreater0>The Sulfur Recovery Unit (SRU) is a multiblock machine that seperates Sulfur from Sulfurized Diesel by using Hydrogen and Oxygen gained from the Electrolysis of Water.
 
 It uses <config;i;hydrotreater_operationcost> Flux per operation<np>
