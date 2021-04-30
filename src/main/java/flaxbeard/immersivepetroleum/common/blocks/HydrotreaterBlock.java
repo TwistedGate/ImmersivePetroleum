@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class HydroTreaterBlock extends IPMetalMultiblock<HydrotreaterTileEntity>{
-	public HydroTreaterBlock(){
+public class HydrotreaterBlock extends IPMetalMultiblock<HydrotreaterTileEntity>{
+	public HydrotreaterBlock(){
 		super("hydrotreater", () -> HydrotreaterTileEntity.TYPE);
 	}
 	

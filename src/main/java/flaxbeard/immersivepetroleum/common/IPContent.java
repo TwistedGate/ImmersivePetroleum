@@ -31,7 +31,7 @@ import flaxbeard.immersivepetroleum.common.blocks.CokerUnitBlock;
 import flaxbeard.immersivepetroleum.common.blocks.DistillationTowerBlock;
 import flaxbeard.immersivepetroleum.common.blocks.FlarestackBlock;
 import flaxbeard.immersivepetroleum.common.blocks.GasGeneratorBlock;
-import flaxbeard.immersivepetroleum.common.blocks.HydroTreaterBlock;
+import flaxbeard.immersivepetroleum.common.blocks.HydrotreaterBlock;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockBase;
 import flaxbeard.immersivepetroleum.common.blocks.PetcokeBlock;
 import flaxbeard.immersivepetroleum.common.blocks.PumpjackBlock;
@@ -157,7 +157,7 @@ public class IPContent{
 		Multiblock.distillationtower = new DistillationTowerBlock();
 		Multiblock.pumpjack = new PumpjackBlock();
 		Multiblock.cokerunit = new CokerUnitBlock();
-		Multiblock.hydrotreater = new HydroTreaterBlock();
+		Multiblock.hydrotreater = new HydrotreaterBlock();
 		
 		Items.bitumen = new IPItemBase("bitumen");
 		Items.oil_can = new OilCanItem("oil_can");
