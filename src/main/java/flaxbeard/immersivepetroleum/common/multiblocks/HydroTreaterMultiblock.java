@@ -27,7 +27,7 @@ public class HydroTreaterMultiblock extends IETemplateMultiblock{
 	
 	@Override
 	public float getManualScale(){
-		return 16.0F;
+		return 12.0F;
 	}
 	
 	@Override
