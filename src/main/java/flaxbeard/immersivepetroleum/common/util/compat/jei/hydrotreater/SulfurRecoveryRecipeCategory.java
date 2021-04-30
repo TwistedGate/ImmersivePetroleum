@@ -23,6 +23,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 public class SulfurRecoveryRecipeCategory extends IPRecipeCategory<SulfurRecoveryRecipe>{
 	public static final ResourceLocation ID = new ResourceLocation(ImmersivePetroleum.MODID, "hydrotreater");
@@ -40,7 +41,9 @@ public class SulfurRecoveryRecipeCategory extends IPRecipeCategory<SulfurRecover
 	@Override
 	public void setIngredients(SulfurRecoveryRecipe recipe, IIngredients ingredients){
 		ingredients.setInputs(VanillaTypes.FLUID, recipe.inputFluid.getMatchingFluidStacks());
-		ingredients.setInputs(VanillaTypes.FLUID, recipe.inputFluidSecondary.getMatchingFluidStacks());
+		if(recipe.inputFluidSecondary != null){
+			ingredients.setInputs(VanillaTypes.FLUID, recipe.inputFluidSecondary.getMatchingFluidStacks());
+		}
 		
 		ingredients.setOutputs(VanillaTypes.FLUID, Arrays.asList(recipe.output));
 		ingredients.setOutputs(VanillaTypes.ITEM, Arrays.asList(recipe.outputItem));
@@ -51,17 +54,19 @@ public class SulfurRecoveryRecipeCategory extends IPRecipeCategory<SulfurRecover
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiFluidStacks.init(0, true, 25, 3, 20, 51, 1, false, this.tankOverlay);
-		guiFluidStacks.set(0, recipe.inputFluid.getMatchingFluidStacks());
+		int id = 0;
 		
-		guiFluidStacks.init(1, true, 3, 3, 20, 51, 1, false, this.tankOverlay);
-		guiFluidStacks.set(1, recipe.inputFluidSecondary.getMatchingFluidStacks());
+		guiFluidStacks.init(id, true, 25, 3, 20, 51, 1, false, this.tankOverlay);
+		guiFluidStacks.set(id++, recipe.inputFluid.getMatchingFluidStacks());
 		
-		guiFluidStacks.init(2, false, 71, 3, 20, 51, 1, false, this.tankOverlay);
-		guiFluidStacks.set(2, recipe.output);
+		guiFluidStacks.init(id, true, 3, 3, 20, 51, 1, false, this.tankOverlay);
+		guiFluidStacks.set(id++, recipe.inputFluidSecondary != null ? recipe.inputFluidSecondary.getMatchingFluidStacks() : Arrays.asList(FluidStack.EMPTY));
 		
-		guiItemStacks.init(3, false, 93, 20);
-		guiItemStacks.set(3, Arrays.asList(recipe.outputItem));
+		guiFluidStacks.init(id, false, 71, 3, 20, 51, 1, false, this.tankOverlay);
+		guiFluidStacks.set(id++, recipe.output);
+		
+		guiItemStacks.init(id, false, 93, 20);
+		guiItemStacks.set(id++, Arrays.asList(recipe.outputItem));
 	}
 	
 	@Override
