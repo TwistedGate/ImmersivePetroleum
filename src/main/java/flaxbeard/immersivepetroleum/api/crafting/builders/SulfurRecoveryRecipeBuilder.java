@@ -38,14 +38,17 @@ public class SulfurRecoveryRecipeBuilder extends IEFinishedRecipe<SulfurRecovery
 		return addFluidTag("input", fluid, amount);
 	}
 	
+	/** Optionaly add a second fluid to be pumped in */
 	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(FluidStack fluid){
 		return addFluid("secondary_input", fluid);
 	}
 	
+	/** Optionaly add a second fluid to be pumped in */
 	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(FluidTagInput fluid){
 		return addFluidTag("secondary_input", fluid);
 	}
 	
+	/** Optionaly add a second fluid to be pumped in */
 	public SulfurRecoveryRecipeBuilder addSecondaryInputFluid(ITag.INamedTag<Fluid> fluid, int amount){
 		return addFluidTag("secondary_input", fluid, amount);
 	}

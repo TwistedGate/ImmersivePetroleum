@@ -26,9 +26,12 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 	
 	public static Map<ResourceLocation, SulfurRecoveryRecipe> recipes = new HashMap<>();
 	
-	public static SulfurRecoveryRecipe findRecipe(FluidStack input, @Nullable FluidStack secondary){
+	public static SulfurRecoveryRecipe findRecipe(@Nonnull FluidStack input, @Nonnull FluidStack secondary){
+		Objects.requireNonNull(input);
+		Objects.requireNonNull(secondary);
+		
 		for(SulfurRecoveryRecipe recipe:recipes.values()){
-			if((recipe.inputFluid != null && recipe.inputFluid.test(input)) && (secondary == null || (recipe.inputFluidSecondary != null && secondary != null && recipe.inputFluidSecondary.test(secondary)))){
+			if((recipe.inputFluid != null && recipe.inputFluid.test(input)) && (secondary.isEmpty() || (recipe.inputFluidSecondary != null && secondary != null && recipe.inputFluidSecondary.test(secondary)))){
 				return recipe;
 			}
 		}
@@ -90,7 +93,7 @@ public class SulfurRecoveryRecipe extends MultiblockRecipe{
 		this.totalProcessTime = (int) Math.floor(time * IPServerConfig.REFINING.hydrotreater_timeModifier.get());
 		
 		this.fluidOutputList = Arrays.asList(output);
-		this.fluidInputList = Arrays.asList(inputFluid, inputFluidSecondary);
+		this.fluidInputList = Arrays.asList(inputFluidSecondary != null ? new FluidTagInput[]{inputFluid, inputFluidSecondary} : new FluidTagInput[]{inputFluid});
 	}
 	
 	@Override

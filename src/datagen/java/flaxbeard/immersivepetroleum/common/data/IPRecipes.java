@@ -154,8 +154,6 @@ public class IPRecipes extends RecipeProvider{
 	}
 	
 	private void hydrotreaterRecipes(){
-		// TODO Hydrotreater Recipes
-		
 		SulfurRecoveryRecipeBuilder.builder(new FluidStack(IPContent.Fluids.diesel, 10), 512, 1)
 			.addInputFluid(new FluidTagInput(IPTags.Fluids.diesel_sulfur, 10))
 			.addSecondaryInputFluid(FluidTags.WATER, 10)
