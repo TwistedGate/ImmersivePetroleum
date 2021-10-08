@@ -202,9 +202,9 @@ public class MotorboatItem extends IPItemBase implements IUpgradeableTool{
 	@Override
 	public void finishUpgradeRecalculation(ItemStack stack){
 	}
-	
+
 	@Override
-	public Slot[] getWorkbenchSlots(Container container, ItemStack stack, Supplier<World> getWorld, Supplier<PlayerEntity> getPlayer){
+	public Slot[] getWorkbenchSlots(Container container, ItemStack stack, World getWorld, Supplier<PlayerEntity> getPlayer, IItemHandler toolInventory) {
 		IItemHandler inv = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(inv != null){
 			return new Slot[]{
@@ -216,7 +216,7 @@ public class MotorboatItem extends IPItemBase implements IUpgradeableTool{
 			return new Slot[0];
 		}
 	}
-	
+
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
