@@ -221,6 +221,7 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 		
 		boolean update = false;
 		
+		
 		if(this.energyStorage.getEnergyStored() > 0 && this.processQueue.size() < getProcessQueueMaxLength()){
 			if(this.tanks[TANK_INPUT_A].getFluidAmount() > 0 || this.tanks[TANK_INPUT_B].getFluidAmount() > 0){
 				SulfurRecoveryRecipe recipe = SulfurRecoveryRecipe.findRecipe(this.tanks[TANK_INPUT_A].getFluid(), this.tanks[TANK_INPUT_B].getFluid());
