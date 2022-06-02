@@ -63,6 +63,11 @@ public class CrusherLubricationHandler implements ILubricationHandler<CrusherTil
 	
 	@Override
 	public void lubricate(World world, int ticks, CrusherTileEntity mbte){
+		this.lubricate(world, ticks, mbte, null);
+	}
+	
+	@Override
+	public void lubricate(World world, int ticks, CrusherTileEntity mbte, AutoLubricatorTileEntity lubricator){
 		if(!world.isRemote){
 			Iterator<MultiblockProcess<CrusherRecipe>> processIterator = mbte.processQueue.iterator();
 			MultiblockProcess<CrusherRecipe> process = processIterator.next();

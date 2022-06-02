@@ -43,8 +43,10 @@ public class LubricatedHandler{
 		boolean isMachineEnabled(World world, E mbte);
 		
 		TileEntity isPlacedCorrectly(World world, AutoLubricatorTileEntity lubricator, Direction direction);
-		
+
 		void lubricate(World world, int ticks, E mbte);
+		
+		void lubricate(World world, int ticks, E mbte, AutoLubricatorTileEntity lubricator);
 		
 		@OnlyIn(Dist.CLIENT)
 		void renderPipes(AutoLubricatorTileEntity lubricator, E mbte, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay);

@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import blusunrize.immersiveengineering.common.blocks.metal.BucketWheelTileEntity;
+import blusunrize.immersiveengineering.common.blocks.metal.CrusherTileEntity;
 import blusunrize.immersiveengineering.common.blocks.metal.ExcavatorTileEntity;
 import blusunrize.immersiveengineering.common.config.IEServerConfig;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
@@ -77,6 +78,11 @@ public class ExcavatorLubricationHandler implements ILubricationHandler<Excavato
 	
 	@Override
 	public void lubricate(World world, int ticks, ExcavatorTileEntity mbte){
+		this.lubricate(world, ticks, mbte, null);
+	}
+	
+	@Override
+	public void lubricate(World world, int ticks, ExcavatorTileEntity mbte, AutoLubricatorTileEntity lubricator){
 		BlockPos wheelPos = mbte.getWheelCenterPos();
 		TileEntity center = world.getTileEntity(wheelPos);
 		

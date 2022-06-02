@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import blusunrize.immersiveengineering.common.blocks.metal.CrusherTileEntity;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
 import flaxbeard.immersivepetroleum.client.model.IPModel;
@@ -59,6 +60,11 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 	
 	@Override
 	public void lubricate(World world, int ticks, PumpjackTileEntity mbte){
+		this.lubricate(world, ticks, mbte, null);
+	}
+	
+	@Override
+	public void lubricate(World world, int ticks, PumpjackTileEntity mbte, AutoLubricatorTileEntity lubricator){
 		if(!world.isRemote){
 			if(ticks % 4 == 0){
 				mbte.tick();
