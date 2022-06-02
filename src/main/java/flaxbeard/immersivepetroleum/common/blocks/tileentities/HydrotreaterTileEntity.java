@@ -67,7 +67,6 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	/** Template-Location of the Redstone Input Port. (0 1 3)<br> */
 	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
 	
-	
 	public final FluidTank[] tanks = new FluidTank[]{new FluidTank(12000), new FluidTank(12000), new FluidTank(12000)};
 	public HydrotreaterTileEntity(){
 		super(HydroTreaterMultiblock.INSTANCE, 8000, true, null);
@@ -212,7 +211,6 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 	
 	@Override
 	public void tick(){
-		super.tick();
 		checkForNeedlessTicking();
 		
 		if(this.world.isRemote || isDummy() || isRSDisabled()){
@@ -254,6 +252,8 @@ public class HydrotreaterTileEntity extends PoweredMultiblockTileEntity<Hydrotre
 		if(!this.processQueue.isEmpty()){
 			update = true;
 		}
+		
+		super.tick();
 
 		
 		if(this.tanks[TANK_OUTPUT].getFluidAmount() > 0){
