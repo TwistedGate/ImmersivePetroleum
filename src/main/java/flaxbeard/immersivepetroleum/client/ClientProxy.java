@@ -273,68 +273,40 @@ public class ClientProxy extends CommonProxy{
 	
 	@SuppressWarnings({"deprecation", "unused"})
 	private static void flarestack(ResourceLocation location, int priority){
-		final List<Component[]> list = new ArrayList<>();
-		
 		ManualInstance man = ManualHelper.getManual();
 		
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(man);
+		builder.readFromFile(location);
 		builder.addSpecialElement(new SpecialElementData("flarestack0", 0, new ManualElementCrafting(man, singleRecipeRef(new ItemStack(IPContent.Blocks.FLARESTACK.get())))));
-		builder.addSpecialElement(new SpecialElementData("flarestack1", 0, () -> {
-			
+		builder.appendText(() -> {
+			List<Component[]> list = new ArrayList<>();
 			for(TagKey<Fluid> tag:FlarestackHandler.getSet()){
-				ForgeRegistries.FLUIDS.getValues().stream().forEach(fluid -> {
-					if(fluid.is(tag)){
+				for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()){
+					if (fluid.is(tag)){
 						Component[] entry = new Component[]{TextComponent.EMPTY, new FluidStack(fluid, 1).getDisplayName()};
 						list.add(entry);
 					}
-				});
-			}
-			
-			// This was an attempt to have dynamicly added pages
-			// to split up the fluids able to be burned by the flarestack
-			// but it does not work, even if looks like it should.
-			// This piece of code requires time-travel to accomplish its goal!
-			if(list.size() > 12){
-				final Function<Integer, Component[][]> func = s -> {
-					Component[][] array = new Component[s][];
-					for(int i = 0;i < array.length;i++){
-						array[i] = list.remove(0);
-					}
-					return array;
-				};
-				
-				final Component[][] mainArray = func.apply(12);
-				
-				if(list.size() > 0){
-					int expectedSize = list.size();
-					int index = 2;
-					while(expectedSize > 14){
-//						final Pair<String, List<SpecialElementData>> pair = fsList(man, index++, () -> func.apply(14));
-//						builder.appendText(() -> pair);
-						expectedSize -= 14;
-					}
-					
-//					final Pair<String, List<SpecialElementData>> pair = fsList(man, index++, () -> list.toArray(new Component[0][]));
-//					builder.appendText(() -> pair);
 				}
-				
-				return new ManualElementTable(man, mainArray, false);
-			}else{
-				return new ManualElementTable(man, list.toArray(new Component[0][]), false);
 			}
-		}));
-		builder.readFromFile(location);
-		
-		final Pair<String, List<SpecialElementData>> pair = fsList(man, 2, () -> list.toArray(new Component[0][]));
-		builder.appendText(() -> pair);
-		
+
+			StringBuilder additionalText = new StringBuilder();
+			List<SpecialElementData> newElements = new ArrayList<>();
+			int nextLine = 0;
+			for (int page = 0; nextLine < list.size(); ++page){
+				final int linesOnPage = page == 0 ? 12 : 14;
+				final int endIndex = Math.min(nextLine + linesOnPage, list.size());
+				List<Component[]> onPage = list.subList(nextLine, endIndex);
+				nextLine = endIndex;
+				final String key = "flarestack_table"+page;
+				additionalText.append("<&").append(key).append(">");
+				newElements.add(new SpecialElementData(key, 0, new ManualElementTable(
+						man, onPage.toArray(Component[][]::new), false
+				)));
+			}
+			return Pair.of(additionalText.toString(), newElements);
+		});
+
 		man.addEntry(IP_CATEGORY, builder.create(), priority);
-	}
-	
-	static Pair<String, List<SpecialElementData>> fsList(ManualInstance man, int index, Supplier<Component[][]> tabs){
-		return Pair.of("<&flarestack" + index + ">", Arrays.asList(new SpecialElementData("flarestack" + index, 0, () -> {
-			return new ManualElementTable(man, tabs.get(), false);
-		})));
 	}
 	
 	private static void autolube(ResourceLocation location, int priority){
