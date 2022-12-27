@@ -148,7 +148,7 @@ public class WellTileEntity extends IPTileEntityBase implements IPServerTickable
 	public void tickClient(){
 		if(this.spill && this.spillFType != Fluids.EMPTY){
 			BlockPos pPos = this.spillHeight > -1 ? new BlockPos(this.worldPosition.getX(), this.spillHeight, this.worldPosition.getZ()) : this.worldPosition.above();
-			ClientProxy.spawnSpillParticles(this.level, pPos, this.spillFType, 10, -0.25F, clientFlow/450f);
+			ClientProxy.spawnSpillParticles(this.level, pPos, this.spillFType, 10, -0.25F, clientFlow);
 		}
 	}
 	

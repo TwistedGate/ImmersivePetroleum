@@ -105,7 +105,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	
 	public final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
 	public boolean drilling, spilling;
-	public int clientFlow;
+	private int clientFlow;
 	public int timer = 0;
 	
 	private Fluid fluidSpilled = Fluids.EMPTY;
@@ -154,8 +154,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		nbt.putInt("timer", this.timer);
 		
 		nbt.putString("spillingfluid", this.fluidSpilled.getRegistryName().toString());
-		nbt.putInt("flow", ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()) == null || this.worldPosition.getY() < getLevelNonnull().getSeaLevel() ? 10 :
-			ReservoirIsland.getFlow(ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()).getPressure(getLevelNonnull(), getBlockPos().getX(), getBlockPos().getZ())));
+		nbt.putInt("flow", getReservoirFlow());
 		
 		nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
 		
@@ -231,7 +230,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		}
 		
 		if(this.spilling){
-			ClientProxy.spawnSpillParticles(level, this.worldPosition, this.fluidSpilled, 5, 15.75F, clientFlow/450f);
+			ClientProxy.spawnSpillParticles(level, this.worldPosition, this.fluidSpilled, 5, 15.75F, clientFlow);
 		}
 	}
 	
@@ -346,7 +345,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 				if(well != null && well.wellPipeLength == well.getMaxPipeLength()) outputReservoirFluid();
 			}
 			
-			if(forceUpdate || (lastDrilling != this.drilling) || (lastSpilling != this.spilling)){
+			if(forceUpdate || (lastDrilling != this.drilling) || (lastSpilling != this.spilling) || (Math.abs(getReservoirFlow() - clientFlow) > 0.075*clientFlow)){
 				updateMasterBlock(null, true);
 				setChanged();
 			}
@@ -360,6 +359,11 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 			return true;
 		}
 		return false;
+	}
+	
+	private int getReservoirFlow() {
+		return ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()) == null || this.worldPosition.getY() < getLevelNonnull().getSeaLevel() ? 10 :
+			   ReservoirIsland.getFlow(ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()).getPressure(getLevelNonnull(), getBlockPos().getX(), getBlockPos().getZ()));
 	}
 	
 	/** May end up being removed */

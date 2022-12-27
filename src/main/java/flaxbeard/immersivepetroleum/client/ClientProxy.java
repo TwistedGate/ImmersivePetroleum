@@ -210,14 +210,14 @@ public class ClientProxy extends CommonProxy{
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public static void spawnSpillParticles(Level world, BlockPos pos, Fluid fluid, int particles, float yOffset, float speed){
+	public static void spawnSpillParticles(Level world, BlockPos pos, Fluid fluid, int particles, float yOffset, float flow){
 		if(fluid == null || fluid == Fluids.EMPTY){
 			return;
 		}
 		
 		for(int i = 0;i < particles;i++){
 			float xa = (world.random.nextFloat() - .5F) / 2F;
-			float ya = 0.25F + (0.5F + (world.random.nextFloat() * 0.25F)) * speed;
+			float ya = 0.25F + (0.5F + (world.random.nextFloat() * 0.25F)) * flow/800;
 			float za = (world.random.nextFloat() - .5F) / 2F;
 			
 			float rx = (world.random.nextFloat() - .5F) * 0.5F;
