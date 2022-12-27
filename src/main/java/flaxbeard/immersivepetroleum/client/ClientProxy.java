@@ -33,6 +33,7 @@ import flaxbeard.immersivepetroleum.client.gui.CokerUnitScreen;
 import flaxbeard.immersivepetroleum.client.gui.DerrickScreen;
 import flaxbeard.immersivepetroleum.client.gui.DistillationTowerScreen;
 import flaxbeard.immersivepetroleum.client.gui.HydrotreaterScreen;
+import flaxbeard.immersivepetroleum.client.particle.FluidParticleData;
 import flaxbeard.immersivepetroleum.client.render.SeismicResultRenderer;
 import flaxbeard.immersivepetroleum.client.render.debugging.DebugRenderHandler;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
@@ -61,6 +62,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -75,6 +77,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -202,6 +207,28 @@ public class ClientProxy extends CommonProxy{
 		transform.translate(0.0F, 0.5F, 1.0F);
 		blockRenderer.getModelRenderer().renderModel(transform.last(), buffers.getBuffer(RenderType.solid()), state, model, 1.0F, 1.0F, 1.0F, -1, -1, EmptyModelData.INSTANCE);
 		transform.popPose();
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public static void spawnSpillParticles(Level world, BlockPos pos, Fluid fluid, int particles, float yOffset, float speed){
+		if(fluid == null || fluid == Fluids.EMPTY){
+			return;
+		}
+		
+		for(int i = 0;i < particles;i++){
+			float xa = (world.random.nextFloat() - .5F) / 2F;
+			float ya = 0.25F + (0.5F + (world.random.nextFloat() * 0.25F)) * speed;
+			float za = (world.random.nextFloat() - .5F) / 2F;
+			
+			float rx = (world.random.nextFloat() - .5F) * 0.5F;
+			float rz = (world.random.nextFloat() - .5F) * 0.5F;
+			
+			double x = (pos.getX() + 0.5) + rx;
+			double y = (pos.getY() + yOffset);
+			double z = (pos.getZ() + 0.5) + rz;
+			
+			world.addParticle(new FluidParticleData(fluid), x, y, z, xa, ya, za);
+		}
 	}
 	
 	@Override

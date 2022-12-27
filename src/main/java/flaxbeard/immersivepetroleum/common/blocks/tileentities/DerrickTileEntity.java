@@ -21,6 +21,7 @@ import blusunrize.immersiveengineering.common.util.ResettableCapability;
 import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
+import flaxbeard.immersivepetroleum.client.ClientProxy;
 import flaxbeard.immersivepetroleum.client.gui.elements.PipeConfig;
 import flaxbeard.immersivepetroleum.client.particle.FluidParticleData;
 import flaxbeard.immersivepetroleum.common.IPContent;
@@ -104,6 +105,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	
 	public final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
 	public boolean drilling, spilling;
+	public int clientFlow;
 	public int timer = 0;
 	
 	private Fluid fluidSpilled = Fluids.EMPTY;
@@ -122,6 +124,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		
 		this.drilling = nbt.getBoolean("drilling");
 		this.spilling = nbt.getBoolean("spilling");
+		this.clientFlow = nbt.getInt("flow");
 		this.timer = nbt.getInt("timer");
 		
 		try{
@@ -151,6 +154,8 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		nbt.putInt("timer", this.timer);
 		
 		nbt.putString("spillingfluid", this.fluidSpilled.getRegistryName().toString());
+		nbt.putInt("flow", ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()) == null || this.worldPosition.getY() < getLevelNonnull().getSeaLevel() ? 10 :
+			ReservoirIsland.getFlow(ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos()).getPressure(getLevelNonnull(), getBlockPos().getX(), getBlockPos().getZ())));
 		
 		nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
 		
@@ -226,7 +231,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		}
 		
 		if(this.spilling){
-			spawnSpillParticles(level, this.worldPosition, this.fluidSpilled, 5, 15.75F);
+			ClientProxy.spawnSpillParticles(level, this.worldPosition, this.fluidSpilled, 5, 15.75F, clientFlow/450f);
 		}
 	}
 	
@@ -536,28 +541,6 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 			well.tappedIslands = list;
 			well.additionalPipes = additionalPipes;
 			well.setChanged();
-		}
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public static void spawnSpillParticles(Level world, BlockPos pos, Fluid fluid, int particles, float yOffset){
-		if(fluid == null || fluid == Fluids.EMPTY){
-			return;
-		}
-		
-		for(int i = 0;i < particles;i++){
-			float xa = (world.random.nextFloat() - .5F) / 2F;
-			float ya = 0.75F + (world.random.nextFloat() * 0.25F);
-			float za = (world.random.nextFloat() - .5F) / 2F;
-			
-			float rx = (world.random.nextFloat() - .5F) * 0.5F;
-			float rz = (world.random.nextFloat() - .5F) * 0.5F;
-			
-			double x = (pos.getX() + 0.5) + rx;
-			double y = (pos.getY() + yOffset);
-			double z = (pos.getZ() + 0.5) + rz;
-			
-			world.addParticle(new FluidParticleData(fluid), x, y, z, xa, ya, za);
 		}
 	}
 	

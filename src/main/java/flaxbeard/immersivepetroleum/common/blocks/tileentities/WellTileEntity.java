@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import flaxbeard.immersivepetroleum.client.ClientProxy;
 import org.apache.commons.lang3.tuple.Pair;
 
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
@@ -57,6 +58,7 @@ public class WellTileEntity extends IPTileEntityBase implements IPServerTickable
 	private int spillHeight = -1;
 	
 	boolean spill = false;
+	int clientFlow = 0;
 	public WellTileEntity(BlockPos pWorldPosition, BlockState pBlockState){
 		super(IPTileTypes.WELL.get(), pWorldPosition, pBlockState);
 	}
@@ -64,6 +66,11 @@ public class WellTileEntity extends IPTileEntityBase implements IPServerTickable
 	@Override
 	protected void writeCustom(CompoundTag nbt){
 		nbt.putBoolean("spill", this.spill);
+		nbt.putInt("flow", ReservoirHandler.getIsland(getWorldNonnull(), getBlockPos()) == null ? 0 :
+			ReservoirIsland.getFlow(ReservoirHandler.getIsland(getWorldNonnull(),
+				getBlockPos()).getPressure(getWorldNonnull(),
+				getBlockPos().getX(), getBlockPos().getZ())));
+		
 		nbt.putBoolean("drillingcompleted", this.drillingCompleted);
 		nbt.putBoolean("pastphyiscalpart", this.pastPhysicalPart);
 		
@@ -98,6 +105,7 @@ public class WellTileEntity extends IPTileEntityBase implements IPServerTickable
 	@Override
 	protected void readCustom(CompoundTag nbt){
 		this.spill = nbt.getBoolean("spill");
+		this.clientFlow = nbt.getInt("flow");
 		this.drillingCompleted = nbt.getBoolean("drillingcompleted");
 		this.pastPhysicalPart = nbt.getBoolean("pastphyiscalpart");
 		
@@ -140,7 +148,7 @@ public class WellTileEntity extends IPTileEntityBase implements IPServerTickable
 	public void tickClient(){
 		if(this.spill && this.spillFType != Fluids.EMPTY){
 			BlockPos pPos = this.spillHeight > -1 ? new BlockPos(this.worldPosition.getX(), this.spillHeight, this.worldPosition.getZ()) : this.worldPosition.above();
-			DerrickTileEntity.spawnSpillParticles(this.level, pPos, this.spillFType, 10, -0.25F);
+			ClientProxy.spawnSpillParticles(this.level, pPos, this.spillFType, 10, -0.25F, clientFlow/450f);
 		}
 	}
 	
