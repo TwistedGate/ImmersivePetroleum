@@ -13,6 +13,7 @@
 	"block.immersivepetroleum.asphalt_slab": "沥青混凝土台阶",
 	"block.immersivepetroleum.asphalt_stair": "沥青混凝土楼梯",
 	"block.immersivepetroleum.petcoke_block": "石油焦块",
+	"block.immersivepetroleum.paraffin_wax_block": "石蜡块",
 	
 	"block.immersivepetroleum.auto_lubricator": "自动润滑器",
 	"block.immersivepetroleum.gas_generator": "便携式发电机",
@@ -66,6 +67,7 @@
 	"item.immersivepetroleum.lubricant_cracked_bucket": "裂化润滑油桶",
 	"item.immersivepetroleum.kerosene_bucket": "煤油桶",
 	"item.immersivepetroleum.gasoline_additives_bucket": "汽油添加剂桶",
+	"item.immersivepetroleum.paraffin_wax": "石蜡",
 	
 	"item.immersivepetroleum.upgrade_reinforced_hull": "强化船体",
 	"item.immersivepetroleum.upgrade_icebreaker": "破冰船艏",
@@ -92,11 +94,13 @@
 	"desc.immersivepetroleum.flavour.upgrade_paddles": "在汽艇没有燃料时能用来划船",
 	
 	"desc.immersivepetroleum.flavour.asphalt": "增加%1$s步行速度",
+	"desc.immersivepetroleum.flavour.paraffin_wax": "降低5%%步行速度，很滑",
 	
 	"_comment": "This is for the upgrade list of the speedboat tooltip",
 	"desc.immersivepetroleum.flavour.speedboat.prefix": "增强",
 	"desc.immersivepetroleum.flavour.speedboat.upgrade": "升级#%d：",
 	
+	"desc.immersivepetroleum.flavour.surveytool.holdme": "手持以查看",
 	"desc.immersivepetroleum.flavour.surveytool.location": "在[%1$d, %2$d]处获取的样本",
 	
 	"desc.immersivepetroleum.info.projector.noMultiblock": "右击打开菜单",
@@ -136,7 +140,7 @@
 	"gui.immersivepetroleum.projector.button.rccw": "逆时针旋转",
 
 	"gui.immersivepetroleum.derrick.msg.disabled": "被红石控制关闭",
-	"gui.immersivepetroleum.derrick.msg.drilling": "钻探中\ue908\ue909%1$s",
+	"gui.immersivepetroleum.derrick.msg.drilling": "钻探中……%1$s",
 	"gui.immersivepetroleum.derrick.msg.out_of_pipes": "管道不足",
 	"gui.immersivepetroleum.derrick.msg.missing": "缺少%1$s",
 	"gui.immersivepetroleum.derrick.msg.completed": "钻探已完成！<br>祝今日顺利 :3",
