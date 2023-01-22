@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class SurveyScan implements ISurveyInfo{
-	public static final String TAG_KEY = "islandscan";
+	public static final String TAG_KEY = "surveyscan";
 	
 	public static final int SCAN_RADIUS = 32;
 	public static final int SCAN_SIZE = SCAN_RADIUS * 2 + 1;

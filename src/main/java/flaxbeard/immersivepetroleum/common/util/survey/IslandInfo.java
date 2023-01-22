@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class IslandInfo implements ISurveyInfo{
-	public static final String TAG_KEY = "surveyscan";
+	public static final String TAG_KEY = "islandscan";
 	
 	private int x, z;
 	private byte status;

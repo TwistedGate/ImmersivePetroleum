@@ -57,6 +57,7 @@ public class IPTags{
 	
 	public static class Utility{
 		public static final TagKey<Fluid> burnableInFlarestack = createFluidWrapper(ResourceUtils.ip("burnable_in_flarestack"));
+		public static final TagKey<Item> toolboxTools = createItemWrapper(ResourceUtils.ie("toolbox/tools"));
 	}
 	
 	public static TagKey<Item> getItemTag(TagKey<Block> blockTag){
