@@ -93,7 +93,7 @@ public class ImmersivePetroleum{
 		IEventBus eBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IPRegisters.addRegistersToEventBus(eBus);
 		
-		IPContent.populate();
+		IPContent.modConstruction();
 		IPLootFunctions.modConstruction();
 		IPRecipeTypes.modConstruction();
 		

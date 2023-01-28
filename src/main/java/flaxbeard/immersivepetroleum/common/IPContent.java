@@ -201,7 +201,7 @@ public class IPContent{
 	public static final RegistryObject<Item> DEBUGITEM = IPRegisters.registerItem("debug", DebugItem::new);
 	
 	/** block/item/fluid population */
-	public static void populate(){
+	public static void modConstruction(){
 		Fluids.forceClassLoad();
 		Blocks.forceClassLoad();
 		Items.forceClassLoad();
