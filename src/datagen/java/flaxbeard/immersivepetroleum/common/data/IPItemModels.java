@@ -53,6 +53,7 @@ public class IPItemModels extends ItemModelProvider{
 		
 		genericItem(IPContent.Items.SURVEYRESULT.get());
 		
+		projectorItem();
 		generatorItem();
 		autolubeItem();
 		flarestackItem();
@@ -65,9 +66,6 @@ public class IPItemModels extends ItemModelProvider{
 		hydrotreaterItem();
 		derrickItem();
 		oiltankItem();
-		
-		getBuilder(ImmersivePetroleum.MODID+":item/"+IPContent.Items.PROJECTOR.get().getRegistryName().getPath())
-			.parent(getExistingFile(modLoc("item/mb_projector")));
 		
 		for(IPFluid.IPFluidEntry f:IPFluid.FLUIDS)
 			createBucket(f.still().get());
@@ -131,6 +129,21 @@ public class IPItemModels extends ItemModelProvider{
 		doTransform(trans, TransformType.GUI, new Vector3f(0, -3, 0), new Vector3f(30, 225, 0), 0.4F);
 		doTransform(trans, TransformType.GROUND, new Vector3f(0, 3, 0), null, 0.25F);
 		doTransform(trans, TransformType.FIXED, new Vector3f(0, -4, 0), null, 0.5F);
+	}
+	
+	private void projectorItem(){
+		ItemModelBuilder model = obj(IPContent.Items.PROJECTOR.get(), "item/obj/projector.obj")
+				.texture("texture", modLoc("item/projector"));
+		
+		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
+		doTransform(trans, TransformType.FIRST_PERSON_LEFT_HAND, new Vector3f(0, 4, -2), null, 0.75F);
+		doTransform(trans, TransformType.FIRST_PERSON_RIGHT_HAND, new Vector3f(12, 4, -2), null, 0.75F);
+		doTransform(trans, TransformType.THIRD_PERSON_LEFT_HAND, new Vector3f(-6, -4, 4.225F), new Vector3f(90, 0, 0), 0.75F);
+		doTransform(trans, TransformType.THIRD_PERSON_RIGHT_HAND, new Vector3f(6, -4, 4.225F), new Vector3f(90, 0, 0), 0.75F);
+		doTransform(trans, TransformType.HEAD, new Vector3f(8, 18.25F, 8), null, 1.0F);
+		doTransform(trans, TransformType.GUI, new Vector3f(0, 12, 0), new Vector3f(30, 135, 0), 1.0F);
+		doTransform(trans, TransformType.GROUND, new Vector3f(4, 8, 4), null, 0.5F);
+		doTransform(trans, TransformType.FIXED, new Vector3f(-6, 6, 5), new Vector3f(0, -90, 0), 0.75F);
 	}
 	
 	private void distillationtowerItem(){
