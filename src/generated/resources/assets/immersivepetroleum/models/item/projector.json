@@ -108,7 +108,7 @@
     }
   },
   "textures": {
-    "texture": "immersivepetroleum:item/projector"
+    "texture": "immersivepetroleum:projectors/projector"
   },
   "loader": "forge:obj",
   "model": "immersivepetroleum:models/item/obj/projector.obj",
