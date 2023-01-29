@@ -133,7 +133,7 @@ public class IPItemModels extends ItemModelProvider{
 	
 	private void projectorItem(){
 		ItemModelBuilder model = obj(IPContent.Items.PROJECTOR.get(), "item/obj/projector.obj")
-				.texture("texture", modLoc("item/projector"));
+				.texture("texture", modLoc("projectors/projector"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
 		doTransform(trans, TransformType.FIRST_PERSON_LEFT_HAND, new Vector3f(0, 4, -2), null, 0.75F);
