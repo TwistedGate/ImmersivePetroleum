@@ -70,6 +70,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
@@ -213,6 +214,7 @@ public class IPContent{
 	}
 	
 	public static void preInit(){
+		IPToolShaders.addShader("test", 0, Rarity.UNCOMMON, 0xDEADAF, 0xBEEF00, 0xFABEEA, null, false, 0xAAAAAA).setInfo(null, "Test", "Experimental");
 	}
 	
 	public static void init(ParallelDispatchEvent event){

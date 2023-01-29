@@ -110,7 +110,7 @@
   "textures": {
     "texture": "immersivepetroleum:projectors/projector"
   },
-  "loader": "forge:obj",
+  "loader": "immersiveengineering:ie_obj",
   "model": "immersivepetroleum:models/item/obj/projector.obj",
-  "flip-v": true
+  "callbacks": "immersiveengineering:default"
 }

@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import com.mojang.math.Vector3f;
 
+import blusunrize.immersiveengineering.client.models.obj.callback.DefaultCallback;
+import blusunrize.immersiveengineering.data.models.IEOBJBuilder;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.fluids.IPFluid;
@@ -13,16 +15,16 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.client.model.generators.loaders.OBJLoaderBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class IPItemModels extends ItemModelProvider{
+public class IPItemModels extends ModelProvider<TRSRModelBuilder>{
 	public IPItemModels(DataGenerator gen, ExistingFileHelper exHelper){
-		super(gen, ImmersivePetroleum.MODID, exHelper);
+		super(gen, ImmersivePetroleum.MODID, ITEM_FOLDER, TRSRModelBuilder::new, exHelper);
+//		super(gen, ImmersivePetroleum.MODID, exHelper);
 	}
 	
 	@Override
@@ -72,7 +74,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void flarestackItem(){
-		ItemModelBuilder model = obj(IPContent.Blocks.FLARESTACK.get(), "block/obj/flarestack.obj")
+		TRSRModelBuilder model = obj(IPContent.Blocks.FLARESTACK.get(), "block/obj/flarestack.obj")
 				.texture("texture", modLoc("block/obj/flarestack"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -87,7 +89,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void surveyToolItem(){
-		ItemModelBuilder model = obj(IPContent.Blocks.SEISMIC_SURVEY.get(), "block/obj/seismic_survey_tool.obj")
+		TRSRModelBuilder model = obj(IPContent.Blocks.SEISMIC_SURVEY.get(), "block/obj/seismic_survey_tool.obj")
 				.texture("texture", modLoc("block/obj/seismic_survey_tool"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -102,7 +104,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void generatorItem(){
-		ItemModelBuilder model = obj(IPContent.Blocks.GAS_GENERATOR.get(), "block/obj/generator.obj")
+		TRSRModelBuilder model = obj(IPContent.Blocks.GAS_GENERATOR.get(), "block/obj/generator.obj")
 				.texture("texture", modLoc("block/obj/generator"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -117,7 +119,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void autolubeItem(){
-		ItemModelBuilder model = obj(IPContent.Blocks.AUTO_LUBRICATOR.get(), "block/obj/autolubricator.obj")
+		TRSRModelBuilder model = obj(IPContent.Blocks.AUTO_LUBRICATOR.get(), "block/obj/autolubricator.obj")
 			.texture("texture", modLoc("models/lubricator"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -132,7 +134,9 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void projectorItem(){
-		ItemModelBuilder model = obj(IPContent.Items.PROJECTOR.get(), "item/obj/projector.obj")
+		TRSRModelBuilder model = objIELoader(IPContent.Items.PROJECTOR.get(), "item/obj/projector.obj")
+				.callback(DefaultCallback.INSTANCE)
+				.end()
 				.texture("texture", modLoc("projectors/projector"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -147,7 +151,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void distillationtowerItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.DISTILLATIONTOWER.get(), "multiblock/obj/distillationtower.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.DISTILLATIONTOWER.get(), "multiblock/obj/distillationtower.obj")
 			.texture("texture", modLoc("multiblock/distillation_tower"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -162,7 +166,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void pumpjackItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.PUMPJACK.get(), "item/obj/pumpjack_itemmockup.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.PUMPJACK.get(), "item/obj/pumpjack_itemmockup.obj")
 			.texture("texture_base", modLoc("multiblock/pumpjack_base"))
 			.texture("texture_armature", modLoc("models/pumpjack_armature"));
 		
@@ -178,7 +182,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void cokerunitItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.COKERUNIT.get(), "multiblock/obj/cokerunit.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.COKERUNIT.get(), "multiblock/obj/cokerunit.obj")
 				.texture("texture", modLoc("multiblock/cokerunit"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -193,7 +197,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void hydrotreaterItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.HYDROTREATER.get(), "multiblock/obj/hydrotreater.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.HYDROTREATER.get(), "multiblock/obj/hydrotreater.obj")
 				.texture("texture", modLoc("multiblock/hydrotreater"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -208,7 +212,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void derrickItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.DERRICK.get(), "multiblock/obj/derrick.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.DERRICK.get(), "multiblock/obj/derrick.obj")
 				.texture("texture", modLoc("multiblock/derrick"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -223,7 +227,7 @@ public class IPItemModels extends ItemModelProvider{
 	}
 	
 	private void oiltankItem(){
-		ItemModelBuilder model = obj(IPContent.Multiblock.OILTANK.get(), "multiblock/obj/oiltank.obj")
+		TRSRModelBuilder model = obj(IPContent.Multiblock.OILTANK.get(), "multiblock/obj/oiltank.obj")
 				.texture("texture", modLoc("multiblock/oiltank"));
 		
 		ModelBuilder<?>.TransformsBuilder trans = model.transforms();
@@ -247,10 +251,16 @@ public class IPItemModels extends ItemModelProvider{
 		trans.end();
 	}
 	
-	private ItemModelBuilder obj(ItemLike item, String model){
+	private TRSRModelBuilder obj(ItemLike item, String model){
 		return getBuilder(item.asItem().getRegistryName().toString())
 				.customLoader(OBJLoaderBuilder::begin)
 				.modelLocation(modLoc("models/" + model)).flipV(true).end();
+	}
+	
+	private IEOBJBuilder<TRSRModelBuilder> objIELoader(ItemLike item, String model){
+		return getBuilder(item.asItem().getRegistryName().toString())
+				.customLoader(IEOBJBuilder::begin)
+				.modelLocation(modLoc("models/" + model));
 	}
 	
 	private void genericItem(Item item){

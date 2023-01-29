@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -25,10 +26,10 @@ import com.mojang.math.Vector3f;
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader.ShaderWrapper_Item;
-import blusunrize.immersiveengineering.api.tool.IUpgrade;
 import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
 import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
+import blusunrize.immersiveengineering.client.render.IEOBJItemRenderer;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.event.ProjectorEvent;
 import flaxbeard.immersivepetroleum.client.IPShaders;
@@ -83,6 +84,7 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -96,7 +98,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
@@ -104,6 +105,14 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 	
 	public ProjectorItem(){
 		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
+	}
+	
+	@Override
+	public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer){
+		super.initializeClient(consumer);
+		
+		// TODO This probably doesnt work, make your own and see if that does it
+		consumer.accept(IEOBJItemRenderer.USE_IEOBJ_RENDER);
 	}
 	
 	@Override
@@ -834,28 +843,6 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 
 	@Override
 	public void recalculateUpgrades(ItemStack stack, Level w, Player player){
-		if(w.isClientSide){
-			return;
-		}
-		
-		clearUpgrades(stack);
-		
-		LazyOptional<IItemHandler> lazy = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-		lazy.ifPresent(handler -> {
-			CompoundTag nbt = new CompoundTag();
-			
-			for(int i = 0;i < handler.getSlots();i++){
-				ItemStack u = handler.getStackInSlot(i);
-				if(u.getItem() instanceof IUpgrade upg){
-					if(upg.getUpgradeTypes(u).contains(UPGRADE_TYPE) && upg.canApplyUpgrades(stack, u)){
-						upg.applyUpgrades(stack, u, nbt);
-					}
-				}
-			}
-			
-			stack.getOrCreateTag().put("upgrades", nbt);
-			finishUpgradeRecalculation(stack);
-		});
 	}
 
 	@Override
