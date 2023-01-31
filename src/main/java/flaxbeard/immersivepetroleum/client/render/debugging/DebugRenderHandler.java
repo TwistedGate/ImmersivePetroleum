@@ -62,7 +62,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -214,7 +215,13 @@ public class DebugRenderHandler{
 	}
 	
 	@SubscribeEvent
-	public void reservoirDebuggingRenderLast(RenderLevelLastEvent event){
+	public void renderLevelStage(RenderLevelStageEvent event){
+		if(event.getStage() == Stage.AFTER_TRIPWIRE_BLOCKS){
+			reservoirDebuggingRender(event);
+		}
+	}
+	
+	private void reservoirDebuggingRender(RenderLevelStageEvent event){
 		if(ReservoirHandler.getGenerator() == null){
 			return;
 		}

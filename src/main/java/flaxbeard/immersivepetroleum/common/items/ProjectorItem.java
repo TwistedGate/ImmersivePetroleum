@@ -86,7 +86,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.MinecraftForge;
@@ -394,7 +395,13 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 	@Mod.EventBusSubscriber(modid = ImmersivePetroleum.MODID, value = Dist.CLIENT)
 	public static class ClientRenderHandler{
 		@SubscribeEvent
-		public static void renderLast(RenderLevelLastEvent event){
+		public static void renderLevelStage(RenderLevelStageEvent event){
+			if(event.getStage() == Stage.AFTER_TRIPWIRE_BLOCKS){
+				renderProjection(event);
+			}
+		}
+		
+		private static void renderProjection(RenderLevelStageEvent event){
 			Minecraft mc = Minecraft.getInstance();
 			
 			if(mc.player != null){

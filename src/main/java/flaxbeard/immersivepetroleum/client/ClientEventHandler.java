@@ -51,7 +51,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
@@ -62,7 +63,13 @@ import net.minecraftforge.fluids.FluidStack;
 public class ClientEventHandler{
 	
 	@SubscribeEvent
-	public void renderLast(RenderLevelLastEvent event){
+	public void renderLevelStage(RenderLevelStageEvent event){
+		if(event.getStage() == Stage.AFTER_TRIPWIRE_BLOCKS){
+			renderAutoLubricatorGhost(event);
+		}
+	}
+	
+	private void renderAutoLubricatorGhost(RenderLevelStageEvent event){
 		PoseStack matrix = event.getPoseStack();
 		Minecraft mc = Minecraft.getInstance();
 		
