@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.mojang.math.Vector3f;
 
-import blusunrize.immersiveengineering.client.models.obj.callback.DefaultCallback;
+import blusunrize.immersiveengineering.api.client.ieobj.DefaultCallback;
 import blusunrize.immersiveengineering.data.models.IEOBJBuilder;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPContent;
