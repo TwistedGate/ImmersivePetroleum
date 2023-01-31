@@ -41,7 +41,7 @@ public class IPToolShaders{
 		if(additionalTexture != null){
 			// Do not understand yet
 		}
-		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_uncolored"), 0xFFFFFF));
+		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_uncolored"), 0xFFFFFFFF));
 		
 		ShaderCaseProjector shader = new ShaderCaseProjector(list);
 		return ShaderRegistry.registerShaderCase(name, shader, rarity);

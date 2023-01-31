@@ -25,7 +25,6 @@ public class ShaderCaseProjector extends ShaderCase{
 	
 	@Override
 	public boolean shouldRenderGroupForPass(String modelPart, int pass){
-		// FIXME ? Never gets called. Might have something to do with L116 in ProjectorItem?
 		return true;
 	}
 	

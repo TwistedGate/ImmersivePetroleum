@@ -214,7 +214,7 @@ public class IPContent{
 	}
 	
 	public static void preInit(){
-		IPToolShaders.addShader("test", 0, Rarity.UNCOMMON, 0xDEADAF, 0xBEEF00, 0xFABEEA, null, false, 0xAAAAAA).setInfo(null, "Test", "Experimental");
+		IPToolShaders.addShader("test", 0, Rarity.UNCOMMON, 0xFFDEADAF, 0xFFBEEF00, 0xFFFABEEA, null, false, 0xFFAAAAAA).setInfo(null, "Test", "Experimental");
 	}
 	
 	public static void init(ParallelDispatchEvent event){

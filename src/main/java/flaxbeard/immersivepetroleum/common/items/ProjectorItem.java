@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -23,7 +22,6 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 
-import blusunrize.immersiveengineering.api.client.ieobj.ItemCallback;
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader.ShaderWrapper_Item;
@@ -84,7 +82,6 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
@@ -106,14 +103,6 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 	
 	public ProjectorItem(){
 		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
-	}
-	
-	@Override
-	public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer){
-		super.initializeClient(consumer);
-		
-		// TODO This probably doesnt work, make your own and see if that does it
-		consumer.accept(ItemCallback.USE_IEOBJ_RENDER);
 	}
 	
 	@Override
