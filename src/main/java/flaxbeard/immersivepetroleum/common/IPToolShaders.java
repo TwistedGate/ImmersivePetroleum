@@ -24,31 +24,30 @@ public class IPToolShaders{
 		return addShader(ResourceUtils.ip(name), Integer.toString(overlayType), rarity, colorPrimary, colorSecondary, colorBackground, additionalTexture, colourOverlay, loot, true);
 	}
 	
-	public static ShaderRegistryEntry addShader(ResourceLocation name, String overlayType, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, String additionalTexture, int colourAdditional, boolean loot, boolean bags){
-		ShaderRegistry.registerShader_Item(name, rarity, colorBackground, colorPrimary, colorSecondary);
-		registerShader_Projector(name, overlayType, rarity, colorBackground, colorPrimary, colorSecondary, additionalTexture, colourAdditional);
+	public static ShaderRegistryEntry addProjectorShader(String name, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, boolean loot, boolean bags, LayerAdder<Integer, Integer, Integer, List<ShaderLayer>> extraLayers){
+		ResourceLocation rlName = ResourceUtils.ip(name);
 		
-		for(IShaderRegistryMethod<?> method:ShaderRegistry.shaderRegistrationMethods){
-			method.apply(name, overlayType, rarity, colorBackground, colorPrimary, colorSecondary, 0xFFFFFF, additionalTexture, colourAdditional);
-		}
+		ShaderRegistry.registerShader_Item(rlName, rarity, colorBackground, colorPrimary, colorSecondary);
 		
-		return ShaderRegistry.shaderRegistry.get(name)
-			.setCrateLoot(loot)
-			.setBagLoot(bags)
-			.setReplicationCost(() -> new IngredientWithSize(Ingredient.of(ShaderRegistry.defaultReplicationCost), 10 - ShaderRegistry.rarityWeightMap.get(rarity)));
-	}
-	
-	public static ShaderCaseProjector registerShader_Projector(ResourceLocation name, String overlayType, Rarity rarity, int color0, int color1, int color2, String additionalTexture, int colourAddtional){
 		List<ShaderLayer> list = new ArrayList<>();
-		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_0"), color0));
-		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_0"), color1));
-		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_" + overlayType), color2)); // Glowy bits?
-		if(additionalTexture != null){
-			// Do not understand yet
-		}
-		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_uncolored"), 0xFFFFFFFF));
+		extraLayers.accept(colorPrimary, colorSecondary, colorBackground, list);
+		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_uncolored"), -1));
 		
 		ShaderCaseProjector shader = new ShaderCaseProjector(list);
-		return ShaderRegistry.registerShaderCase(name, shader, rarity);
+		ShaderRegistry.registerShaderCase(rlName, shader, rarity);
+		
+		for(IShaderRegistryMethod<?> method:ShaderRegistry.shaderRegistrationMethods){
+			method.apply(rlName, "0", rarity, colorBackground, colorPrimary, colorSecondary, 0xFFFFFFFF, null, 0xFFFFFFFF);
+		}
+		
+		return ShaderRegistry.shaderRegistry.get(rlName)
+				.setCrateLoot(loot)
+				.setBagLoot(bags)
+				.setReplicationCost(() -> new IngredientWithSize(Ingredient.of(ShaderRegistry.defaultReplicationCost), 10 - ShaderRegistry.rarityWeightMap.get(rarity)));
+	}
+	
+	@FunctionalInterface
+	private interface LayerAdder<P, S, B, L>{
+		void accept(P colorPrimary, S colorSecondary, B colorBackground, L list);
 	}
 }
