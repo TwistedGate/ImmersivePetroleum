@@ -99,8 +99,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 
 public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
-	public static final String UPGRADE_TYPE = "PROJECTOR";
-	
 	public ProjectorItem(){
 		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
 	}

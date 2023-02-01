@@ -15,6 +15,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class IPToolShaders{
+	
+	public static void preInit(){
+		addShader("test",	0, Rarity.UNCOMMON,	0xFFFF0000, 0xFF00FF00, 0xFF0000FF, null, false, 0xFFFF00FF).setInfo(null, "Test", "Experimental");
+	}
+	
 	public static ShaderRegistryEntry addShader(String name, int overlayType, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, String additionalTexture, boolean loot, int colourOverlay){
 		return addShader(ResourceUtils.ip(name), Integer.toString(overlayType), rarity, colorPrimary, colorSecondary, colorBackground, additionalTexture, colourOverlay, loot, true);
 	}
