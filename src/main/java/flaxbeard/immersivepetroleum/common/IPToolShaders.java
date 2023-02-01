@@ -17,11 +17,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class IPToolShaders{
 	
 	public static void preInit(){
-		addShader("test",	0, Rarity.UNCOMMON,	0xFFFF0000, 0xFF00FF00, 0xFF0000FF, null, false, 0xFFFF00FF).setInfo(null, "Test", "Experimental");
-	}
-	
-	public static ShaderRegistryEntry addShader(String name, int overlayType, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, String additionalTexture, boolean loot, int colourOverlay){
-		return addShader(ResourceUtils.ip(name), Integer.toString(overlayType), rarity, colorPrimary, colorSecondary, colorBackground, additionalTexture, colourOverlay, loot, true);
+		final ShaderRegistryEntry blue = addProjectorShader("blue", Rarity.UNCOMMON, 0xFF007FFF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+		}).setInfo("Aperture", "Portal", "Blue Portal Gun");
+		final ShaderRegistryEntry orange = addProjectorShader("orange", Rarity.UNCOMMON, 0xFFFF7F00, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
+			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+		}).setInfo("Aperture", "Portal", "Orange Portal Gun");
 	}
 	
 	public static ShaderRegistryEntry addProjectorShader(String name, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, boolean loot, boolean bags, LayerAdder<Integer, Integer, Integer, List<ShaderLayer>> extraLayers){
