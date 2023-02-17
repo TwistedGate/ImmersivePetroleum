@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
+import blusunrize.immersiveengineering.api.shader.ShaderCase;
 import blusunrize.immersiveengineering.api.shader.ShaderLayer;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry.IShaderRegistryMethod;
@@ -17,25 +18,27 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class IPToolShaders{
 	
 	public static void preInit(){
-		addProjectorShader("blue", Rarity.COMMON, 0xFF007FFF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+		addProjectorShader("blue", Rarity.COMMON, 0xFF007FFF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
 		}).setInfo("Aperture", "Portal", "Blue Portal Gun");
-		addProjectorShader("orange", Rarity.UNCOMMON, 0xFFFF7F00, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+		
+		addProjectorShader("orange", Rarity.UNCOMMON, 0xFFFF7F00, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
 		}).setInfo("Aperture", "Portal", "Orange Portal Gun");
 		
-		addProjectorShader("cube0", Rarity.COMMON, 0xFF3AF1FF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
+		addProjectorShader("cube0", Rarity.COMMON, 0xFF3AF1FF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
 			
 		}).setInfo("Aperture", "Portal", "Storage Cube");
-		addProjectorShader("cube1", Rarity.EPIC, 0xFFFF66AE, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layer) -> {
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
-			layer.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
+		
+		addProjectorShader("cube1", Rarity.EPIC, 0xFFFF66AE, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
 		}).setInfo("Aperture", "Portal", "Companion Cube");
 	}
 	
@@ -49,13 +52,17 @@ public class IPToolShaders{
 		list.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_uncolored"), -1));
 		
 		ShaderCaseProjector shader = new ShaderCaseProjector(list);
-		ShaderRegistry.registerShaderCase(rlName, shader, rarity);
+		return registerCase(rlName, shader, rarity, colorPrimary, colorSecondary, colorBackground, loot, bags);
+	}
+	
+	private static <S extends ShaderCase> ShaderRegistryEntry registerCase(ResourceLocation name, S shader, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, boolean loot, boolean bags){
+		ShaderRegistry.registerShaderCase(name, shader, rarity);
 		
 		for(IShaderRegistryMethod<?> method:ShaderRegistry.shaderRegistrationMethods){
-			method.apply(rlName, "0", rarity, colorBackground, colorPrimary, colorSecondary, 0xFFFFFFFF, null, 0xFFFFFFFF);
+			method.apply(name, "0", rarity, colorBackground, colorPrimary, colorSecondary, 0xFFFFFFFF, null, 0xFFFFFFFF);
 		}
 		
-		return ShaderRegistry.shaderRegistry.get(rlName)
+		return ShaderRegistry.shaderRegistry.get(name)
 				.setCrateLoot(loot)
 				.setBagLoot(bags)
 				.setReplicationCost(() -> new IngredientWithSize(Ingredient.of(ShaderRegistry.defaultReplicationCost), 10 - ShaderRegistry.rarityWeightMap.get(rarity)));

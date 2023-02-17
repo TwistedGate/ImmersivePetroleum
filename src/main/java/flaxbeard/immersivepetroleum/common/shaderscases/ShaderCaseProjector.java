@@ -8,7 +8,7 @@ import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.resources.ResourceLocation;
 
 public class ShaderCaseProjector extends ShaderCase{
-	private static final ResourceLocation TYPE = ResourceUtils.ip("projector");
+	public static final ResourceLocation TYPE = ResourceUtils.ip("projector");
 	
 	public ShaderCaseProjector(ShaderLayer... layers){
 		super(layers);
