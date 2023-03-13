@@ -20,26 +20,32 @@ public class IPToolShaders{
 	public static void preInit(){
 		addProjectorShader("blue", Rarity.COMMON, 0xFF007FFF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), primary));
 		}).setInfo("Aperture", "Portal", "Blue Portal Gun");
 		
 		addProjectorShader("orange", Rarity.UNCOMMON, 0xFFFF7F00, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), primary));
 		}).setInfo("Aperture", "Portal", "Orange Portal Gun");
 		
 		addProjectorShader("cube0", Rarity.COMMON, 0xFF3AF1FF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
-			
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
 		}).setInfo("Aperture", "Portal", "Storage Cube");
 		
 		addProjectorShader("cube1", Rarity.EPIC, 0xFFFF66AE, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
-			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_2"), primary));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
 		}).setInfo("Aperture", "Portal", "Companion Cube");
+	}
+	
+	// I lack ideas and this may end up never being used...
+	public static ShaderRegistryEntry addProjectorShader(String name, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, boolean loot, boolean bags){
+		return addProjectorShader(name, rarity, colorPrimary, colorSecondary, colorBackground, loot, bags, (primary, secondary, background, layers) -> {
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_0_0"), 0xFF000000 | primary));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_0_1"), 0xFF000000 | secondary));
+			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_0_2"), 0xFF000000 | background));
+		});
 	}
 	
 	public static ShaderRegistryEntry addProjectorShader(String name, Rarity rarity, int colorPrimary, int colorSecondary, int colorBackground, boolean loot, boolean bags, LayerAdder<Integer, Integer, Integer, List<ShaderLayer>> extraLayers){
