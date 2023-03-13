@@ -18,25 +18,28 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class IPToolShaders{
 	
 	public static void preInit(){
+		final String warnings = "Do not touch the operational end of the device.\n" +
+								"Do not look directly at the operational end of the device.";
+		
 		addProjectorShader("blue", Rarity.COMMON, 0xFF007FFF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), primary));
-		}).setInfo("Aperture", "Portal", "Blue Portal Gun");
+		}).setInfo("Aperture", "Portal", warnings);
 		
 		addProjectorShader("orange", Rarity.UNCOMMON, 0xFFFF7F00, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_portal"), -1));
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_0"), primary));
-		}).setInfo("Aperture", "Portal", "Orange Portal Gun");
+		}).setInfo("Aperture", "Portal", warnings);
 		
 		addProjectorShader("cube0", Rarity.COMMON, 0xFF3AF1FF, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
-		}).setInfo("Aperture", "Portal", "Storage Cube");
+		}).setInfo("Aperture", "Portal", "Designed to be used on the 1500 Megawatt Aperture Science Heavy Duty Super-Colliding Super Button");
 		
 		addProjectorShader("cube1", Rarity.EPIC, 0xFFFF66AE, 0xFF000000, 0xFFFFFFFF, false, true, (primary, secondary, background, layers) -> {
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_cube"), -1));
 			layers.add(new ShaderLayer(ResourceUtils.ip("projectors/shaders/projector_1_1"), primary));
-		}).setInfo("Aperture", "Portal", "Companion Cube");
+		}).setInfo("Aperture", "Portal", "Can not speak");
 	}
 	
 	// I lack ideas and this may end up never being used...
