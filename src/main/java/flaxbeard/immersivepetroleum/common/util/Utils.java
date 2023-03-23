@@ -3,10 +3,8 @@ package flaxbeard.immersivepetroleum.common.util;
 import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.ServerLevel;
@@ -55,7 +53,7 @@ public class Utils{
 		if(player instanceof ServerPlayer serverPlayer){
 			PlayerAdvancements advancements = serverPlayer.getAdvancements();
 			ServerAdvancementManager manager = ((ServerLevel) serverPlayer.getCommandSenderWorld()).getServer().getAdvancements();
-			Advancement advancement = manager.getAdvancement(new ResourceLocation(ImmersivePetroleum.MODID, name));
+			Advancement advancement = manager.getAdvancement(ResourceUtils.ip(name));
 			if(advancement != null)
 				advancements.award(advancement, "code_trigger");
 		}

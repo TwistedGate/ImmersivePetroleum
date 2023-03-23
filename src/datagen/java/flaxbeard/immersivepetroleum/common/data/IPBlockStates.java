@@ -49,9 +49,6 @@ import net.minecraftforge.client.model.generators.loaders.OBJLoaderBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class IPBlockStates extends BlockStateProvider{
-	/** ResourceLocation("forge","obj") */
-//	private static final ResourceLocation FORGE_LOADER = new ResourceLocation("forge", "obj");
-	
 	final ExistingFileHelper exFileHelper;
 	private final NongeneratedModels nongeneratedModels;
 	public IPBlockStates(DataGenerator gen, ExistingFileHelper exFileHelper){

@@ -275,7 +275,7 @@ public class ClientProxy extends CommonProxy{
 			return Pair.of(additionalText.toString(), newElements);
 		});
 		
-		man.addEntry(man.getRoot().getOrCreateSubnode(new ResourceLocation(ImmersivePetroleum.MODID, "petroleum")), builder.create(), priority);
+		man.addEntry(man.getRoot().getOrCreateSubnode(ResourceUtils.ip("petroleum")), builder.create(), priority);
 	}
 	
 
@@ -286,7 +286,7 @@ public class ClientProxy extends CommonProxy{
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(man);
 		builder.setContent(ClientProxy::createContent);
 		builder.setLocation(location);
-		man.addEntry(man.getRoot().addNewSubnode(new ResourceLocation(ImmersivePetroleum.MODID, "petroleum"), 100), builder.create(), priority);
+		man.addEntry(man.getRoot().addNewSubnode(ResourceUtils.ip("petroleum"), 100), builder.create(), priority);
 	}
 	
 	protected static EntryData createContent(){

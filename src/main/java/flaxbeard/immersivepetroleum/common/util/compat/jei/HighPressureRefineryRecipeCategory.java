@@ -6,10 +6,10 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.IPContent;
+import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import flaxbeard.immersivepetroleum.common.util.Utils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
@@ -27,12 +27,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class HighPressureRefineryRecipeCategory extends IPRecipeCategory<HighPressureRefineryRecipe>{
-	public static final ResourceLocation ID = new ResourceLocation(ImmersivePetroleum.MODID, "hydrotreater");
+	public static final ResourceLocation ID = ResourceUtils.ip("hydrotreater");
 	
 	private final IDrawableStatic tankOverlay;
 	public HighPressureRefineryRecipeCategory(IGuiHelper guiHelper){
 		super(HighPressureRefineryRecipe.class, guiHelper, ID, "block.immersivepetroleum.hydrotreater");
-		ResourceLocation background = new ResourceLocation(ImmersivePetroleum.MODID, "textures/gui/jei/hydrotreater.png");
+		ResourceLocation background = ResourceUtils.ip("textures/gui/jei/hydrotreater.png");
 		setBackground(guiHelper.createDrawable(background, 0, 0, 113, 75));
 		setIcon(new ItemStack(IPContent.Multiblock.HYDROTREATER.get()));
 		
