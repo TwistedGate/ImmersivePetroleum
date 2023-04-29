@@ -130,6 +130,8 @@
 	"desc.immersivepetroleum.info.projector.control2": "按%s以镜像多方块结构虚像",
 	"desc.immersivepetroleum.info.projector.control3": "对着空气潜行并右击以改变模式",
 	
+	"desc.immersiveengineering.info.shader.immersivepetroleum:projector": "投影仪",
+	
 	"_comment": "################## Item-Shaders ##################",
 	
 	"item.immersivepetroleum.shader.name.blue": "Blue ASHPD",
