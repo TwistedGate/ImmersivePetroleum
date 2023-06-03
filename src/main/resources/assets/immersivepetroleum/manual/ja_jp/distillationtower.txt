@@ -1,9 +1,61 @@
 蒸留塔
 環境に優しくない
-<&distillationtower0>蒸留塔は、原油をいくつかの副産物に分離する巨大なマルチブロック構造物です。 上の通りに構築し、レッドストーン機構ブロックにエンジニアのハンマーを使用することで構築できます。
+<&distillationtower0>蒸留塔は、原油をいくつかの
+副産物に分離する巨大な
+マルチブロック構造物です。<np>
+図の通りに組み立て、レッド
+ストーン機構ブロックに
+エンジニアのハンマーを使用
+することで構築できます。
 
-原油は、青い点がついた後部ハッチから蒸留塔に搬入することができ、いくつかの層に分離されるまで加熱されます。 この処理により様々な液体が生成され、また副産物として瀝青が生成されることがあります。<np>
-蒸留塔は、操作ごとに<config;i;distillationtower_operationcost>Fluxを使用し、ティック毎に25mBの原油をディーゼル、潤滑油、ガソリン、瀝青に変換します。 生成された液体は、オレンジの点が付いた横のハッチから出力され、瀝青は前のハッチから出力されます。
+コントロールパネルにレッド
+ストーン信号を送ると機械の
+動作が停止し、この挙動は
+ネジ回しで反転させることが
+できます。
 
-ディーゼルは<link;diesel_generator;§o§nエネルギー生産§r>に、潤滑油は<link;immersivepetroleum:lubricant;§o§n機械の潤滑§r>に、ガソリンは<link;immersivepetroleum:portablegenerator;§o§n発電エンジン§r>、<link;immersivepetroleum:speedboat;§o§n乗り物§r>、<link;immersivepetroleum:napalm;§o§nナパーム§r>に使用できます。 瀝青は、<link;immersivepetroleum:asphalt;§o§nアスファルト§r>の材料に使えます。
-<&distillationtower1>以下は、蒸留塔が行う処理です:
+原油は、青い点がついた後部
+ハッチから蒸留塔に搬入し、
+いくつかの層に分離される
+まで加熱されます。この処理
+により様々な液体が生成され
+また副産物として瀝青が生成
+されることがあります。<np>
+
+<config;i;distillationtower_operationcost>IF/tを消費して、
+以下の処理を行います:
+
+原油50mB/t毎に:
+|   15mB/tのナフサ
+|   18mB/tの灯油
+|   30mB/tの硫化ディーゼル
+|   12mB/tの潤滑剤
+|   たまに瀝青を生成
+
+作成された各種液体は、
+橙色の点がついた側面の
+ハッチから排出されます。
+瀝青は前面のハッチから
+排出されます。
+<np>
+分解ナフサ10mB/t毎に:
+|   6mB/tのエチレン
+|   2mB/tのプロピレン
+|   2mB/tのベンゼン
+
+分解潤滑剤12mB/t毎に:
+|   6mB/tの灯油
+|   10mB/tの硫化ディーゼル
+
+灯油10mB/t毎に:
+|   2mB/tのナフサ
+|   3mB/tのガソリン添加剤
+|   5mB/tの硫化ディーゼル
+<np>
+ディーゼルは<link;diesel_generator;§o§nエネルギー生産§r>に、潤滑剤は<link;immersivepetroleum:lubricant;§o§n機械の潤滑§r>に、
+灯油は<link;diesel_generator;§o§n発電§r>、<link;immersivepetroleum:speedboat;§o§n乗り物§r>、
+ナフサは<link;immersivepetroleum:portablegenerator;§o§nエンジンの燃料§r>や
+<link;immersivepetroleum:plastics;§o§nプラスチック§r>に使えます。
+瀝青は<link;immersivepetroleum:asphalt;§o§nアスファルト§r>の材料に
+なるほか、<link;immersivepetroleum:cokerunit;§o§nコーカー§r>で石油
+コークスに変換できます。
