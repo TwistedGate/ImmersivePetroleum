@@ -8,7 +8,6 @@ import com.google.common.base.Preconditions;
 
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.energy.FuelHandler;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.DerrickTileEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -56,8 +55,6 @@ public class IPServerConfig{
 		public final ConfigValue<Integer> pumpjack_consumption;
 		public final ConfigValue<Integer> pumpjack_speed;
 		public final ConfigValue<Integer> derrick_consumption;
-		public final ConfigValue<String> derrick_drilling;
-		public final ConfigValue<String> derrick_concrete;
 		Extraction(ForgeConfigSpec.Builder builder){
 			builder.push("Extraction");
 			
@@ -72,14 +69,6 @@ public class IPServerConfig{
 			derrick_consumption = builder
 				.comment("The Flux the Derrick requires each tick to operate", "Default: 512")
 				.define("derrick_consumption", 512);
-			
-			derrick_drilling = builder
-				.comment("The Fluid the Derrick uses for drilling lubricant", "Default: \"minecraft:water\"")
-				.define("derrick_drilling", "minecraft:water");
-			
-			derrick_concrete = builder
-				.comment("The Fluid the Derrick uses for drilling concrete", "Default: \"immersiveengineering:concrete\"")
-				.define("derrick_concrete", "immersiveengineering:concrete");
 			
 			builder.pop();
 		}
@@ -168,6 +157,5 @@ public class IPServerConfig{
 	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent ev){
 		FuelHandler.onConfigReload(ev);
-		DerrickTileEntity.onConfigReload(ev);
 	}
 }

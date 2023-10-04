@@ -4,6 +4,8 @@ import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -16,12 +18,24 @@ public class ExternalModContent{
 	private static RegistryObject<Item> IE_ITEM_BUCKSHOT;
 	private static RegistryObject<Item> IE_ITEM_EMPTY_SHELL;
 	
+	// Fluids
+	private static RegistryObject<Fluid> IE_FLUID_CONCRETE;
+	
 	public static void init(){
 		IE_REDSTONE_ENGINEERING_BLOCK = RegistryObject.create(ResourceUtils.ie("rs_engineering"), ForgeRegistries.BLOCKS);
 		
 		IE_ITEM_PIPE = RegistryObject.create(ResourceUtils.ie("fluid_pipe"), ForgeRegistries.ITEMS);
 		IE_ITEM_BUCKSHOT = RegistryObject.create(ResourceUtils.ie("buckshot"), ForgeRegistries.ITEMS);
 		IE_ITEM_EMPTY_SHELL = RegistryObject.create(ResourceUtils.ie("empty_shell"), ForgeRegistries.ITEMS);
+		IE_FLUID_CONCRETE = RegistryObject.create(ResourceUtils.ie("concrete"), ForgeRegistries.FLUIDS);
+	}
+	
+	public static Fluid getIEFluid_Concrete(){
+		return IE_FLUID_CONCRETE.get();
+	}
+	
+	public static FluidStack getIEFluid_Concrete(int amount){
+		return new FluidStack(IE_FLUID_CONCRETE.get(), amount);
 	}
 	
 	public static Block getIEBlock_RedstoneEngineering(){

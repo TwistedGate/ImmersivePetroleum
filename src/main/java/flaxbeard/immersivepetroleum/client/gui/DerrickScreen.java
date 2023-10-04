@@ -14,6 +14,7 @@ import blusunrize.immersiveengineering.client.gui.info.EnergyInfoArea;
 import blusunrize.immersiveengineering.client.gui.info.FluidInfoArea;
 import blusunrize.immersiveengineering.client.gui.info.InfoArea;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
+import flaxbeard.immersivepetroleum.common.ExternalModContent;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DerrickTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.WellTileEntity;
 import flaxbeard.immersivepetroleum.common.gui.DerrickContainer;
@@ -28,6 +29,8 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
 
 public class DerrickScreen extends AbstractContainerScreen<DerrickContainer>{
 	static final ResourceLocation GUI_TEXTURE = ResourceUtils.ip("textures/gui/derrick.png");
@@ -112,17 +115,17 @@ public class DerrickScreen extends AbstractContainerScreen<DerrickContainer>{
 				
 				if(this.tile.tank.isEmpty()){
 					int realPipeLength = (this.tile.getBlockPos().getY() - 1) - well.getBlockPos().getY();
-					int concreteNeeded = (DerrickTileEntity.CONCRETE.getAmount() * (realPipeLength - well.wellPipeLength));
+					int concreteNeeded = (DerrickTileEntity.REQUIRED_CONCRETE_AMOUNT * (realPipeLength - well.wellPipeLength));
 					if(concreteNeeded > 0){
 						drawInfoText(matrix, new TranslatableComponent("gui.immersivepetroleum.derrick.msg.missing", Utils.fDecimal(concreteNeeded) + "mB"), 0, 0xEF0000);
-						drawInfoText(matrix, DerrickTileEntity.CONCRETE.getDisplayName(), 1, 0xEF0000);
+						drawInfoText(matrix, ExternalModContent.getIEFluid_Concrete(1).getDisplayName(), 1, 0xEF0000);
 						return;
 					}
 					
-					int waterNeeded = DerrickTileEntity.WATER.getAmount() * (well.getMaxPipeLength() - well.wellPipeLength);
+					int waterNeeded = DerrickTileEntity.REQUIRED_WATER_AMOUNT * (well.getMaxPipeLength() - well.wellPipeLength);
 					if(waterNeeded > 0){
 						drawInfoText(matrix, new TranslatableComponent("gui.immersivepetroleum.derrick.msg.missing", Utils.fDecimal(waterNeeded) + "mB"), 0, 0xEF0000);
-						drawInfoText(matrix, DerrickTileEntity.WATER.getDisplayName(), 1, 0xEF0000);
+						drawInfoText(matrix, new FluidStack(Fluids.WATER, 1).getDisplayName(), 1, 0xEF0000);
 						return;
 					}
 				}

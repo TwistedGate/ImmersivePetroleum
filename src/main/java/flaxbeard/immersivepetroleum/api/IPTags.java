@@ -54,6 +54,9 @@ public class IPTags{
 		public static final TagKey<Fluid> lubricant_cracked = createFluidWrapper(ResourceUtils.forge("lubricant_cracked"));
 		public static final TagKey<Fluid> kerosene = createFluidWrapper(ResourceUtils.forge("kerosene"));
 		public static final TagKey<Fluid> gasoline_additives = createFluidWrapper(ResourceUtils.forge("gasoline_additives"));
+		
+		public static final TagKey<Fluid> water = createFluidWrapper(ResourceUtils.mc("water"));
+		public static final TagKey<Fluid> concrete = createFluidWrapper(ResourceUtils.forge("concrete"));
 	}
 	
 	public static class Utility{

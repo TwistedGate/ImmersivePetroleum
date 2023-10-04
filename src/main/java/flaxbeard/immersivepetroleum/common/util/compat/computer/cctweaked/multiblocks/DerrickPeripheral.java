@@ -6,11 +6,13 @@ import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
+import flaxbeard.immersivepetroleum.common.ExternalModContent;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.DerrickTileEntity;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.WellTileEntity;
 import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.CCTUtils;
 import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks.generic.PoweredMultiblockPeripheral;
 import net.minecraft.server.level.ColumnPos;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
 public class DerrickPeripheral extends PoweredMultiblockPeripheral{
@@ -60,13 +62,13 @@ public class DerrickPeripheral extends PoweredMultiblockPeripheral{
 		}
 		
 		int realPipeLength = (this.master.getBlockPos().getY() - 1) - well.getBlockPos().getY();
-		int concreteNeeded = (DerrickTileEntity.CONCRETE.getAmount() * (realPipeLength - well.wellPipeLength));
+		int concreteNeeded = (DerrickTileEntity.REQUIRED_CONCRETE_AMOUNT * (realPipeLength - well.wellPipeLength));
 		if(concreteNeeded > 0){
-			return MethodResult.of(CCTUtils.fluidToMap(new FluidStack(DerrickTileEntity.CONCRETE, concreteNeeded)));
+			return MethodResult.of(CCTUtils.fluidToMap(new FluidStack(ExternalModContent.getIEFluid_Concrete(), concreteNeeded)));
 		}else{
-			int waterNeeded = DerrickTileEntity.WATER.getAmount() * (well.getMaxPipeLength() - well.wellPipeLength);
+			int waterNeeded = DerrickTileEntity.REQUIRED_WATER_AMOUNT * (well.getMaxPipeLength() - well.wellPipeLength);
 			if(waterNeeded > 0){
-				return MethodResult.of(CCTUtils.fluidToMap(new FluidStack(DerrickTileEntity.WATER, waterNeeded)));
+				return MethodResult.of(CCTUtils.fluidToMap(new FluidStack(Fluids.WATER, waterNeeded)));
 			}
 		}
 		

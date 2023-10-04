@@ -19,6 +19,7 @@ import blusunrize.immersiveengineering.common.blocks.multiblocks.process.Multibl
 import blusunrize.immersiveengineering.common.util.MultiblockCapability;
 import blusunrize.immersiveengineering.common.util.ResettableCapability;
 import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
+import flaxbeard.immersivepetroleum.api.IPTags;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.client.ClientProxy;
@@ -63,7 +64,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -71,8 +71,11 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileEntity, MultiblockRecipe> implements IPCommonTickableTile, IPMenuProvider<DerrickTileEntity>, IEBlockInterfaces.IBlockBounds{
 	
-	public static FluidStack WATER = FluidStack.EMPTY;
-	public static FluidStack CONCRETE = FluidStack.EMPTY;
+	@Deprecated public static FluidStack WATER = FluidStack.EMPTY;
+	@Deprecated public static FluidStack CONCRETE = FluidStack.EMPTY;
+	
+	public static final int REQUIRED_WATER_AMOUNT = 125;
+	public static final int REQUIRED_CONCRETE_AMOUNT = 125;
 	
 	public enum Inventory{
 		/** Item Pipe Input */
@@ -164,6 +167,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	}
 	
 	// Only accept as much Concrete and Water as needed
+	@SuppressWarnings("deprecation")
 	private boolean acceptsFluid(FluidStack fs){
 		WellTileEntity well = getOrCreateWell(false);
 		if(well == null){
@@ -171,11 +175,11 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		}
 		
 		int realPipeLength = (getBlockPos().getY() - 1) - well.getBlockPos().getY();
-		int concreteNeeded = (CONCRETE.getAmount() * (realPipeLength - well.wellPipeLength));
-		if(fs.getFluid().equals(CONCRETE.getFluid()) && concreteNeeded > 0){
-			FluidStack tFluidStack = this.tank.getFluid();
+		int concreteNeeded = (REQUIRED_CONCRETE_AMOUNT * (realPipeLength - well.wellPipeLength));
+		if(concreteNeeded > 0 && fs.getFluid().is(IPTags.Fluids.concrete)){
+			FluidStack tankFluidStack = this.tank.getFluid();
 			
-			if(fs.getFluid().equals(CONCRETE.getFluid()) && tFluidStack.getAmount() >= concreteNeeded){
+			if(fs.getFluid() == tankFluidStack.getFluid() && tankFluidStack.getAmount() >= concreteNeeded){
 				return false;
 			}
 			
@@ -183,11 +187,11 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		}
 		
 		if(concreteNeeded <= 0){
-			int waterNeeded = WATER.getAmount() * (well.getMaxPipeLength() - well.wellPipeLength);
-			if(fs.getFluid() == WATER.getFluid() && waterNeeded > 0){
-				FluidStack tFluidStack = this.tank.getFluid();
+			int waterNeeded = REQUIRED_WATER_AMOUNT * (well.getMaxPipeLength() - well.wellPipeLength);
+			if(waterNeeded > 0 && fs.getFluid().is(IPTags.Fluids.water)){
+				FluidStack tankFluidStack = this.tank.getFluid();
 				
-				if(tFluidStack.getFluid() == WATER.getFluid() && tFluidStack.getAmount() >= waterNeeded){
+				if(fs.getFluid() == tankFluidStack.getFluid() && tankFluidStack.getAmount() >= waterNeeded){
 					return false;
 				}
 				
@@ -278,7 +282,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 									int realPipeLength = ((dPos.getY() - 1) - wPos.getY());
 									
 									if(well.phyiscalPipesList.size() < realPipeLength && well.wellPipeLength < realPipeLength){
-										if(this.tank.drain(CONCRETE, FluidAction.SIMULATE).getAmount() >= CONCRETE.getAmount()){
+										if(this.tank.drain(REQUIRED_CONCRETE_AMOUNT, FluidAction.SIMULATE).getAmount() >= REQUIRED_CONCRETE_AMOUNT){
 											this.energyStorage.extractEnergy(IPServerConfig.EXTRACTION.derrick_consumption.get(), false);
 											
 											if(advanceTimer()){
@@ -296,7 +300,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 														
 														well.phyiscalPipesList.add(y);
 														
-														this.tank.drain(CONCRETE, FluidAction.EXECUTE);
+														this.tank.drain(REQUIRED_CONCRETE_AMOUNT, FluidAction.EXECUTE);
 														
 														well.usePipe();
 														break;
@@ -319,13 +323,13 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 											this.tank.drain(this.tank.getFluidAmount(), FluidAction.EXECUTE);
 											forceUpdate = true;
 										}
-										if(this.tank.drain(WATER, FluidAction.SIMULATE).getAmount() >= WATER.getAmount()){
+										if(this.tank.drain(REQUIRED_WATER_AMOUNT, FluidAction.SIMULATE).getAmount() >= REQUIRED_WATER_AMOUNT){
 											this.energyStorage.extractEnergy(IPServerConfig.EXTRACTION.derrick_consumption.get(), false);
 											
 											if(advanceTimer()){
 												restorePhysicalPipeProgress(dPos, realPipeLength);
 												
-												this.tank.drain(WATER, FluidAction.EXECUTE);
+												this.tank.drain(REQUIRED_WATER_AMOUNT, FluidAction.EXECUTE);
 												well.usePipe();
 											}
 											
@@ -1032,17 +1036,5 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	/** Makes a box using texture pixel space (Assuming 16x16 p texture) */
 	private static AABB box(double x0, double y0, double z0, double x1, double y1, double z1){
 		return new AABB(x0 / 16D, y0 / 16D, z0 / 16D, x1 / 16D, y1 / 16D, z1 / 16D);
-	}
-	
-	public static void onConfigReload(ModConfigEvent ev){
-		if(ev.getConfig().getSpec() != IPServerConfig.ALL){
-			return;
-		}
-		
-		//Load from config on reload
-		Fluid temporary = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(IPServerConfig.EXTRACTION.derrick_drilling.get()));
-		if(temporary != null) WATER = new FluidStack(temporary, 125);
-		temporary = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(IPServerConfig.EXTRACTION.derrick_concrete.get()));
-		if(temporary != null) CONCRETE = new FluidStack(temporary, 125);
 	}
 }
