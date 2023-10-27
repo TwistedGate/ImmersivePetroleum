@@ -1,7 +1,6 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +25,7 @@ import flaxbeard.immersivepetroleum.common.IPMenuTypes;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
 import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
 import flaxbeard.immersivepetroleum.common.multiblocks.DistillationTowerMultiblock;
+import flaxbeard.immersivepetroleum.common.util.AABBUtils;
 import flaxbeard.immersivepetroleum.common.util.FluidHelper;
 import flaxbeard.immersivepetroleum.common.util.inventory.MultiFluidTankFiltered;
 import net.minecraft.core.BlockPos;
@@ -484,89 +484,90 @@ public class DistillationTowerTileEntity extends PoweredMultiblockBlockEntity<Di
 	}
 	
 	private static List<AABB> getShape(BlockPos posInMultiblock){
-		final int bX = posInMultiblock.getX();
-		final int bY = posInMultiblock.getY();
-		final int bZ = posInMultiblock.getZ();
+		final int x = posInMultiblock.getX();
+		final int y = posInMultiblock.getY();
+		final int z = posInMultiblock.getZ();
+		
+		List<AABB> main = new ArrayList<>();
 		
 		// Redstone Input
-		if(bY < 2){
-			if(bX == 0 && bZ == 3){
-				if(bY == 1){ // Actual Input
-					return List.of(new AABB(0.0, 0.0, 0.0, 0.5, 1.0, 1.0));
+		if(y < 2){
+			if(x == 0 && z == 3){
+				if(y == 1){ // Actual Input
+					AABBUtils.box16(main, 0, 0, 0, 8, 16, 16);
 				}else{ // Input Legs
-					return Arrays.asList(new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), new AABB(0.125, 0.0, 0.75, 0.375, 1.0, 0.875), new AABB(0.125, 0.0, 0.125, 0.375, 1.0, 0.25));
+					AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
+					AABBUtils.box16(main, 2, 0, 12, 6, 16, 14);
+					AABBUtils.box16(main, 2, 0, 2, 6, 16, 4);
 				}
 			}
 		}
 		
 		// Pipe over Furnace
-		if(bY == 2 && bX == 3 && bZ == 2){
-			return Arrays.asList(new AABB(-0.0625, 0.375, 0.125, 0.0625, 1.125, 0.875), new AABB(0.125, 0, 0.125, 0.875, 0.125, 0.875), new AABB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75), new AABB(0.0, 0.5, 0.25, 0.75, 1.0, 0.75));
+		if(y == 2 && x == 3 && z == 2){
+			AABBUtils.box16(main, -1, 6, 2, 1, 18, 14);
+			AABBUtils.box16(main, 2, 0, 2, 14, 2, 14);
+			AABBUtils.box16(main, 4, 0, 4, 12, 16, 12);
+			AABBUtils.box16(main, 0, 8, 4, 12, 16, 12);
 		}
 		
 		// Long Pipe
-		if(bY > 0 && bX == 1 && bZ == 3){
-			if(bY != 15){
-				List<AABB> list = new ArrayList<>();
-				list.add(new AABB(0.1875, 0.0, 0.1875, 0.8125, 1.0, 0.8125));
-				if(bY > 0 && bY % 4 == 0){ // For pipe passing a platform
-					list.add(new AABB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0));
+		if(y > 0 && x == 1 && z == 3){
+			if(y != 15){
+				AABBUtils.box16(main, 3, 0, 3, 13, 16, 13);
+				if(y > 0 && y % 4 == 0){ // For pipe passing a platform
+					AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
 				}
-				return list;
 			}else{ // Pipe Top Bend
-				return List.of(new AABB(0.1875, 0.0, -0.0625, 0.8125, 0.625, 0.8125));
+				AABBUtils.box16(main, 3, 0, -1, 13, 10, 13);
 			}
 		}
 		
 		// Ladder
-		if(bY > 0 && bX == 2 && bZ == 0){
-			List<AABB> list = new ArrayList<>();
-			list.add(new AABB(0.0625, bY == 1 ? 0.125 : 0.0, 0.875, 0.9375, 1.0, 1.0625));
-			if(bY > 0 && bY % 4 == 0){
-				list.add(new AABB(0.0, 0.5, 0.875, 1.0, 1.0, 1.0625));
-				list.add(new AABB(0.0, 0.5, 0.0, 1.0, 1.0, 0.0625));
+		if(y > 0 && x == 2 && z == 0){
+			AABBUtils.box16(main, 1, y == 1 ? 2 : 0, 14, 15, 16, 17);
+			if(y > 0 && y % 4 == 0){
+				AABBUtils.box16(main, 0, 8, 14, 16, 16, 17);
+				AABBUtils.box16(main, 0, 8, 0, 16, 16, 1);
 			}
-			return list;
 		}
 		
 		// Center
-		if(bX > 0 && bX < 3 && bZ > 0 && bZ < 3){
-			if(bY > 0){
-				// Boiler
-				AABB bb = new AABB(0.0625, 0.0, 0.0625, 0.9375, 1.0, 0.9375);
-				if(bZ == 1){
-					if(bX == 1) bb = new AABB(0.0625, 0.0, 0.0625, 1.0, 1.0, 1.0);
-					if(bX == 2) bb = new AABB(0.0, 0.0, 0.0625, 0.9375, 1.0, 1.0);
-				}else if(bZ == 2){
-					if(bX == 1) bb = new AABB(0.0625, 0.0, 0.0, 1.0, 1.0, 0.9375);
-					if(bX == 2) bb = new AABB(0.0, 0.0, 0.0, 0.9375, 1.0, 0.9375);
+		if(x > 0 && x < 3 && z > 0 && z < 3){
+			if(y > 0){
+				// Distillation Column
+				AABB bb = AABBUtils.box16(1, 0, 1, 15, 16, 15);
+				if(z == 1){
+					if(x == 1) bb = AABBUtils.box16(1, 0, 1, 16, 16, 16);
+					if(x == 2) bb = AABBUtils.box16(0, 0, 1, 15, 16, 16);
+				}else if(z == 2){
+					if(x == 1) bb = AABBUtils.box16(1, 0, 0, 16, 16, 15);
+					if(x == 2) bb = AABBUtils.box16(0, 0, 0, 15, 16, 15);
 				}
-				return List.of(bb);
+				main.add(bb);
 			}else{
-				// Below Boiler
-				return Arrays.asList(
-						new AABB(-0.125, 0.5, -0.125, 1.125, 1.125, 1.125),
-						new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
-				);
+				// Distillation Column Base
+				AABBUtils.box16(main, -2, 8, -2, 18, 18, 18);
+				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
 			}
 		}
 		
 		// Platforms
-		if(bY > 0 && bY % 4 == 0){
-			return List.of(new AABB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0));
+		if((y > 0 && y % 4 == 0) && !(x == 2 && z == 0) && !(x >= 1 && x <= 2 && z >= 1 && z <= 2)){
+			AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
 		}
 		
 		// Base
-		if(bY == 0){
-			List<AABB> list = new ArrayList<>();
-			if((bX == 0 && bZ == 1) || (bX == 1 && bZ == 3) || (bX == 3 && bZ == 2) || (bX == 3 && bZ == 3)){
-				list.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
-			}else{
-				list.add(new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0));
+		if(y == 0){
+			if(!((x == 0 && z == 1) || (x == 1 && z == 3) || (x == 3 && z == 2) || (x == 3 && z == 3))){
+				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
 			}
-			return list;
 		}
 		
-		return List.of(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+		// Use default cube shape if nessesary
+		if(main.isEmpty()){
+			main.add(AABBUtils.FULL);
+		}
+		return main;
 	}
 }

@@ -1,7 +1,6 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +26,7 @@ import flaxbeard.immersivepetroleum.common.IPMenuTypes;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
 import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
 import flaxbeard.immersivepetroleum.common.multiblocks.CokerUnitMultiblock;
+import flaxbeard.immersivepetroleum.common.util.AABBUtils;
 import flaxbeard.immersivepetroleum.common.util.FluidHelper;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.BlockPos;
@@ -561,7 +561,8 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		return false;
 	}
 	
-	private static CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(CokerUnitTileEntity::getShape);
+	private static final CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(CokerUnitTileEntity::getShape);
+	
 	@Override
 	@Nonnull
 	public VoxelShape getBlockBounds(CollisionContext ctx){
@@ -569,47 +570,47 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 	}
 	
 	private static List<AABB> getShape(BlockPos posInMultiblock){
-		int bX = posInMultiblock.getX();
-		int bY = posInMultiblock.getY();
-		int bZ = posInMultiblock.getZ();
+		int x = posInMultiblock.getX();
+		int y = posInMultiblock.getY();
+		int z = posInMultiblock.getZ();
 		
 		List<AABB> main = new ArrayList<>();
 		
-		if((bY >= 15 && bY <= 22) && bZ == 2 && (bX == 2 || bX == 6)){
+		if((y >= 15 && y <= 22) && z == 2 && (x == 2 || x == 6)){
 			// The two vertical pipes at the very top
-			main.add(new AABB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75));
+			AABBUtils.box16(main, 4, 0, 4, 12, 16, 12);
 		}
 		
 		{ // Catwalk Railings
-			if(bY == 22 || bY == 18){
-				if(bX == 1){
-					main.add(new AABB(0.0, 0.0, 0.0, 0.0625, 1.0, 1.0)); // West Plate
+			if(y == 22 || y == 18){
+				if(x == 1){
+					AABBUtils.box16(main, 0, 0, 0, 1, 16, 16); // West Plate
 				}
-				if(bX == 7){
-					main.add(new AABB(0.9375, 0.0, 0.0, 1.0, 1.0, 1.0)); // East Plate
+				if(x == 7){
+					AABBUtils.box16(main, 15, 0, 0, 16, 16, 16); // East Plate
 				}
-				if(bZ == 1){
-					main.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 0.0625)); // South Plate
+				if(z == 1){
+					AABBUtils.box16(main, 0, 0, 0, 16, 16, 1); // South Plate
 				}
-				if(bZ == 3){
-					main.add(new AABB(0.0, 0.0, 0.9375, 1.0, 1.0, 1.0)); // North Plate
+				if(z == 3){
+					AABBUtils.box16(main, 0, 0, 15, 16, 16, 16); // North Plate
 				}
 			}
-			if(bY == 14 || bY == 9){
-				if(bX >= 0 && bX <= 8){
-					if(bZ == 0){
-						main.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 0.0625)); // South Plate
+			if(y == 14 || y == 9){
+				if(x >= 0 && x <= 8){
+					if(z == 0){
+						AABBUtils.box16(main, 0, 0, 0, 16, 16, 1); // South Plate
 					}
-					if(bZ == 4){
-						main.add(new AABB(0.0, 0.0, 0.9375, 1.0, 1.0, 1.0)); // North Plate
-					}
-					
-					if(bX == 8 && (bZ == 0 || bZ == 4)){
-						main.add(new AABB(0.9375, 0.0, 0.0, 1.0, 1.0, 1.0)); // East Plate
+					if(z == 4){
+						AABBUtils.box16(main, 0, 0, 15, 16, 16, 16); // North Plate
 					}
 					
-					if(bX == 0 && (bZ == 0 || bZ == 4)){
-						main.add(new AABB(0.0, 0.0, 0.0, 0.0625, 1.0, 1.0)); // West Plate
+					if(x == 8 && (z == 0 || z == 4)){
+						AABBUtils.box16(main, 15, 0, 0, 16, 16, 16); // East Plate
+					}
+					
+					if(x == 0 && (z == 0 || z == 4)){
+						AABBUtils.box16(main, 0, 0, 0, 1, 16, 16); // West Plate
 					}
 				}
 			}
@@ -619,10 +620,10 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		{
 			// Lower 2
 			{
-				if(bY == 8 || bY == 13){
-					if(!(bX >= 1 && bX <= 3 && bZ >= 1 && bZ <= 3) && !(bX >= 5 && bX <= 7 && bZ >= 1 && bZ <= 3)){
-						if(!(bX == 8 && bZ == 2)){
-							main.add(new AABB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0));
+				if(y == 8 || y == 13){
+					if(!(x >= 1 && x <= 3 && z >= 1 && z <= 3) && !(x >= 5 && x <= 7 && z >= 1 && z <= 3)){
+						if(!(x == 8 && z == 2)){
+							AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
 						}
 					}
 				}
@@ -630,10 +631,10 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 			
 			// Upper 2
 			{
-				if(bY == 17 || bY == 21){
-					if(bX >= 1 && bX <= 7 && bZ >= 1 && bZ <= 3){
-						if(!((bX == 2 || bX == 6 || bX == 7) && bZ == 2)){
-							main.add(new AABB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0));
+				if(y == 17 || y == 21){
+					if(x >= 1 && x <= 7 && z >= 1 && z <= 3){
+						if(!((x == 2 || x == 6 || x == 7) && z == 2)){
+							AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
 						}
 					}
 				}
@@ -643,57 +644,57 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		// Support Beams
 		{
 			// Vertical Beams
-			boolean lower = bY >= 4 && bY <= 13;
-			boolean upper = bY >= 14 && bY <= 21;
+			boolean lower = y >= 4 && y <= 13;
+			boolean upper = y >= 14 && y <= 21;
 			if(lower || upper){
 				// Corners
-				if((lower && bX == 0 && bZ == 0) || (upper && ((bX == 1 && bZ == 1) || (bX == 5 && bZ == 1)))){
-					main.add(new AABB(0.125, 0.0, 0.125, 0.375, 1.0, 0.375));
+				if((lower && x == 0 && z == 0) || (upper && ((x == 1 && z == 1) || (x == 5 && z == 1)))){
+					AABBUtils.box16(main, 2, 0, 2, 6, 16, 6);
 				}
-				if((lower && bX == 0 && bZ == 4) || (upper && ((bX == 1 && bZ == 3) || (bX == 5 && bZ == 3)))){
-					main.add(new AABB(0.125, 0.0, 0.625, 0.375, 1.0, 0.875));
+				if((lower && x == 0 && z == 4) || (upper && ((x == 1 && z == 3) || (x == 5 && z == 3)))){
+					AABBUtils.box16(main, 2, 0, 10, 6, 16, 14);
 				}
-				if((lower && bX == 8 && bZ == 0) || (upper && ((bX == 3 && bZ == 1) || (bX == 7 && bZ == 1)))){
-					main.add(new AABB(0.625, 0.0, 0.125, 0.875, 1.0, 0.375));
+				if((lower && x == 8 && z == 0) || (upper && ((x == 3 && z == 1) || (x == 7 && z == 1)))){
+					AABBUtils.box16(main, 10, 0, 2, 14, 16, 6);
 				}
-				if((lower && bX == 8 && bZ == 4) || (upper && ((bX == 3 && bZ == 3) || (bX == 7 && bZ == 3)))){
-					main.add(new AABB(0.625, 0.0, 0.625, 0.875, 1.0, 0.875));
+				if((lower && x == 8 && z == 4) || (upper && ((x == 3 && z == 3) || (x == 7 && z == 3)))){
+					AABBUtils.box16(main, 10, 0, 10, 14, 16, 14);
 				}
 				
 				// Middle
-				if(lower && bX == 4 && bZ == 0){
-					main.add(new AABB(0.375, 0.0, 0.125, 0.625, 1.0, 0.375));
+				if(lower && x == 4 && z == 0){
+					AABBUtils.box16(main, 6, 0, 2, 10, 16, 6);
 				}
-				if(lower && bX == 4 && bZ == 4){
-					main.add(new AABB(0.375, 0.0, 0.625, 0.625, 1.0, 0.875));
+				if(lower && x == 4 && z == 4){
+					AABBUtils.box16(main, 6, 0, 10, 10, 16, 14);
 				}
 			}
 			
 			// Horizontal Beams
-			if(bY == 6 || bY == 11){
-				//main.add(new AABB(0.0, 0.125, 0.0, 1.0, 0.375, 1.0));
-				if(bX >= 0 && bX <= 8){
-					if(bZ == 0){
-						double xa = (bX == 0) ? 0.125 : 0.0;
-						double xb = (bX == 8) ? 0.875 : 1.0;
-						main.add(new AABB(xa, 0.125, 0.125, xb, 0.375, 0.375));
+			if(y == 6 || y == 11){
+				//AABBUtils.box16(main, 0, 2, 0, 16, 6, 16);
+				if(x >= 0 && x <= 8){
+					if(z == 0){
+						double xa = (x == 0) ? 2 : 0;
+						double xb = (x == 8) ? 14 : 16;
+						AABBUtils.box16(main, xa, 2, 2, xb, 6, 6);
 					}
-					if(bZ == 4){
-						double xa = (bX == 0) ? 0.125 : 0.0;
-						double xb = (bX == 8) ? 0.875 : 1.0;
-						main.add(new AABB(xa, 0.125, 0.625, xb, 0.375, 0.875));
+					if(z == 4){
+						double xa = (x == 0) ? 2 : 0;
+						double xb = (x == 8) ? 14 : 16;
+						AABBUtils.box16(main, xa, 2, 10, xb, 6, 14);
 					}
 				}
-				if(bZ >= 0 && bZ <= 4){
-					if(bX == 0){
-						double za = (bZ == 0) ? 0.125 : 0.0;
-						double zb = (bZ == 4) ? 0.875 : 1.0;
-						main.add(new AABB(0.125, 0.125, za, 0.375, 0.375, zb));
+				if(z >= 0 && z <= 4){
+					if(x == 0){
+						double za = (z == 0) ? 2 : 0;
+						double zb = (z == 4) ? 14 : 16;
+						AABBUtils.box16(main, 2, 2, za, 6, 6, zb);
 					}
-					if(bX == 8 && bZ != 2){
-						double za = (bZ == 0) ? 0.125 : 0.0;
-						double zb = (bZ == 4) ? 0.875 : 1.0;
-						main.add(new AABB(0.625, 0.125, za, 0.875, 0.375, zb));
+					if(x == 8 && z != 2){
+						double za = (z == 0) ? 2 : 0;
+						double zb = (z == 4) ? 14 : 16;
+						AABBUtils.box16(main, 10, 2, za, 14, 6, zb);
 					}
 				}
 			}
@@ -709,193 +710,191 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 				// Vertical, Horizontal-X, Horizontal-Z
 				boolean v = false, hX = false, hZ = false;
 				
-				if(((bY >= 1 && bY <= 7 && bY != 3) && bX == 2 && bZ == 4) || ((bY >= 9 && bY <= 13) && bX == 0 && bZ == 2) || (bY == 1 && bX == 5 && bZ == 4)){
+				if(((y >= 1 && y <= 7 && y != 3) && x == 2 && z == 4) || ((y >= 9 && y <= 13) && x == 0 && z == 2) || (y == 1 && x == 5 && z == 4)){
 					v = true;
 					
-					if(bY == 2 || bY == 7 || (bX == 5 && bZ == 4)){
+					if(y == 2 || y == 7 || (x == 5 && z == 4)){
 						u = true;
 					}
-					if(bY == 1 || bY == 4 || bY == 9){
+					if(y == 1 || y == 4 || y == 9){
 						d = true;
 					}
 				}
 				
-				if(bY == 0){
-					if(bX == 3 && bZ == 3){
+				if(y == 0){
+					if(x == 3 && z == 3){
 						hZ = n = s = true;
 					}
 				}
 				
-				if(bY == 1){
-					if(bX == 4 && bZ == 2){
+				if(y == 1){
+					if(x == 4 && z == 2){
 						v = u = d = true;
 					}
 				}
-				if(bY == 2){
-					if(bX == 3 && bZ == 3){
+				if(y == 2){
+					if(x == 3 && z == 3){
 						hX = w = true;
 					}
-					if(bX == 4 && bZ == 3){
+					if(x == 4 && z == 3){
 						hX = e = true;
 					}
-					if((bX == 3 || bX == 5) && bZ == 2){
+					if((x == 3 || x == 5) && z == 2){
 						hX = e = w = true;
 					}
-					if(bX == 4 && bZ == 2){
+					if(x == 4 && z == 2){
 						hX = e = w = d = true;
-						main.add(new AABB(0.25, 0.125, 0.25, 0.75, 0.25, 0.75));
+						AABBUtils.box16(main, 4, 2, 4, 12, 4, 12);
 					}
-					if(bX == 5 && bZ == 3){
+					if(x == 5 && z == 3){
 						hX = e = w = s = true;
-						main.add(new AABB(0.25, 0.25, 0.75, 0.75, 0.75, 0.875));
+						AABBUtils.box16(main, 4, 4, 12, 12, 12, 14);
 					}
 				}
-				if(bY == 8){
-					if(bX == 1 && bZ == 4){
+				if(y == 8){
+					if(x == 1 && z == 4){
 						hX = e = w = true;
 					}
-					if(bX == 0 && bZ == 3){
+					if(x == 0 && z == 3){
 						hZ = n = s = true;
 					}
 				}
 				
-				if(v) main.add(new AABB(0.25, 0.0, 0.25, 0.75, 1.0, 0.75)); // Vertical Pipe
-				if(hX) main.add(new AABB(0.0, 0.25, 0.25, 1.0, 0.75, 0.75)); // Horizontal-X Pipe
-				if(hZ) main.add(new AABB(0.25, 0.25, 0.0, 0.75, 0.75, 1.0)); // Horizontal-Z Pipe
+				if(v) AABBUtils.box16(main, 4, 0, 4, 12, 16, 12); // Vertical Pipe
+				if(hX) AABBUtils.box16(main, 0, 4, 4, 16, 12, 12); // Horizontal-X Pipe
+				if(hZ) AABBUtils.box16(main, 4, 4, 0, 12, 12, 16); // Horizontal-Z Pipe
 			}
 			
 			// 90° Bends
 			{
-				if(bY == 0){
-					if(bX == 4 && bZ == 2){
+				if(y == 0){
+					if(x == 4 && z == 2){
 						u = w = true;
-						main.add(new AABB(0.125, 0.25, 0.25, 0.75, 0.875, 0.75));
+						AABBUtils.box16(main, 2, 4, 4, 12, 14, 12);
 					}
-					if(bX == 3 && bZ == 2){
+					if(x == 3 && z == 2){
 						e = s = true;
-						main.add(new AABB(0.25, 0.25, 0.25, 0.875, 0.75, 0.875));
+						AABBUtils.box16(main, 4, 4, 4, 14, 12, 14);
 					}
 				}
-				if(bY == 2){
-					if(bX == 2 && bZ == 3){
+				if(y == 2){
+					if(x == 2 && z == 3){
 						n = e = true;
-						main.add(new AABB(0.25, 0.25, 0.125, 0.875, 0.75, 0.75));
+						AABBUtils.box16(main, 4, 4, 2, 14, 12, 12);
 					}
-					if(bX == 5 && bZ == 4){
+					if(x == 5 && z == 4){
 						d = n = true;
-						main.add(new AABB(0.25, 0.125, 0.125, 0.75, 0.75, 0.75));
+						AABBUtils.box16(main, 4, 2, 2, 12, 12, 12);
 					}
-					if(bX == 6 && bZ == 3){
+					if(x == 6 && z == 3){
 						w = n = true;
-						main.add(new AABB(0.125, 0.25, 0.125, 0.75, 0.75, 0.75));
+						AABBUtils.box16(main, 2, 4, 2, 12, 12, 12);
 					}
 				}
-				if(bY == 8){
-					if(bX == 0 && bZ == 2){
+				if(y == 8){
+					if(x == 0 && z == 2){
 						u = s = true;
-						main.add(new AABB(0.25, 0.25, 0.25, 0.75, 0.875, 0.875));
+						AABBUtils.box16(main, 4, 4, 4, 12, 14, 14);
 					}
-					if(bX == 0 && bZ == 4){
+					if(x == 0 && z == 4){
 						n = e = true;
-						main.add(new AABB(0.25, 0.25, 0.125, 0.875, 0.75, 0.75));
+						AABBUtils.box16(main, 4, 4, 2, 14, 12, 12);
 					}
-					if(bX == 2 && bZ == 4){
+					if(x == 2 && z == 4){
 						d = w = true;
-						main.add(new AABB(0.125, 0.125, 0.25, 0.75, 0.75, 0.75));
+						AABBUtils.box16(main, 2, 2, 4, 12, 12, 12);
 					}
 				}
 			}
 			
-			if(u) main.add(new AABB(0.125, 0.875, 0.125, 0.875, 1.0, 0.875)); // Top Connection
-			if(d) main.add(new AABB(0.125, 0.0, 0.125, 0.875, 0.125, 0.875)); // Bottom Connection
-			if(n) main.add(new AABB(0.125, 0.125, 0.0, 0.875, 0.875, 0.125)); // North Connection
-			if(s) main.add(new AABB(0.125, 0.125, 0.875, 0.875, 0.875, 1.0)); // South Connection
-			if(e) main.add(new AABB(0.875, 0.125, 0.125, 1.0, 0.875, 0.875)); // East Connection
-			if(w) main.add(new AABB(0.0, 0.125, 0.125, 0.125, 0.875, 0.875)); // West Connection
+			if(u) AABBUtils.box16(main, 2, 14, 2, 14, 16, 14); // Top Connection
+			if(d) AABBUtils.box16(main, 2, 0, 2, 14, 2, 14); // Bottom Connection
+			if(n) AABBUtils.box16(main, 2, 2, 0, 14, 14, 2); // North Connection
+			if(s) AABBUtils.box16(main, 2, 2, 14, 14, 14, 16); // South Connection
+			if(e) AABBUtils.box16(main, 14, 2, 2, 16, 14, 14); // East Connection
+			if(w) AABBUtils.box16(main, 0, 2, 2, 2, 14, 14); // West Connection
 		}
 		
 		// Redstone Controller
-		if(bX == 1 && bZ == 4){
-			if(bY == 0){ // Bottom
-				return Arrays.asList(
-						new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0),
-						new AABB(0.75, 0.0, 0.625, 0.875, 1.0, 0.875),
-						new AABB(0.125, 0.0, 0.625, 0.25, 1.0, 0.875)
-				);
+		if(x == 1 && z == 4){
+			if(y == 0){ // Bottom
+				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
+				AABBUtils.box16(main, 12, 0, 10, 14, 16, 14);
+				AABBUtils.box16(main, 2, 0, 10, 4, 16, 14);
 			}
-			if(bY == 1){ // Top
-				return List.of(new AABB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0));
+			if(y == 1){ // Top
+				AABBUtils.box16(main, 0, 0, 8, 16, 16, 16);
 			}
 		}
 		
 		// Power Sockets
-		if(bY == 1 && bZ == 4 && (bX == 6 || bX == 7)){
-			main.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 0.875));
-			main.add(new AABB(0.25, 0.25, 0.875, 0.75, 0.75, 1.0));
+		if(y == 1 && z == 4 && (x == 6 || x == 7)){
+			AABBUtils.box16(main, 0, 0, 0, 16, 16, 14);
+			AABBUtils.box16(main, 4, 4, 14, 12, 12, 16);
 		}
 		
 		// Power Cables
-		if((bX == 6 && bY == 2 && bZ == 4) || (bY >= 4 && bY <= 13 && bX == 4 && bZ == 2)){
-			main.add(new AABB(0.3125, 0.0, 0.3125, 0.6875, 1.0, 0.6875));
+		if((x == 6 && y == 2 && z == 4) || (y >= 4 && y <= 13 && x == 4 && z == 2)){
+			AABBUtils.box16(main, 5, 0, 5, 11, 16, 11);
 		}
 		
 		// Bitumen input Sign
-		if(bY == 1 && bX == 3 && bZ == 4){
-			main.add(new AABB(0.0, 0.9375, 0.875, 1.0, 1.0625, 1.0));
-			main.add(new AABB(0.0625, 0.0625, 0.875, 0.9375, 0.9375, 0.9375));
+		if(y == 1 && x == 3 && z == 4){
+			AABBUtils.box16(main, 0, 15, 14, 16, 17, 16);
+			AABBUtils.box16(main, 1, 1, 14, 15, 15, 15);
 		}
 		
 		// Primary Ladder
-		if((bX == 8 && bZ == 2) && (bY >= 5 && bY <= 13)){
-			main.add(new AABB(0.0, 0.0, 0.125, 0.0625, 1.0, 0.875)); // West Plate
+		if((x == 8 && z == 2) && (y >= 5 && y <= 13)){
+			AABBUtils.box16(main, 0, 0, 2, 1, 16, 14); // West Plate
 		}
 		
 		// Secondary Ladder
-		if((bX == 7 && bZ == 2) && (bY >= 15 && bY <= 21)){
-			main.add(new AABB(0.0, 0.0, 0.125, 0.0625, 1.0, 0.875)); // West Plate
+		if((x == 7 && z == 2) && (y >= 15 && y <= 21)){
+			AABBUtils.box16(main, 0, 0, 2, 1, 16, 14); // West Plate
 		}
 		
 		// Baseplate
-		if(bY == 0){
-			if(!((bZ == 0 || bZ == 4) && (bX == 0 || bX == 4 || bX == 8)) && !(bZ == 4 && (bX == 2 || bX == 3 || (bX >= 5 && bX <= 7)))){
-				main.add(new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0));
+		if(y == 0){
+			if(!((z == 0 || z == 4) && (x == 0 || x == 4 || x == 8)) && !(z == 4 && (x == 2 || x == 3 || (x >= 5 && x <= 7)))){
+				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
 			}
 		}
 		
 		// Chambers
 		{
-			if(bY >= 4 && bY <= 13){
-				if(bX == 1 || bX == 5){
-					if(bZ == 1) List.of(new AABB(0.0625, 0.0, 0.0625, 1.0, 1.0, 1.0));
-					if(bZ == 2) List.of(new AABB(0.0625, 0.0, 0.0, 1.0, 1.0, 1.0));
-					if(bZ == 3) List.of(new AABB(0.0625, 0.0, 0.0, 1.0, 1.0, 0.9375));
+			if(y >= 4 && y <= 13){
+				if(x == 1 || x == 5){
+					if(z == 1) List.of(AABBUtils.box16(1, 0, 1, 16, 16, 16));
+					if(z == 2) List.of(AABBUtils.box16(1, 0, 0, 16, 16, 16));
+					if(z == 3) List.of(AABBUtils.box16(1, 0, 0, 16, 16, 15));
 				}
-				if(bX == 2 || bX == 6){
-					if(bZ == 1) List.of(new AABB(0.0, 0.0, 0.0625, 1.0, 1.0, 1.0));
-					if(bZ == 3) List.of(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 0.9375));
+				if(x == 2 || x == 6){
+					if(z == 1) List.of(AABBUtils.box16(0, 0, 1, 16, 16, 16));
+					if(z == 3) List.of(AABBUtils.box16(0, 0, 0, 16, 16, 15));
 				}
-				if(bX == 3 || bX == 7){
-					if(bZ == 1) List.of(new AABB(0.0, 0.0, 0.0625, 0.9375, 1.0, 1.0));
-					if(bZ == 2) List.of(new AABB(0.0, 0.0, 0.0, 0.9375, 1.0, 1.0));
-					if(bZ == 3) List.of(new AABB(0.0, 0.0, 0.0, 0.9375, 1.0, 0.9375));
+				if(x == 3 || x == 7){
+					if(z == 1) List.of(AABBUtils.box16(0, 0, 1, 15, 16, 16));
+					if(z == 2) List.of(AABBUtils.box16(0, 0, 0, 15, 16, 16));
+					if(z == 3) List.of(AABBUtils.box16(0, 0, 0, 15, 16, 15));
 				}
 			}
 		}
 		
 		// Fences
 		{
-			if(bY == 0 || bY == 1){
-				if(bZ >= 1 && bZ <= 3){
-					if(bX == 0){
-						main.add(new AABB(0.375, 0.0, 0.0, 0.4375, 1.0, 1.0));
+			if(y == 0 || y == 1){
+				if(z >= 1 && z <= 3){
+					if(x == 0){
+						AABBUtils.box16(main, 6, 0, 0, 7, 16, 16);
 					}
-					if(bX == 8){
-						main.add(new AABB(0.5625, 0.0, 0.0, 0.625, 1.0, 1.0));
+					if(x == 8){
+						AABBUtils.box16(main, 9, 0, 0, 10, 16, 16);
 					}
 				}
-				if(bX >= 1 && bX <= 3 || bX >= 5 && bX <= 7){
-					if(bZ == 0){
-						main.add(new AABB(0.0, 0.0, 0.375, 1.0, 1.0, 0.4375));
+				if(x >= 1 && x <= 3 || x >= 5 && x <= 7){
+					if(z == 0){
+						AABBUtils.box16(main, 0, 0, 6, 16, 16, 7);
 					}
 				}
 			}
@@ -903,7 +902,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		
 		// Use default cube shape if nessesary
 		if(main.isEmpty()){
-			main.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+			main.add(AABBUtils.FULL);
 		}
 		return main;
 	}

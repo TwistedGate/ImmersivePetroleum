@@ -22,6 +22,7 @@ import flaxbeard.immersivepetroleum.common.IPMenuTypes;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
 import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
 import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
+import flaxbeard.immersivepetroleum.common.util.AABBUtils;
 import flaxbeard.immersivepetroleum.common.util.FluidHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -359,15 +360,15 @@ public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<Hydrotr
 		
 		// Baseplate
 		if(y == 0 && !(x == 0 && z == 2) && !(z == 3 && (x == 1 || x == 2))){
-			main.add(new AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0));
+			AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
 		}
 		
 		// Redstone Controller
 		if(y == 0 && x == 0 && z == 3){
-			main.add(new AABB(0.75, 0.5, 0.625, 0.875, 1.0, 0.875));
-			main.add(new AABB(0.125, 0.5, 0.625, 0.25, 1.0, 0.875));
+			AABBUtils.box16(main, 12, 8, 10, 14, 16, 14);
+			AABBUtils.box16(main, 2, 8, 10, 4, 16, 14);
 		}else if(y == 1 && x == 0 && z == 3){
-			main.add(new AABB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0));
+			AABBUtils.box16(main, 0, 0, 8, 16, 16, 16);
 		}
 		
 		// Small Tank
@@ -375,14 +376,14 @@ public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<Hydrotr
 			// Bottom half
 			if(y == 0){
 				if(z == 0){
-					main.add(new AABB(0.125, 0.75, 0.5, 1.0, 1.0, 1.0));
-					main.add(new AABB(0.25, 0.5, 0.75, 0.875, 0.75, 1.0));
+					AABBUtils.box16(main, 2, 12, 8, 16, 16, 16);
+					AABBUtils.box16(main, 4, 8, 12, 14, 12, 16);
 				}
 				if(z == 1){
-					main.add(new AABB(0.125, 0.75, 0.0, 1.0, 1.0, 1.0));
+					AABBUtils.box16(main, 2, 12, 0, 16, 16, 16);
 				}
 				if(z == 3){
-					main.add(new AABB(0.125, 0.75, 0.0, 1.0, 1.0, 0.25));
+					AABBUtils.box16(main, 2, 12, 0, 16, 16, 4);
 				}
 				
 			}
@@ -390,13 +391,13 @@ public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<Hydrotr
 			// Top half
 			if(y == 1){
 				if(z == 0){
-					main.add(new AABB(0.125, 0.0, 0.5, 1.0, 0.75, 1.0));
+					AABBUtils.box16(main, 2, 0, 8, 16, 12, 16);
 				}
 				if(z == 1){
-					main.add(new AABB(0.125, 0.0, 0.0, 1.0, 0.75, 1.0));
+					AABBUtils.box16(main, 2, 0, 0, 16, 12, 16);
 				}
 				if(z == 3){
-					main.add(new AABB(0.125, 0.0, 0.0, 1.0, 0.75, 0.25));
+					AABBUtils.box16(main, 2, 0, 0, 16, 12, 4);
 				}
 			}
 		}
@@ -407,29 +408,30 @@ public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<Hydrotr
 			if(y == 0){
 				if(z == 0){
 					if(x == 1){
-						main.add(new AABB(0.125, 0.3125, 0.0625, 0.375, 1.0, 0.3125));
+						AABBUtils.box16(main, 2, 5, 1, 6, 16, 5);
 					}
 					if(x == 2){
-						main.add(new AABB(0.625, 0.3125, 0.0625, 0.875, 1.0, 0.3125));
+						AABBUtils.box16(main, 10, 5, 1, 14, 16, 5);
 					}
 				}
 				if(z == 1){
 					if(x == 1){
-						main.add(new AABB(0.125, 0.3125, 0.875, 0.375, 1.0, 1.0));
+						AABBUtils.box16(main, 2, 5, 16, 6, 16, 16);
 					}
 					if(x == 2){
-						main.add(new AABB(0.625, 0.3125, 0.875, 0.875, 1.0, 1.0));
+						AABBUtils.box16(main, 10, 5, 16, 16, 16, 16);
 					}
 				}
-				if(z == 2 && x == 2){
-					main.add(new AABB(0.625, 0.3125, 0.0, 0.875, 1.0, 0.125));
+				if(x == 2){
+					if(z == 1) AABBUtils.box16(main, 10, 5, 14, 14, 16, 16);
+					if(z == 2) AABBUtils.box16(main, 10, 5, 0, 14, 16, 2);
 				}
 			}
 		}
 		
 		// Use default cube shape if nessesary
 		if(main.isEmpty()){
-			main.add(new AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+			main.add(AABBUtils.FULL);
 		}
 		return main;
 	}
