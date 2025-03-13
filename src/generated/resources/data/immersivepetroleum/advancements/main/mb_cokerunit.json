@@ -38,5 +38,6 @@
     "loot": [
       "immersivepetroleum:advancements/forming_coker_reward"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

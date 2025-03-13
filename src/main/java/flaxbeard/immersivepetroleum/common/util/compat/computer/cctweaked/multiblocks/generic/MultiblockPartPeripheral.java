@@ -1,12 +1,8 @@
 package flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks.generic;
 
-import blusunrize.immersiveengineering.common.blocks.generic.MultiblockPartBlockEntity;
-import dan200.computercraft.api.lua.LuaFunction;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;
-
-public abstract class MultiblockPartPeripheral implements IPeripheral{
-	MultiblockPartBlockEntity<?> mbPart;
+public abstract class MultiblockPartPeripheral //implements IPeripheral
+{
+	/*MultiblockPartBlockEntity<?> mbPart;
 	public MultiblockPartPeripheral(MultiblockPartBlockEntity<?> mbPart){
 		this.mbPart = mbPart;
 	}
@@ -38,5 +34,5 @@ public abstract class MultiblockPartPeripheral implements IPeripheral{
 		if(other instanceof MultiblockPartPeripheral part && part.mbPart.getBlockPos().equals(this.mbPart.getBlockPos()))
 			return true;
 		return false;
-	}
+	}*/
 }

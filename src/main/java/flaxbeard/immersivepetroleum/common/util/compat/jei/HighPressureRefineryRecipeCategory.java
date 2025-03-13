@@ -1,11 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util.compat.jei;
 
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.IPContent;
@@ -22,9 +16,13 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nonnull;
+import java.util.Locale;
 
 public class HighPressureRefineryRecipeCategory extends IPRecipeCategory<HighPressureRefineryRecipe>{
 	public static final ResourceLocation ID = ResourceUtils.ip("hydrotreater");
@@ -34,7 +32,7 @@ public class HighPressureRefineryRecipeCategory extends IPRecipeCategory<HighPre
 		super(HighPressureRefineryRecipe.class, guiHelper, ID, "block.immersivepetroleum.hydrotreater");
 		ResourceLocation background = ResourceUtils.ip("textures/gui/jei/hydrotreater.png");
 		setBackground(guiHelper.createDrawable(background, 0, 0, 113, 75));
-		setIcon(new ItemStack(IPContent.Multiblock.HYDROTREATER.get()));
+		setIcon(new ItemStack(IPContent.Multiblock.HYDROTREATER.block().get()));
 		
 		this.tankOverlay = guiHelper.createDrawable(background, 113, 0, 20, 51);
 	}
@@ -67,7 +65,7 @@ public class HighPressureRefineryRecipeCategory extends IPRecipeCategory<HighPre
 	}
 	
 	@Override
-	public void draw(HighPressureRefineryRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, PoseStack matrix, double mouseX, double mouseY){
+	public void draw(HighPressureRefineryRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY){
 		IDrawable background = getBackground();
 		int bWidth = background.getWidth();
 		int bHeight = background.getHeight();
@@ -77,17 +75,17 @@ public class HighPressureRefineryRecipeCategory extends IPRecipeCategory<HighPre
 		int energy = recipe.getTotalProcessEnergy()/recipe.getTotalProcessTime();
 		int chance = (int) (100 * recipe.chance);
 		
-		matrix.pushPose();
+		guiGraphics.pose().pushPose();
 		String text0 = I18n.get("desc.immersiveengineering.info.ift", Utils.fDecimal(energy));
-		font.draw(matrix, text0, bWidth / 2 - font.width(text0) / 2, bHeight - (font.lineHeight * 2), 0);
+		guiGraphics.drawString(font, text0, bWidth / 2 - font.width(text0) / 2, bHeight - (font.lineHeight * 2), -1, false);
 		
 		String text1 = I18n.get("desc.immersiveengineering.info.seconds", Utils.fDecimal(time / 20D));
-		font.draw(matrix, text1, bWidth / 2 - font.width(text1) / 2, bHeight - font.lineHeight, 0);
+		guiGraphics.drawString(font, text1, bWidth / 2 - font.width(text1) / 2, bHeight - font.lineHeight, -1, false);
 		
 		if(recipe.hasSecondaryItem()){
 			String text2 = String.format(Locale.US, "%d%%", chance);
-			font.draw(matrix, text2, bWidth + 3 - font.width(text2), bHeight / 2 + 4, 0);
+			guiGraphics.drawString(font, text2, bWidth + 3 - font.width(text2), bHeight / 2 + 4, -1, false);
 		}
-		matrix.popPose();
+		guiGraphics.pose().popPose();
 	}
 }

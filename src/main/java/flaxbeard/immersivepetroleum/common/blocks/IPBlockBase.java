@@ -1,10 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.blocks.interfaces.IPlacementReader;
 import flaxbeard.immersivepetroleum.common.blocks.interfaces.IPlayerInteraction;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPClientTickableTile;
@@ -29,13 +24,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
 public class IPBlockBase extends Block{
 	public IPBlockBase(Block.Properties props){
 		super(props);
 	}
 	
 	public Supplier<BlockItem> blockItemSupplier(){
-		return () -> new IPBlockItemBase(this, new Item.Properties().tab(ImmersivePetroleum.creativeTab));
+		return () -> new IPBlockItemBase(this, new Item.Properties());
 	}
 	
 	private final boolean isEntityBlock = this instanceof EntityBlock;

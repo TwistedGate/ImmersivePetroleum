@@ -1,33 +1,9 @@
 package flaxbeard.immersivepetroleum.common.multiblocks;
 
-import java.util.List;
-import java.util.function.Consumer;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-
-import blusunrize.immersiveengineering.api.ApiUtils;
-import blusunrize.immersiveengineering.api.multiblocks.ClientMultiblocks;
-import blusunrize.immersiveengineering.client.utils.RenderUtils;
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
-import flaxbeard.immersivepetroleum.client.utils.MCUtil;
-import flaxbeard.immersivepetroleum.common.IPContent;
-import flaxbeard.immersivepetroleum.common.IPTileTypes;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
-import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-
-public class PumpjackMultiblock extends IPTemplateMultiblock{
-	public static final PumpjackMultiblock INSTANCE = new PumpjackMultiblock();
+@Deprecated(forRemoval = true)
+public class PumpjackMultiblock //extends IPTemplateMultiblock
+{
+	/*public static final PumpjackMultiblock INSTANCE = new PumpjackMultiblock();
 	
 	private PumpjackMultiblock(){
 		super(ResourceUtils.ip("multiblocks/pumpjack"), new BlockPos(1, 0, 0), new BlockPos(1, 1, 4), new BlockPos(3, 4, 6), IPContent.Multiblock.PUMPJACK);
@@ -44,7 +20,7 @@ public class PumpjackMultiblock extends IPTemplateMultiblock{
 	}
 	
 	public class PumpjackClientData extends IPClientMultiblockProperties{
-		private PumpjackTileEntity te;
+		private BlockEntity te;
 		private List<BakedQuad> list;
 		public PumpjackClientData(){
 			super(PumpjackMultiblock.INSTANCE, 0, 0, 0);
@@ -63,7 +39,7 @@ public class PumpjackMultiblock extends IPTemplateMultiblock{
 		@Override
 		public void renderCustomFormedStructure(PoseStack matrix, MultiBufferSource buffer){
 			if(this.te == null){
-				this.te = new PumpjackTileEntity(IPTileTypes.PUMP.master(), BlockPos.ZERO, IPContent.Multiblock.PUMPJACK.get().defaultBlockState());
+				this.te = IPContent.Multiblock.PUMPJACK.masterBE().get().create(BlockPos.ZERO, IPContent.Multiblock.PUMPJACK.block().get().defaultBlockState());
 			}
 			
 			if(this.list == null){
@@ -94,6 +70,6 @@ public class PumpjackMultiblock extends IPTemplateMultiblock{
 			}
 		}
 		
-		final Quaternion rot = new Quaternion(new Vector3f(0F, 1F, 0F), 90, true);
-	}
+		final Quaternionf rot = Axis.YP.rotationDegrees(90);
+	}*/
 }

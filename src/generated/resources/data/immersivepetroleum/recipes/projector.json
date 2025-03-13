@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:ingots/iron"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:projector"
-  }
+  },
+  "show_notification": true
 }

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "immersivepetroleum:upgrade_paddles"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_treated_planks": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:treated_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_treated_planks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "immersivepetroleum:upgrade_paddles"
+    ]
+  },
+  "sends_telemetry_event": false
+}

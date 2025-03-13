@@ -1,12 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util.compat.jei;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import flaxbeard.immersivepetroleum.api.crafting.CokerUnitRecipe;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.IPContent;
@@ -22,9 +15,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 	public static final ResourceLocation ID = ResourceUtils.ip("cokerunit");
@@ -36,7 +34,7 @@ public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 		ResourceLocation coker = ResourceUtils.ip("textures/gui/coker.png");
 		
 		setBackground(guiHelper.createDrawable(background, 0, 0, 150, 77));
-		setIcon(new ItemStack(IPContent.Multiblock.COKERUNIT.get()));
+		setIcon(new ItemStack(IPContent.Multiblock.COKERUNIT.block().get()));
 		
 		this.tankOverlay = guiHelper.createDrawable(coker, 200, 0, 20, 51);
 	}
@@ -61,11 +59,11 @@ public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 			.addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.inputItem.getMatchingStacks()));
 		
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 52, 58)
-			.addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.outputItem.get()));
+			.addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.outputItem.copy()));
 	}
 	
 	@Override
-	public void draw(CokerUnitRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, PoseStack matrix, double mouseX, double mouseY){
+	public void draw(CokerUnitRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY){
 		IDrawable background = getBackground();
 		int bWidth = background.getWidth();
 		int bHeight = background.getHeight();
@@ -74,12 +72,12 @@ public class CokerUnitRecipeCategory extends IPRecipeCategory<CokerUnitRecipe>{
 		int time = (recipe.getTotalProcessTime() + 2 + 5) * recipe.inputItem.getCount();
 		int energy = recipe.getTotalProcessEnergy()/recipe.getTotalProcessTime();
 		
-		matrix.pushPose();
+		guiGraphics.pose().pushPose();
 		String text0 = I18n.get("desc.immersiveengineering.info.ift", Utils.fDecimal(energy));
-		font.draw(matrix, text0, bWidth - 5 - font.width(text0), (bHeight / 3) + font.lineHeight, -1);
+		guiGraphics.drawString(font, text0, bWidth - 5 - font.width(text0), (bHeight / 3) + font.lineHeight, -1, false);
 		
 		String text1 = I18n.get("desc.immersiveengineering.info.seconds", Utils.fDecimal(time / 20D));
-		font.draw(matrix, text1, bWidth - 10 - font.width(text1), (bHeight / 3) + (font.lineHeight * 2), -1);
-		matrix.popPose();
+		guiGraphics.drawString(font, text1, bWidth - 10 - font.width(text1), (bHeight / 3) + (font.lineHeight * 2), -1, false);
+		guiGraphics.pose().popPose();
 	}
 }

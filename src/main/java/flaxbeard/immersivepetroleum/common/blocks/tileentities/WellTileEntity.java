@@ -1,16 +1,11 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.tuple.Pair;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.client.ClientProxy;
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.PumpjackLogic;
 import flaxbeard.immersivepetroleum.common.blocks.stone.WellPipeBlock;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
 import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
@@ -28,10 +23,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WellTileEntity extends IPTileEntityBase implements IPCommonTickableTile{
 	
-	static final int PIPE_WORTH = 6;
+	public static final int PIPE_WORTH = 6;
 	static final int DEFAULT_PIPELENGTH = PIPE_WORTH * 64;
 	
 	/** It's supposed to be never null nor empty. If it is then something's wrong. */
@@ -179,10 +179,11 @@ public class WellTileEntity extends IPTileEntityBase implements IPCommonTickable
 						Pair<Boolean, BlockPos> result = well.hasValidConnection();
 						
 						// Don't stop spilling even if the pumpjack is ontop, because it is "not designed" to handle the high pressure
-						if(!result.getLeft() || getWorldNonnull().getBlockEntity(result.getRight()) instanceof PumpjackTileEntity){
+						BlockEntity te = getWorldNonnull().getBlockEntity(result.getRight());
+						if(!result.getLeft() || te instanceof IMultiblockBE<?> multiblockBE && multiblockBE.getHelper().getContext().getState() instanceof PumpjackLogic.State){
 							for(ColumnPos cPos:this.tappedIslands){
 								ReservoirIsland island = ReservoirHandler.getIsland(getWorldNonnull(), cPos);
-								
+
 								// One is enough to trigger spilling
 								if(island != null && island.getPressure(getWorldNonnull(), cPos.x(), cPos.z()) > 0.0){
 									fType = island.getFluid();

@@ -1,8 +1,5 @@
 package flaxbeard.immersivepetroleum.common.sound;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import blusunrize.immersiveengineering.common.items.EarmuffsItem;
 import blusunrize.immersiveengineering.common.register.IEItems;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
@@ -24,6 +21,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class IPEntitySound implements TickableSoundInstance{
@@ -138,7 +138,7 @@ public class IPEntitySound implements TickableSoundInstance{
 		if(volumeAjustment > .1f)
 			for(int dx = (int) Math.floor(entity.getX() - 8) >> 4;dx <= (int) Math.floor(entity.getX() + 8) >> 4;dx++){
 				for(int dz = (int) Math.floor(entity.getZ() - 8) >> 4;dz <= (int) Math.floor(entity.getZ() + 8) >> 4;dz++){
-					for(BlockEntity tile:MCUtil.getPlayer().level.getChunk(dx, dz).getBlockEntities().values()){
+					for(BlockEntity tile:MCUtil.getPlayer().level().getChunk(dx, dz).getBlockEntities().values()){
 						if(tile != null && tile.getClass().getName().contains("SoundMuffler")){
 							BlockPos tPos = tile.getBlockPos();
 							double d = entity.position().distanceTo(new Vec3(tPos.getX() + .5, tPos.getY() + .5, tPos.getZ() + .5));
@@ -156,7 +156,7 @@ public class IPEntitySound implements TickableSoundInstance{
 	
 	@Override
 	public void tick(){
-		if(MCUtil.getPlayer() != null && MCUtil.getPlayer().level.getDayTime() % 40 == 0)
+		if(MCUtil.getPlayer() != null && MCUtil.getPlayer().level().getDayTime() % 40 == 0)
 			evaluateVolume();
 	}
 	

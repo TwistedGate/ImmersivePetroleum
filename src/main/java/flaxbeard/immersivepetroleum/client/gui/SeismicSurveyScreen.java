@@ -1,26 +1,16 @@
 package flaxbeard.immersivepetroleum.client.gui;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-
 import flaxbeard.immersivepetroleum.client.render.IPRenderTypes;
 import flaxbeard.immersivepetroleum.client.render.dyn.DynamicTextureWrapper;
-import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.network.MessageSurveyResultDetails;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import flaxbeard.immersivepetroleum.common.util.survey.SurveyScan;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -28,6 +18,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import org.joml.Matrix4f;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Objects;
 
 public class SeismicSurveyScreen extends Screen{
 	private static final ResourceLocation GUI_TEXTURE = ResourceUtils.ip("textures/gui/seismicsurvey_gui.png");
@@ -42,7 +39,7 @@ public class SeismicSurveyScreen extends Screen{
 	private int surveyLeft, surveyTop;
 	private int surveyRight, surveyBottom;
 	
-	private int gridScale = 2;
+	private final int gridScale = 2;
 	private float hoverSquareScale;
 	
 	boolean requestSent = false;
@@ -99,9 +96,9 @@ public class SeismicSurveyScreen extends Screen{
 	}
 	
 	@Override
-	public void render(PoseStack matrix, int mouseX, int mouseY, float partialTick){
-		background(matrix, mouseX, mouseY, partialTick);
-		super.render(matrix, mouseX, mouseY, partialTick);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick){
+		background(guiGraphics, mouseX, mouseY, partialTick);
+		super.render(guiGraphics, mouseX, mouseY, partialTick);
 		
 		DynamicTextureWrapper wrapper = DynamicTextureWrapper.getOrCreate(SurveyScan.SCAN_SIZE, SurveyScan.SCAN_SIZE, this.scan);
 		if(wrapper == null)
@@ -119,16 +116,16 @@ public class SeismicSurveyScreen extends Screen{
 			tooltip.add(Component.translatable("gui.immersivepetroleum.dirs.north").withStyle(ChatFormatting.AQUA));
 		}
 		
-		matrix.pushPose();
+		guiGraphics.pose().pushPose();
 		{
-			matrix.translate(this.surveyLeft, this.surveyTop, 0);
+			guiGraphics.pose().translate(this.surveyLeft, this.surveyTop, 0);
 			
-			renderScanTexture(matrix, wrapper);
+			renderScanTexture(guiGraphics, wrapper);
 			
 			if(mouseX >= this.surveyLeft && mouseX < this.surveyRight && mouseY >= this.surveyTop && mouseY < this.surveyBottom){
 				int data;
 				if((data = getScanData(scanX, scanY)) != -1){
-					renderCursorBox(matrix, mouseX, mouseY, 0xFF000000 | (data < 0x7F ? 0xFFFFFF : 0));
+					renderCursorBox(guiGraphics, mouseX, mouseY, 0xFF000000 | (data < 0x7F ? 0xFFFFFF : 0));
 				}
 				
 				int worldX = this.scan.getX() - scanXCentered;
@@ -150,22 +147,22 @@ public class SeismicSurveyScreen extends Screen{
 				}
 			}
 		}
-		matrix.popPose();
+		guiGraphics.pose().popPose();
 		
 		if(!tooltip.isEmpty())
-			renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
+			guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
 	}
 	
-	private void renderCursorBox(PoseStack matrix, int mouseX, int mouseY, int color){
+	private void renderCursorBox(GuiGraphics guiGraphics, int mouseX, int mouseY, int color){
 		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 		
-		matrix.pushPose();
+		guiGraphics.pose().pushPose();
 		{
-			matrix.scale(this.gridScale, this.gridScale, 1.0F);
-			matrix.translate((mouseX - this.surveyLeft) / this.gridScale, (mouseY - this.surveyTop) / this.gridScale, 0);
+			guiGraphics.pose().scale(this.gridScale, this.gridScale, 1.0F);
+			guiGraphics.pose().translate( (mouseX - this.surveyLeft) / (this.gridScale * 1f),  (mouseY - this.surveyTop) / (this.gridScale * 1f), 0);
 			
 			VertexConsumer builder = buffer.getBuffer(IPRenderTypes.TRANSLUCENT_POSITION_COLOR);
-			Matrix4f mat = matrix.last().pose();
+			Matrix4f mat = guiGraphics.pose().last().pose();
 			
 			float s = this.hoverSquareScale;
 			builder.vertex(mat, 0, 0, 0).color(color).endVertex();
@@ -188,18 +185,18 @@ public class SeismicSurveyScreen extends Screen{
 			builder.vertex(mat, 1, 1, 0).color(color).endVertex();
 			builder.vertex(mat, 1, 0, 0).color(color).endVertex();
 		}
-		matrix.popPose();
+		guiGraphics.pose().popPose();
 		
 		buffer.endBatch();
 	}
 	
-	private void renderScanTexture(PoseStack matrix, DynamicTextureWrapper wrapper){
+	private void renderScanTexture(GuiGraphics guiGraphics, DynamicTextureWrapper wrapper){
 		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-		matrix.pushPose();
+		guiGraphics.pose().pushPose();
 		{
-			matrix.scale(this.gridScale, this.gridScale, 1.0F);
+			guiGraphics.pose().scale(this.gridScale, this.gridScale, 1.0F);
 			VertexConsumer builder = buffer.getBuffer(wrapper.renderType);
-			Matrix4f mat = matrix.last().pose();
+			Matrix4f mat = guiGraphics.pose().last().pose();
 			
 			int a = wrapper.width;
 			int b = wrapper.height;
@@ -215,14 +212,14 @@ public class SeismicSurveyScreen extends Screen{
 			builder.vertex(mat, a, b, 0).color(-1).uv(1, 1).uv2(0xF000F0).endVertex();
 			builder.vertex(mat, a, 0, 0).color(-1).uv(1, 0).uv2(0xF000F0).endVertex();
 		}
-		matrix.popPose();
+		guiGraphics.pose().popPose();
 		
 		buffer.endBatch();
 	}
 	
-	private void background(PoseStack matrix, int mouseX, int mouseY, float partialTicks){
-		MCUtil.bindTexture(GUI_TEXTURE);
-		blit(matrix, this.guiLeft, this.guiTop, 0, 0, X_SIZE, Y_SIZE);
+	private void background(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks){
+		//MCUtil.bindTexture(GUI_TEXTURE);
+		guiGraphics.blit(GUI_TEXTURE, this.guiLeft, this.guiTop, 0, 0, X_SIZE, Y_SIZE);
 	}
 	
 	@Override

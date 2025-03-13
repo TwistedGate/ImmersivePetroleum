@@ -1,39 +1,19 @@
 package flaxbeard.immersivepetroleum;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import flaxbeard.immersivepetroleum.api.crafting.IPRecipeTypes;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.client.ClientProxy;
-import flaxbeard.immersivepetroleum.common.CommonEventHandler;
-import flaxbeard.immersivepetroleum.common.CommonProxy;
-import flaxbeard.immersivepetroleum.common.ExternalModContent;
-import flaxbeard.immersivepetroleum.common.IPContent;
-import flaxbeard.immersivepetroleum.common.IPContent.Fluids;
-import flaxbeard.immersivepetroleum.common.IPRegisters;
-import flaxbeard.immersivepetroleum.common.IPSaveData;
-import flaxbeard.immersivepetroleum.common.IPToolShaders;
-import flaxbeard.immersivepetroleum.common.ReservoirRegionDataStorage;
+import flaxbeard.immersivepetroleum.common.*;
 import flaxbeard.immersivepetroleum.common.cfg.IPClientConfig;
 import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
 import flaxbeard.immersivepetroleum.common.crafting.RecipeReloadListener;
 import flaxbeard.immersivepetroleum.common.network.IPPacketHandler;
 import flaxbeard.immersivepetroleum.common.util.commands.IslandCommand;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.IPPeripheralProvider;
 import flaxbeard.immersivepetroleum.common.util.loot.IPLootFunctions;
-import flaxbeard.immersivepetroleum.common.world.IPWorldGen;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -42,7 +22,6 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -50,20 +29,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.function.Supplier;
 
 @Mod(ImmersivePetroleum.MODID)
 public class ImmersivePetroleum{
 	public static final String MODID = "immersivepetroleum";
 	
 	public static final Logger log = LogManager.getLogger(MODID);
-	
-	public static final CreativeModeTab creativeTab = new CreativeModeTab(MODID){
-		@Override
-		@Nonnull
-		public ItemStack makeIcon(){
-			return new ItemStack(Fluids.CRUDEOIL.bucket().get());
-		}
-	};
 	
 	// Complete hack: DistExecutor::safeRunForDist intentionally tries to access the "wrong" supplier in dev, which
 	// throws an error (rather than an exception) on J16 due to trying to load a client-only class. So we need to
@@ -101,8 +76,8 @@ public class ImmersivePetroleum{
 		IPLootFunctions.modConstruction();
 		IPRecipeTypes.modConstruction();
 		
-		MinecraftForge.EVENT_BUS.register(new IPWorldGen());
-		IPWorldGen.init(eBus);
+		//MinecraftForge.EVENT_BUS.register(new IPWorldGen());
+		//IPWorldGen.init(eBus);
 	}
 	
 	public void setup(FMLCommonSetupEvent event){
@@ -126,9 +101,9 @@ public class ImmersivePetroleum{
 		
 		proxy.init();
 		
-		if(ModList.get().isLoaded("computercraft")){
+		/*if(ModList.get().isLoaded("computercraft")){
 			IPPeripheralProvider.init();
-		}
+		}*/
 		
 		// ---------------------------------------------------------------------------------------------------------------------------------------------
 		

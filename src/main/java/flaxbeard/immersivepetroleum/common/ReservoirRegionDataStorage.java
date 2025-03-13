@@ -1,26 +1,13 @@
 package flaxbeard.immersivepetroleum.common;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.common.util.Utils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -30,6 +17,16 @@ import net.minecraft.server.level.ColumnPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Manager for {@link RegionData}s
@@ -271,12 +268,12 @@ public class ReservoirRegionDataStorage extends SavedData{
 					for(int i = 0;i < reservoirs.size();i++){
 						CompoundTag dim = reservoirs.getCompound(i);
 						ResourceLocation rl = new ResourceLocation(dim.getString("dimension"));
-						ResourceKey<Level> dimType = ResourceKey.create(Registry.DIMENSION_REGISTRY, rl);
+						ResourceKey<Level> dimType = ResourceKey.create(Registries.DIMENSION, rl);
 						ListTag islands = dim.getList("islands", Tag.TAG_COMPOUND);
 						
 						List<ReservoirIsland> list = islands.stream()
 								.map(inbt -> ReservoirIsland.readFromNBT((CompoundTag) inbt))
-								.filter(o -> o != null)
+								.filter(Objects::nonNull)
 								.collect(Collectors.toList());
 						list.forEach(island -> island.setRegion(this));
 						this.reservoirlist.putAll(dimType, list);

@@ -1,8 +1,7 @@
 package flaxbeard.immersivepetroleum.common.util;
 
-import com.blamejared.crafttweaker.api.CraftTweakerConstants;
-
 import blusunrize.immersiveengineering.api.Lib;
+import com.blamejared.crafttweaker.api.CraftTweakerConstants;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.versions.forge.ForgeVersion;

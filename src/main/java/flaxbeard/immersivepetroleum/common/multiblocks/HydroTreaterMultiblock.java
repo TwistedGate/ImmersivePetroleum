@@ -1,14 +1,9 @@
 package flaxbeard.immersivepetroleum.common.multiblocks;
 
-import java.util.function.Consumer;
-
-import blusunrize.immersiveengineering.api.multiblocks.ClientMultiblocks;
-import flaxbeard.immersivepetroleum.common.IPContent;
-import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
-import net.minecraft.core.BlockPos;
-
-public class HydroTreaterMultiblock extends IPTemplateMultiblock{
-	public static final HydroTreaterMultiblock INSTANCE = new HydroTreaterMultiblock();
+@Deprecated (forRemoval = true)
+public class HydroTreaterMultiblock //extends IPTemplateMultiblock
+{
+/*	public static final HydroTreaterMultiblock INSTANCE = new HydroTreaterMultiblock();
 	
 	public HydroTreaterMultiblock(){
 		super(ResourceUtils.ip("multiblocks/hydrotreater"),
@@ -24,5 +19,5 @@ public class HydroTreaterMultiblock extends IPTemplateMultiblock{
 	@Override
 	public void initializeClient(Consumer<ClientMultiblocks.MultiblockManualData> consumer){
 		consumer.accept(new IPClientMultiblockProperties(this, 1.5, 0.5, 2.5));
-	}
+	}*/
 }

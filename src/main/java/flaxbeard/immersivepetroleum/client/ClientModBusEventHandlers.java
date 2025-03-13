@@ -1,15 +1,8 @@
 package flaxbeard.immersivepetroleum.client;
 
-import java.util.function.Supplier;
-
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
-import flaxbeard.immersivepetroleum.client.render.AutoLubricatorRenderer;
-import flaxbeard.immersivepetroleum.client.render.DerrickRenderer;
-import flaxbeard.immersivepetroleum.client.render.MotorboatRenderer;
-import flaxbeard.immersivepetroleum.client.render.MultiblockDistillationTowerRenderer;
-import flaxbeard.immersivepetroleum.client.render.MultiblockPumpjackRenderer;
-import flaxbeard.immersivepetroleum.client.render.OilTankRenderer;
-import flaxbeard.immersivepetroleum.client.render.SeismicSurveyBarrelRenderer;
+import flaxbeard.immersivepetroleum.client.render.*;
+import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
 import flaxbeard.immersivepetroleum.common.entity.IPEntityTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -26,14 +19,16 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
+import java.util.function.Supplier;
+
 @EventBusSubscriber(modid = ImmersivePetroleum.MODID, value = Dist.CLIENT, bus = Bus.MOD)
 public class ClientModBusEventHandlers{
 	@SubscribeEvent
 	public static void registerRenders(EntityRenderersEvent.RegisterRenderers ev){
-		registerBERender(ev, IPTileTypes.TOWER.master(), MultiblockDistillationTowerRenderer::new);
-		registerBERender(ev, IPTileTypes.PUMP.master(), MultiblockPumpjackRenderer::new);
-		registerBERender(ev, IPTileTypes.OILTANK.master(), OilTankRenderer::new);
-		registerBERender(ev, IPTileTypes.DERRICK.master(), DerrickRenderer::new);
+		registerBERenderNoContext(ev, IPContent.Multiblock.DISTILLATIONTOWER.masterBE(), MultiblockDistillationTowerRenderer::new);
+		registerBERenderNoContext(ev, IPContent.Multiblock.PUMPJACK.masterBE(), MultiblockPumpjackRenderer::new);
+		registerBERenderNoContext(ev, IPContent.Multiblock.OILTANK.masterBE(), OilTankRenderer::new);
+		registerBERenderNoContext(ev, IPContent.Multiblock.DERRICK.masterBE(), DerrickRenderer::new);
 		
 		registerBERender(ev, IPTileTypes.AUTOLUBE.get(), AutoLubricatorRenderer::new);
 		registerBERender(ev, IPTileTypes.SEISMIC_SURVEY.get(), SeismicSurveyBarrelRenderer::new);
@@ -41,7 +36,22 @@ public class ClientModBusEventHandlers{
 		registerEntityRenderingHandler(ev, IPEntityTypes.MOTORBOAT, MotorboatRenderer::new);
 		registerEntityRenderingHandler(ev, IPEntityTypes.MOLOTOV, ThrownItemRenderer::new);
 	}
-	
+
+	private static <T extends BlockEntity>
+	void registerBERenderNoContext(
+			RegisterRenderers event, Supplier<BlockEntityType<? extends T>> type, Supplier<BlockEntityRenderer<T>> render
+	)
+	{
+		registerBERenderNoContext(event, type.get(), render);
+	}
+	private static <T extends BlockEntity>
+	void registerBERenderNoContext(
+			RegisterRenderers event, BlockEntityType<? extends T> type, Supplier<BlockEntityRenderer<T>> render
+	)
+	{
+		event.registerBlockEntityRenderer(type, $ -> render.get());
+	}
+
 	private static <T extends BlockEntity> void registerBERender(RegisterRenderers ev, BlockEntityType<T> type, Supplier<BlockEntityRenderer<T>> factory){
 		ev.registerBlockEntityRenderer(type, ctx -> factory.get());
 	}

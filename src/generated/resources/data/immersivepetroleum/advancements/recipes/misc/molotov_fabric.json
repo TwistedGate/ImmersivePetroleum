@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gasoline_bottle": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "immersivepetroleum:gasoline_bottle"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "immersivepetroleum:molotov_fabric"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_gasoline_bottle",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "immersivepetroleum:molotov_fabric"
+    ]
+  },
+  "sends_telemetry_event": false
+}

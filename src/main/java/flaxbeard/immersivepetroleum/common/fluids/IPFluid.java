@@ -1,21 +1,6 @@
 package flaxbeard.immersivepetroleum.common.fluids;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.mutable.Mutable;
-import org.apache.commons.lang3.mutable.MutableObject;
-
 import com.google.common.collect.ImmutableList;
-
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPRegisters;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.Util;
@@ -49,9 +34,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.ForgeMod;
@@ -59,6 +41,17 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class IPFluid extends FlowingFluid{
 	public static final List<IPFluidEntry> FLUIDS = new ArrayList<>();
@@ -101,9 +94,9 @@ public class IPFluid extends FlowingFluid{
 	}
 	
 	
-	protected static Material createMaterial(MaterialColor color){
+	/*protected static Material createMaterial(MaterialColor color){
 		return new Material(color, true, false, false, false, false, true, PushReaction.DESTROY);
-	}
+	}*/
 	
 	private static IPFluidEntry staticEntry;
 	private static IPFluid makeFluid(Function<IPFluidEntry, ? extends IPFluid> make, IPFluid.IPFluidEntry entry){
@@ -131,10 +124,15 @@ public class IPFluid extends FlowingFluid{
 	}
 	
 	@Override
-	protected boolean canConvertToSource(){
+	public boolean canConvertToSource(FluidState state, Level level, BlockPos pos){
 		return false;
 	}
-	
+
+	@Override
+	protected boolean canConvertToSource(Level pLevel) {
+		return false;
+	}
+
 	public boolean hasCustomSlowdown(){
 		return false;
 	}
@@ -259,7 +257,7 @@ public class IPFluid extends FlowingFluid{
 			
 			RegistryObject<IPFluid> source = IPRegisters.registerFluid(name, () -> IPFluid.makeFluid(makeSource, thisMutable.getValue()));
 			RegistryObject<IPFluid> flow = IPRegisters.registerFluid(name + "_flowing", () -> IPFluid.makeFluid(makeFlowing, thisMutable.getValue()));
-			RegistryObject<IPFluidBlock> block = IPRegisters.registerBlock(name + "_fluid_block", () -> makeBlock.apply(thisMutable.getValue(), Properties.copy(Blocks.WATER)));
+			RegistryObject<IPFluidBlock> block = IPRegisters.registerBlock(name + "_fluid_block", () -> makeBlock.apply(thisMutable.getValue(), Properties.copy(Blocks.WATER).noLootTable()));
 			RegistryObject<BucketItem> bucket = IPRegisters.registerItem(name + "_bucket", () -> new IPBucketItem(source, burnTime));
 			
 			IPFluidEntry entry = new IPFluidEntry(source, flow, block, bucket, type, properties);
@@ -379,7 +377,7 @@ public class IPFluid extends FlowingFluid{
 	}
 	
 	public static class IPBucketItem extends BucketItem{
-		private static final Item.Properties PROPS = new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET).tab(ImmersivePetroleum.creativeTab);
+		private static final Item.Properties PROPS = new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET);
 		
 		private int burnTime;
 		public IPBucketItem(Supplier<? extends Fluid> fluid, int burnTime){

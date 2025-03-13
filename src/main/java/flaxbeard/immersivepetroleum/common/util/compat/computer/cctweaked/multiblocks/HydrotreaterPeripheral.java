@@ -1,15 +1,8 @@
 package flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks;
 
-import java.util.Map;
-
-import dan200.computercraft.api.lua.LuaFunction;
-import dan200.computercraft.api.lua.MethodResult;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.HydrotreaterTileEntity;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.CCTUtils;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks.generic.PoweredMultiblockPeripheral;
-
-public class HydrotreaterPeripheral extends PoweredMultiblockPeripheral{
-	HydrotreaterTileEntity master;
+public class HydrotreaterPeripheral //extends PoweredMultiblockPeripheral
+{
+	/*HydrotreaterTileEntity master;
 	public HydrotreaterPeripheral(HydrotreaterTileEntity treater){
 		super(treater);
 		this.master = treater.master();
@@ -46,5 +39,5 @@ public class HydrotreaterPeripheral extends PoweredMultiblockPeripheral{
 	@LuaFunction
 	public final Map<String, Object> getOutputTank(){
 		return CCTUtils.fluidToMap(this.master.tanks[HydrotreaterTileEntity.TANK_OUTPUT].getFluid());
-	}
+	}*/
 }

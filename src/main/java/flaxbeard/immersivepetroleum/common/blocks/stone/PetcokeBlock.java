@@ -1,8 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks.stone;
 
-import java.util.function.Supplier;
-
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockBase;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockItemBase;
 import net.minecraft.core.BlockPos;
@@ -13,18 +10,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+
+import java.util.function.Supplier;
 
 public class PetcokeBlock extends IPBlockBase{
 	public PetcokeBlock(){
-		super(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2, 10).requiresCorrectToolForDrops());
+		super(Block.Properties.copy(Blocks.STONE).sound(SoundType.STONE).strength(2, 10).requiresCorrectToolForDrops());
 	}
 	
 	@Override
 	public Supplier<BlockItem> blockItemSupplier(){
-		return () -> new IPBlockItemBase(this, new Item.Properties().tab(ImmersivePetroleum.creativeTab)){
+		return () -> new IPBlockItemBase(this, new Item.Properties()){
 			@Override
 			public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType){
 				return 32000;

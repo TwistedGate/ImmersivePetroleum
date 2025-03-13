@@ -33,5 +33,6 @@
     [
       "gasoline"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

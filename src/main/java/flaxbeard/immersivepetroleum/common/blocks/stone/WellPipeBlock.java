@@ -1,9 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks.stone;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockBase;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.WellPipeTileEntity;
@@ -15,21 +11,24 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
+
+import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public class WellPipeBlock extends IPBlockBase implements EntityBlock{
 	
 	public static final BooleanProperty BROKEN = BooleanProperty.create("broken");
 	
 	public WellPipeBlock(){
-		super(Block.Properties.of(Material.STONE, MaterialColor.PODZOL).strength(75.0F, 10.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+		super(Block.Properties.copy(Blocks.STONE).mapColor(MapColor.PODZOL).strength(75.0F, 10.0F).sound(SoundType.STONE).requiresCorrectToolForDrops().noLootTable());
 		
 		registerDefaultState(getStateDefinition().any()
 				.setValue(BROKEN, false));

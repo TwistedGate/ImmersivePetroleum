@@ -1,18 +1,8 @@
 package flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import blusunrize.immersiveengineering.common.util.inventory.MultiFluidTank;
-import dan200.computercraft.api.lua.LuaFunction;
-import dan200.computercraft.api.lua.MethodResult;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.DistillationTowerTileEntity;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.CCTUtils;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks.generic.PoweredMultiblockPeripheral;
-
-public class DistillationTowerPeripheral extends PoweredMultiblockPeripheral{
-	DistillationTowerTileEntity master;
+public class DistillationTowerPeripheral //extends PoweredMultiblockPeripheral
+{
+	/*DistillationTowerTileEntity master;
 	public DistillationTowerPeripheral(DistillationTowerTileEntity tower){
 		super(tower);
 		this.master = tower.master();
@@ -49,5 +39,5 @@ public class DistillationTowerPeripheral extends PoweredMultiblockPeripheral{
 		}
 		
 		return list;
-	}
+	}*/
 }

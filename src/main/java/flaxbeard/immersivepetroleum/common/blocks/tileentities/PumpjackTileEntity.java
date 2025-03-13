@@ -1,81 +1,35 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-
-import blusunrize.immersiveengineering.api.crafting.MultiblockRecipe;
-import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockBlockEntity;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcess;
-import blusunrize.immersiveengineering.common.util.ResettableCapability;
-import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
-import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
-import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
-import flaxbeard.immersivepetroleum.common.multiblocks.PumpjackMultiblock;
-import flaxbeard.immersivepetroleum.common.util.AABBUtils;
-import flaxbeard.immersivepetroleum.common.util.FluidHelper;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ColumnPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-
-public class PumpjackTileEntity extends PoweredMultiblockBlockEntity<PumpjackTileEntity, MultiblockRecipe> implements IPCommonTickableTile, IEBlockInterfaces.IBlockBounds{
+@Deprecated(forRemoval = true)
+public class PumpjackTileEntity// extends PoweredMultiblockBlockEntity<PumpjackTileEntity, MultiblockRecipe> implements IPCommonTickableTile, IEBlockInterfaces.IBlockBounds
+{
 	/** Template-Location of the Energy Input Port. (0, 1, 5) */
-	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 5));
+	//public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 5));
 	
 	/** Template-Location of the Redstone Input Port. (2, 1, 5) */
-	public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 1, 5, RelativeBlockFace.UP));
+	//public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 1, 5, RelativeBlockFace.UP));
 	
 	/** Template-Location of the Eastern Fluid Output Port. (2, 0, 2) */
-	public static final BlockPos East_Port = new BlockPos(2, 0, 2);
+	//public static final BlockPos East_Port = new BlockPos(2, 0, 2);
 	
 	/** Template-Location of the Western Fluid Output Port. (0, 0, 2) */
-	public static final BlockPos West_Port = new BlockPos(0, 0, 2);
+	//public static final BlockPos West_Port = new BlockPos(0, 0, 2);
 	
 	/**
 	 * Template-Location of the Bottom Fluid Output Port. (1, 0, 0) <b>(Also Master Block)</b>
 	 */
-	public static final BlockPos Down_Port = new BlockPos(1, 0, 0);
+	/*public static final BlockPos Down_Port = new BlockPos(1, 0, 0);
 	
 	public static final FluidTank FAKE_TANK = new FluidTank(0);
 	public boolean wasActive = false;
 	public float activeTicks = 0;
-	public PumpjackTileEntity(BlockEntityType<PumpjackTileEntity> type, BlockPos pWorldPosition, BlockState pBlockState){
-		super(PumpjackMultiblock.INSTANCE, 16000, true, type, pWorldPosition, pBlockState);
+	public PumpjackTileEntity(BlockEntityType<?> type, BlockPos pWorldPosition, BlockState pBlockState){
+		//super(PumpjackMultiblock.INSTANCE, 16000, true, type, pWorldPosition, pBlockState);
 	}
 	
-	@Override
+	//@Override
 	public void readCustomNBT(CompoundTag nbt, boolean descPacket){
-		super.readCustomNBT(nbt, descPacket);
+		//super.readCustomNBT(nbt, descPacket);
 		boolean lastActive = this.wasActive;
 		this.wasActive = nbt.getBoolean("wasActive");
 		if(!this.wasActive && lastActive){
@@ -83,9 +37,9 @@ public class PumpjackTileEntity extends PoweredMultiblockBlockEntity<PumpjackTil
 		}
 	}
 	
-	@Override
+	//@Override
 	public void writeCustomNBT(CompoundTag nbt, boolean descPacket){
-		super.writeCustomNBT(nbt, descPacket);
+		//super.writeCustomNBT(nbt, descPacket);
 		nbt.putBoolean("wasActive", this.wasActive);
 	}
 	
@@ -432,5 +386,5 @@ public class PumpjackTileEntity extends PoweredMultiblockBlockEntity<PumpjackTil
 			main.add(AABBUtils.FULL);
 		}
 		return main;
-	}
+	}*/
 }

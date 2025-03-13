@@ -1,6 +1,5 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -26,7 +25,7 @@ public class GasolineBottleItem extends IPItemBase{
 	public static final int FILLED_AMOUNT = 250;
 	
 	public GasolineBottleItem(){
-		super(new Item.Properties().stacksTo(16).tab(ImmersivePetroleum.creativeTab));
+		super(new Item.Properties().stacksTo(16));
 	}
 	
 	@Override
@@ -88,7 +87,7 @@ public class GasolineBottleItem extends IPItemBase{
 		float f5 = Mth.sin(-f * ((float) Math.PI / 180F));
 		float f6 = f3 * f4;
 		float f7 = f2 * f4;
-		double d0 = player.getReachDistance();
+		double d0 = player.getBlockReach();
 		Vec3 vec31 = vec3.add((double) f6 * d0, (double) f5 * d0, (double) f7 * d0);
 		return level.clip(new ClipContext(vec3, vec31, blockMode, ClipContext.Fluid.NONE, player));
 	}

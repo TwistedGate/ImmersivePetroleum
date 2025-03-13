@@ -1,14 +1,9 @@
 package flaxbeard.immersivepetroleum.common.multiblocks;
 
-import java.util.function.Consumer;
-
-import blusunrize.immersiveengineering.api.multiblocks.ClientMultiblocks;
-import flaxbeard.immersivepetroleum.common.IPContent.Multiblock;
-import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
-import net.minecraft.core.BlockPos;
-
-public class DistillationTowerMultiblock extends IPTemplateMultiblock{
-	public static final DistillationTowerMultiblock INSTANCE = new DistillationTowerMultiblock();
+@Deprecated (forRemoval = true)
+public class DistillationTowerMultiblock //extends IPTemplateMultiblock
+{
+	/*public static final DistillationTowerMultiblock INSTANCE = new DistillationTowerMultiblock();
 	
 	private DistillationTowerMultiblock(){
 		super(ResourceUtils.ip("multiblocks/distillationtower"),
@@ -23,5 +18,5 @@ public class DistillationTowerMultiblock extends IPTemplateMultiblock{
 	@Override
 	public void initializeClient(Consumer<ClientMultiblocks.MultiblockManualData> consumer){
 		consumer.accept(new IPClientMultiblockProperties(this, 2.5, 0.5, 2.5));
-	}
+	}*/
 }

@@ -2,6 +2,7 @@ package flaxbeard.immersivepetroleum.common.world;
 
 import com.google.common.collect.HashMultimap;
 
+import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;

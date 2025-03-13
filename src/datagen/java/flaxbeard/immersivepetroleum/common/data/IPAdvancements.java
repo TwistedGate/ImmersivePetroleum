@@ -1,9 +1,5 @@
 package flaxbeard.immersivepetroleum.common.data;
 
-import java.util.function.Consumer;
-
-import javax.annotation.Nullable;
-
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockAdvancementTrigger;
 import blusunrize.immersiveengineering.common.register.IEBlocks;
 import blusunrize.immersiveengineering.common.register.IEItems.Tools;
@@ -16,21 +12,26 @@ import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.commands.CommandFunction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
 
-public class IPAdvancements extends AdvancementProvider{
-	public IPAdvancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn){
-		super(generatorIn, fileHelperIn);
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
+public class IPAdvancements extends ForgeAdvancementProvider {
+	public IPAdvancements(DataGenerator generatorIn, CompletableFuture<HolderLookup.Provider> pRegistries, ExistingFileHelper helper){
+		super(generatorIn.getPackOutput(), pRegistries, helper, List.of(IPAdvancements::registerAdvancements) );
 	}
-	
-	@Override
-	protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper){
+
+	private static void registerAdvancements(HolderLookup.Provider lookup, Consumer<Advancement> consumer, ExistingFileHelper fileHelper){
 		Advancement start = Advancement.Builder.advancement()
 			.display(IPContent.Blocks.SEISMIC_SURVEY.get(),
 				Component.translatable("advancement.immersivepetroleum.root"),
@@ -38,118 +39,118 @@ public class IPAdvancements extends AdvancementProvider{
 				ResourceUtils.ip("textures/block/asphalt.png"),
 				FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/root"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/root"), fileHelper);
 		
-		Advancement derrick = advancement(start, IPContent.Multiblock.DERRICK.get(), "mb_derrick", FrameType.GOAL, true, true, false)
+		Advancement derrick = advancement(start, IPContent.Multiblock.DERRICK.block().get(), "mb_derrick", FrameType.GOAL, true, true, false)
 			.addCriterion("derrick", createMultiblockTrigger("derrick"))
-			.save(consumer, ResourceUtils.ip("main/mb_derrick"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_derrick"), fileHelper);
 		
-		Advancement pumpjack = advancement(derrick, IPContent.Multiblock.PUMPJACK.get(), "mb_pumpjack", FrameType.GOAL, true, true, false)
+		Advancement pumpjack = advancement(derrick, IPContent.Multiblock.PUMPJACK.block().get(), "mb_pumpjack", FrameType.GOAL, true, true, false)
 			.addCriterion("pumpjack", createMultiblockTrigger("pumpjack"))
-			.save(consumer, ResourceUtils.ip("main/mb_pumpjack"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_pumpjack"), fileHelper);
 		
-		advancement(derrick, IPContent.Multiblock.OILTANK.get(), "mb_oiltank", FrameType.GOAL, true, true, false)
+		advancement(derrick, IPContent.Multiblock.OILTANK.block().get(), "mb_oiltank", FrameType.GOAL, true, true, false)
 			.addCriterion("oiltank", createMultiblockTrigger("oiltank"))
-			.save(consumer, ResourceUtils.ip("main/mb_oiltank"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_oiltank"), fileHelper);
 		
-		Advancement tower = advancement(pumpjack, IPContent.Multiblock.DISTILLATIONTOWER.get(), "mb_distillationtower", FrameType.GOAL, true, true, false)
+		Advancement tower = advancement(pumpjack, IPContent.Multiblock.DISTILLATIONTOWER.block().get(), "mb_distillationtower", FrameType.GOAL, true, true, false)
 			.addCriterion("distillationtower", createMultiblockTrigger("distillationtower"))
-			.save(consumer, ResourceUtils.ip("main/mb_distillationtower"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_distillationtower"), fileHelper);
 		
 		Advancement bitumen = advancement(tower, IPContent.Items.BITUMEN.get(), "bitumen", FrameType.TASK, true, true, false)
 			.addCriterion("bitumen", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Items.BITUMEN.get()))
-			.save(consumer, ResourceUtils.ip("main/bitumen"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/bitumen"), fileHelper);
 		
-		Advancement cokerunit = advancement(bitumen, IPContent.Multiblock.COKERUNIT.get(), "mb_cokerunit", FrameType.GOAL, true, true, false)
+		Advancement cokerunit = advancement(bitumen, IPContent.Multiblock.COKERUNIT.block().get(), "mb_cokerunit", FrameType.GOAL, true, true, false)
 			.addCriterion("cokerunit", createMultiblockTrigger("cokerunit"))
 			.rewards(reward(10, ResourceUtils.ip("advancements/forming_coker_reward")))
-			.save(consumer, ResourceUtils.ip("main/mb_cokerunit"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_cokerunit"), fileHelper);
 		
 		advancement(cokerunit, IPContent.Items.PETCOKE.get(), "petcoke", FrameType.TASK, true, true, false)
 			.addCriterion("petcoke", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Items.PETCOKE.get()))
-			.save(consumer, ResourceUtils.ip("main/petcoke"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/petcoke"), fileHelper);
 		
-		Advancement hydrotreater = advancement(tower, IPContent.Multiblock.HYDROTREATER.get(), "mb_hydrotreater", FrameType.GOAL, true, true, false)
+		Advancement hydrotreater = advancement(tower, IPContent.Multiblock.HYDROTREATER.block().get(), "mb_hydrotreater", FrameType.GOAL, true, true, false)
 			.addCriterion("hydrotreater", createMultiblockTrigger("hydrotreater"))
-			.save(consumer, ResourceUtils.ip("main/mb_hydrotreater"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/mb_hydrotreater"), fileHelper);
 		
-		motorboat(consumer, tower);
+		motorboat(consumer, tower, fileHelper);
 		
 		advancement(tower, IPContent.Blocks.GAS_GENERATOR.get(), "gas_generator", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/gas_generator"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/gas_generator"), fileHelper);
 		
 		advancement(tower, IPContent.Blocks.AUTO_LUBRICATOR.get(), "auto_lubricator", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/auto_lubricator"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/auto_lubricator"), fileHelper);
 		
 		advancement(tower, IPContent.Items.OIL_CAN.get(), "oil_can", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/oil_can"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/oil_can"), fileHelper);
 		
 		advancement(start, IPContent.Items.PROJECTOR.get(), "projector", FrameType.TASK, true, true, false)
 			.addCriterion("projector", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Items.PROJECTOR.get()))
-			.save(consumer, ResourceUtils.ip("main/projector"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/projector"), fileHelper);
 		
 		advancement(start, IPContent.Blocks.FLARESTACK.get(), "flarestack", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/flarestack"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/flarestack"), fileHelper);
 		
 		Advancement cracking = advancement(hydrotreater, IPContent.Fluids.NAPHTHA_CRACKED.bucket().get(), "cracking", FrameType.TASK, true, true, false)
 			.addCriterion("cracking", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.NAPHTHA_CRACKED.bucket().get()))
-			.save(consumer, ResourceUtils.ip("main/cracking"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/cracking"), fileHelper);
 		
 		Advancement naphtha_distillates = advancement(cracking, IPContent.Fluids.BENZENE.bucket().get(), "naphtha_distillates", FrameType.GOAL, true, true, false)
 			.addCriterion("benzene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.BENZENE.bucket().get()))
 			.addCriterion("propylene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.PROPYLENE.bucket().get()))
 			.addCriterion("ethylene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.ETHYLENE.bucket().get()))
-			.save(consumer, ResourceUtils.ip("main/naphtha_distillates"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/naphtha_distillates"), fileHelper);
 		
 		advancement(naphtha_distillates, IEBlocks.StoneDecoration.DUROPLAST.get().asItem(), "duroplast", FrameType.CHALLENGE, true, true, false)
 			.addCriterion("benzene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.BENZENE.bucket().get()))
 			.addCriterion("propylene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.PROPYLENE.bucket().get()))    //These are here to make sure the player made their duroplast from naphtha
 			.addCriterion("ethylene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.ETHYLENE.bucket().get()))
 			.addCriterion("duroplast_block", InventoryChangeTrigger.TriggerInstance.hasItems(IEBlocks.StoneDecoration.DUROPLAST.get().asItem()))
-			.save(consumer, ResourceUtils.ip("main/duroplast"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/duroplast"), fileHelper);
 		
 		Advancement kerosene = advancement(tower, IPContent.Fluids.GASOLINE_ADDITIVES.bucket().get(), "kerosene", FrameType.TASK, true, true, false)
 			.addCriterion("kerosene", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.GASOLINE_ADDITIVES.bucket().get()))
-			.save(consumer, ResourceUtils.ip("main/kerosene"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/kerosene"), fileHelper);
 		
 		Advancement gasoline = advancement(kerosene, IPContent.Fluids.GASOLINE.bucket().get(), "gasoline", FrameType.GOAL, true, true, false)
 			.addCriterion("gasoline", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.GASOLINE.bucket().get()))
-			.save(consumer, ResourceUtils.ip("main/gasoline"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/gasoline"), fileHelper);
 		
 		advancement(gasoline, IPContent.Fluids.NAPALM.bucket().get(), "napalm", FrameType.TASK, true, true, false)
 			.addCriterion("napalm", InventoryChangeTrigger.TriggerInstance.hasItems(IPContent.Fluids.NAPALM.bucket().get()))
-			.save(consumer, ResourceUtils.ip("main/napalm"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/napalm"), fileHelper);
 	}
 	
-	private void motorboat(Consumer<Advancement> consumer, Advancement start){
+	private static void motorboat(Consumer<Advancement> consumer, Advancement start, ExistingFileHelper fileHelper){
 		Advancement fill_motorboat = advancement(start, IPContent.Items.SPEEDBOAT.get(), "motorboat", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/motorboat"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/motorboat"), fileHelper);
 		
 		advancement(fill_motorboat, IPContent.BoatUpgrades.ICE_BREAKER.get(), "ice_breaker", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/ice_breaker"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/ice_breaker"), fileHelper);
 		
 		advancement(fill_motorboat, IPContent.BoatUpgrades.PADDLES.get(), "paddles", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/paddles"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/paddles"), fileHelper);
 		
 		advancement(fill_motorboat, IPContent.BoatUpgrades.REINFORCED_HULL.get(), "reinforced_hull", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/reinforced_hull"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/reinforced_hull"), fileHelper);
 		
 		advancement(fill_motorboat, IPContent.BoatUpgrades.RUDDERS.get(), "rudders", FrameType.CHALLENGE, true, true, false)
 			.rewards(reward(50, ResourceUtils.ie("advancements/shader_rare")))
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/rudders"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/rudders"), fileHelper);
 		
 		advancement(fill_motorboat, IPContent.BoatUpgrades.TANK.get(), "tank", FrameType.TASK, true, true, false)
 			.addCriterion("code_trigger", new ImpossibleTrigger.TriggerInstance())
-			.save(consumer, ResourceUtils.ip("main/tank"), this.fileHelper);
+			.save(consumer, ResourceUtils.ip("main/tank"), fileHelper);
 	}
 	
 	static final ItemPredicate HAMMER = ItemPredicate.Builder.item().of(Tools.HAMMER).build();

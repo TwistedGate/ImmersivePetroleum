@@ -1,5 +1,6 @@
 {
   "type": "immersiveengineering:shaped_fluid",
+  "category": "misc",
   "key": {
     "i": {
       "tag": "forge:plates/iron"
@@ -20,5 +21,6 @@
   ],
   "result": {
     "item": "immersiveengineering:toolupgrade_drill_lube"
-  }
+  },
+  "show_notification": true
 }

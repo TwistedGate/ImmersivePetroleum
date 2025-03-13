@@ -1,12 +1,10 @@
 package flaxbeard.immersivepetroleum.client.render;
 
-import javax.annotation.Nonnull;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
+import blusunrize.immersiveengineering.client.utils.GuiHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-
-import blusunrize.immersiveengineering.client.utils.GuiHelper;
+import com.mojang.math.Axis;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.AutoLubricatorTileEntity;
@@ -19,6 +17,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nonnull;
+
 public class AutoLubricatorRenderer implements BlockEntityRenderer<AutoLubricatorTileEntity>{
 	
 	@Override
@@ -28,6 +28,7 @@ public class AutoLubricatorRenderer implements BlockEntityRenderer<AutoLubricato
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
+	@SuppressWarnings("unchecked, rawtypes")
 	public void render(@Nonnull AutoLubricatorTileEntity te, float partialTicks, @Nonnull PoseStack transform, @Nonnull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn){
 		if(te.isSlave)
 			return;
@@ -51,17 +52,17 @@ public class AutoLubricatorRenderer implements BlockEntityRenderer<AutoLubricato
 				
 				float h = height * level;
 				GuiHelper.drawRepeatedFluidSprite(builder, transform, fs, 0, 0, 8, h);
-				transform.mulPose(new Quaternion(0, 90, 0, true));
+				transform.mulPose(Axis.YP.rotationDegrees(90));
 				transform.translate(-7.98, 0, 0);
 				GuiHelper.drawRepeatedFluidSprite(builder, transform, fs, 0, 0, 8, h);
-				transform.mulPose(new Quaternion(0, 90, 0, true));
+				transform.mulPose(Axis.YP.rotationDegrees(90));
 				transform.translate(-7.98, 0, 0);
 				GuiHelper.drawRepeatedFluidSprite(builder, transform, fs, 0, 0, 8, h);
-				transform.mulPose(new Quaternion(0, 90, 0, true));
+				transform.mulPose(Axis.YP.rotationDegrees(90));
 				transform.translate(-7.98, 0, 0);
 				GuiHelper.drawRepeatedFluidSprite(builder, transform, fs, 0, 0, 8, h);
 				if(h < height){
-					transform.mulPose(new Quaternion(90, 0, 0, true));
+					transform.mulPose(Axis.XP.rotationDegrees(90));
 					transform.translate(0, 0, -h);
 					GuiHelper.drawRepeatedFluidSprite(builder, transform, fs, 0, 0, 8, 8);
 				}
@@ -73,12 +74,15 @@ public class AutoLubricatorRenderer implements BlockEntityRenderer<AutoLubricato
 		{
 			BlockPos target = te.getBlockPos().relative(te.getFacing());
 			BlockEntity test = te.getLevel().getBlockEntity(target);
-			
-			ILubricationHandler<BlockEntity> handler = LubricatedHandler.getHandlerForTile(test);
-			if(handler != null){
-				BlockEntity master = handler.isPlacedCorrectly(te.getLevel(), te, te.getFacing());
-				if(master != null){
-					handler.renderPipes(te, master, transform, bufferIn, combinedLightIn, combinedOverlayIn);
+
+			if (test instanceof IMultiblockBE<?> tile)
+			{
+				ILubricationHandler handler = LubricatedHandler.getHandlerForTile(tile.getHelper());
+				if(handler != null){
+					BlockEntity master = handler.isPlacedCorrectly(te.getLevel(), te, te.getFacing());
+					if(master instanceof IMultiblockBE<?> newTile){
+						handler.renderPipes(te, newTile.getHelper(), transform, bufferIn, combinedLightIn, combinedOverlayIn);
+					}
 				}
 			}
 		}

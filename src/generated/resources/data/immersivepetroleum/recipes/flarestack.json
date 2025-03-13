@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "A": {
       "item": "immersiveengineering:fluid_placer"
@@ -24,5 +25,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:flarestack"
-  }
+  },
+  "show_notification": true
 }

@@ -1,0 +1,127 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "copyfile",
+        "importPath": "shutil",
+        "description": "shutil",
+        "isExtraImport": true,
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "createModel",
+        "kind": 2,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "def createModel(line):\n\ttext = read.replace(\"{{name}}\", line)\n\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "location",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "location = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/template.json\")\ntemplate = open(location, \"r\")\nread = template.read()\ndef createModel(line):\n\ttext = read.replace(\"{{name}}\", line)\n\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "template",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "template = open(location, \"r\")\nread = template.read()\ndef createModel(line):\n\ttext = read.replace(\"{{name}}\", line)\n\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "read",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "read = template.read()\ndef createModel(line):\n\ttext = read.replace(\"{{name}}\", line)\n\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\ttext",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\ttext = read.replace(\"{{name}}\", line)\n\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:\n\tfor line in f:",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\tlocation2",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\tlocation2 = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/models/item/\" + line + \".json\")\n\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:\n\tfor line in f:\n\t\tindex = line.find(\"cyberware:\")",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\tindex",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\tindex = open(location2, \"w\")\n\tindex.write(text)\n\tindex.close()\n\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:\n\tfor line in f:\n\t\tindex = line.find(\"cyberware:\")\n\t\tif index == -1:",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\ttemplateimg",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\ttemplateimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/template.png\")\n\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:\n\tfor line in f:\n\t\tindex = line.find(\"cyberware:\")\n\t\tif index == -1:\n\t\t\tfilename = line.strip()\n\t\telse:\n\t\t\tfilename = line[index + len(\"cyberware:\"):].strip()",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\tdestimg",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\tdestimg = os.path.join(os.path.dirname(__file__), \"src/main/resources/assets/cyberware/textures/items/\" + line + \".png\")\n\tcopyfile(templateimg, destimg)\nwith open('todo.txt') as f:\n\tfor line in f:\n\t\tindex = line.find(\"cyberware:\")\n\t\tif index == -1:\n\t\t\tfilename = line.strip()\n\t\telse:\n\t\t\tfilename = line[index + len(\"cyberware:\"):].strip()\n\t\tcreateModel(filename)",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tindex",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\t\tindex = line.find(\"cyberware:\")\n\t\tif index == -1:\n\t\t\tfilename = line.strip()\n\t\telse:\n\t\t\tfilename = line[index + len(\"cyberware:\"):].strip()\n\t\tcreateModel(filename)\ntemplate.close()",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\tfilename",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\t\t\tfilename = line.strip()\n\t\telse:\n\t\t\tfilename = line[index + len(\"cyberware:\"):].strip()\n\t\tcreateModel(filename)\ntemplate.close()",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\tfilename",
+        "kind": 5,
+        "importPath": "ImmersivePetroleum-1.20.1.itemmodels",
+        "description": "ImmersivePetroleum-1.20.1.itemmodels",
+        "peekOfCode": "\t\t\tfilename = line[index + len(\"cyberware:\"):].strip()\n\t\tcreateModel(filename)\ntemplate.close()",
+        "detail": "ImmersivePetroleum-1.20.1.itemmodels",
+        "documentation": {}
+    }
+]

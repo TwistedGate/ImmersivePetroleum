@@ -1,11 +1,12 @@
 package flaxbeard.immersivepetroleum.common.lubehandlers;
 
-import java.util.function.Supplier;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.component.IClientTickableComponent;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.component.IServerTickableComponent;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelper;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockLevel;
+import blusunrize.immersiveengineering.common.blocks.multiblocks.logic.CrusherLogic;
+import blusunrize.immersiveengineering.common.register.IEMultiblockLogic;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-
-import blusunrize.immersiveengineering.common.blocks.metal.CrusherBlockEntity;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
 import flaxbeard.immersivepetroleum.client.model.IPModel;
 import flaxbeard.immersivepetroleum.client.model.IPModels;
@@ -29,57 +30,68 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class CrusherLubricationHandler implements ILubricationHandler<CrusherBlockEntity>{
+import java.util.function.Supplier;
+
+public class CrusherLubricationHandler implements ILubricationHandler<IMultiblockBEHelper<CrusherLogic.State>, CrusherLogic.State>{
 	private static final Vec3i size = new Vec3i(3, 3, 5);
-	
+
 	@Override
 	public Vec3i getStructureDimensions(){
 		return size;
 	}
-	
+
 	@Override
-	public boolean isMachineEnabled(Level world, CrusherBlockEntity mbte){
-		return mbte.shouldRenderAsActive();
+	public boolean isMachineEnabled(Level world, IMultiblockBEHelper<CrusherLogic.State> mbte){
+		return mbte.getState().shouldRenderActive();
 	}
 	
 	@Override
 	public BlockEntity isPlacedCorrectly(Level world, AutoLubricatorTileEntity lubricator, Direction facing){
 		BlockPos target = lubricator.getBlockPos().relative(facing);
 		BlockEntity te = world.getBlockEntity(target);
-		
-		if(te instanceof CrusherBlockEntity master){
-			master = master.master();
+
+		if(te instanceof IMultiblockBEHelper<?> master && master.getContext().getState() instanceof CrusherLogic.State){
+			IMultiblockBEHelper<CrusherLogic.State> castedMasted = master.asType(IEMultiblockLogic.CRUSHER);
 			
-			if(master != null && master.getFacing().getOpposite() == facing){
-				return master;
+			if(castedMasted != null && castedMasted.getContext().getLevel().getOrientation().front().getOpposite() == facing){
+				return te;
 			}
 		}
 		
 		return null;
 	}
-	
+
 	@Override
-	public void lubricateClient(ClientLevel world, Fluid lubricant, int ticks, CrusherBlockEntity mbte){
-		if(mbte.shouldRenderAsActive()){
-			mbte.animation_barrelRotation += 4.5f;
-			mbte.animation_barrelRotation %= 360f;
+	public void lubricateClient(ClientLevel world, Fluid lubricant, int ticks, IMultiblockBEHelper<CrusherLogic.State> mbte){
+		if(mbte.getState().shouldRenderActive()){
+			@SuppressWarnings("unchecked")
+			IClientTickableComponent<CrusherLogic.State> tick = (IClientTickableComponent<CrusherLogic.State>) mbte.getMultiblock().logic();
+			tick.tickClient(mbte.getContext());
+			//mbte.getState().getBarrelAngle() += 4.5f;
+			//mbte.animation_barrelRotation %= 360f;
 		}
 	}
 	
 	@Override
-	public void lubricateServer(ServerLevel world, Fluid lubricant, int ticks, CrusherBlockEntity mbte){
-		if(ticks % 4 == 0){
-			mbte.tickServer();
+	public void lubricateServer(ServerLevel world, Fluid lubricant, int ticks, IMultiblockBEHelper<CrusherLogic.State> mbte)
+	{
+		if(ticks % 4 == 0)
+		{
+			@SuppressWarnings("unchecked")
+			IServerTickableComponent<CrusherLogic.State> tick = (IServerTickableComponent<CrusherLogic.State>) mbte.getMultiblock().logic();
+			tick.tickServer(mbte.getContext());
 		}
 	}
 	
 	@Override
-	public void spawnLubricantParticles(ClientLevel world, AutoLubricatorTileEntity lubricator, Direction facing, CrusherBlockEntity mbte){
-		Direction f = mbte.getIsMirrored() ? facing : facing.getOpposite();
+	public void spawnLubricantParticles(ClientLevel world, AutoLubricatorTileEntity lubricator, Direction facing, IMultiblockBEHelper<CrusherLogic.State> mbte){
+
+		boolean mirrored = mbte.getContext().getLevel().getOrientation().mirrored();
+		Direction f = mirrored ? facing : facing.getOpposite();
 		
 		float location = world.random.nextFloat();
 		
-		boolean flip = f.getAxis() == Axis.Z ^ facing.getAxisDirection() == AxisDirection.NEGATIVE ^ !mbte.getIsMirrored();
+		boolean flip = f.getAxis() == Axis.Z ^ facing.getAxisDirection() == AxisDirection.NEGATIVE ^ !mirrored;
 		float xO = 2.5F;
 		float zO = -0.1F;
 		float yO = 1.3F;
@@ -109,13 +121,12 @@ public class CrusherLubricationHandler implements ILubricationHandler<CrusherBlo
 	}
 	
 	@Override
-	public Tuple<BlockPos, Direction> getGhostBlockPosition(Level world, CrusherBlockEntity mbte){
-		if(!mbte.isDummy()){
-			BlockPos pos = mbte.getBlockPos().relative(mbte.getFacing(), 2);
-			Direction f = mbte.getFacing().getOpposite();
-			return new Tuple<>(pos, f);
-		}
-		return null;
+	public Tuple<BlockPos, Direction> getGhostBlockPosition(Level world, IMultiblockBEHelper<CrusherLogic.State> mbte){
+
+		IMultiblockLevel level = mbte.getContext().getLevel();
+		BlockPos pos = mbte.getPositionInMB().relative(level.getOrientation().front(), 2);
+		Direction f = level.getOrientation().front().getOpposite();
+		return new Tuple<>(pos, f);
 	}
 	
 	private static final ResourceLocation TEXTURE = ResourceUtils.ip("textures/models/lube_pipe.png");
@@ -123,26 +134,29 @@ public class CrusherLubricationHandler implements ILubricationHandler<CrusherBlo
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void renderPipes(AutoLubricatorTileEntity lubricator, CrusherBlockEntity mbte, PoseStack matrix, MultiBufferSource buffer, int combinedLight, int combinedOverlay){
+	public void renderPipes(AutoLubricatorTileEntity lubricator, IMultiblockBEHelper<CrusherLogic.State> mbte, PoseStack matrix, MultiBufferSource buffer, int combinedLight, int combinedOverlay){
+
+		IMultiblockLevel level = mbte.getContext().getLevel();
+
 		matrix.translate(0, -1, 0);
-		Vec3i offset = mbte.getBlockPos().subtract(lubricator.getBlockPos());
+		Vec3i offset = level.getAbsoluteOrigin().subtract(lubricator.getBlockPos());
 		matrix.translate(offset.getX(), offset.getY(), offset.getZ());
 		
-		Direction rotation = mbte.getFacing();
+		Direction rotation = level.getOrientation().front();
 		switch(rotation){
 			case NORTH -> {
-				matrix.mulPose(new Quaternion(0, 90F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90F));
 				matrix.translate(-1, 0, 0);
 			}
 			case SOUTH -> {
-				matrix.mulPose(new Quaternion(0, 270F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(270F));
 				matrix.translate(0, 0, -1);
 			}
 			case EAST -> {
 				matrix.translate(0, 0, 0);
 			}
 			case WEST -> {
-				matrix.mulPose(new Quaternion(0, 180F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(180F));
 				matrix.translate(-1, 0, -1);
 			}
 			default -> {

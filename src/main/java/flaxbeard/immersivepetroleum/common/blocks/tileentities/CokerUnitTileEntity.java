@@ -1,121 +1,61 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-
-import blusunrize.immersiveengineering.api.fluid.IFluidPipe;
-import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockBlockEntity;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcess;
-import blusunrize.immersiveengineering.common.util.MultiblockCapability;
-import blusunrize.immersiveengineering.common.util.ResettableCapability;
-import blusunrize.immersiveengineering.common.util.Utils;
-import blusunrize.immersiveengineering.common.util.inventory.IEInventoryHandler;
-import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
-import flaxbeard.immersivepetroleum.api.crafting.CokerUnitRecipe;
-import flaxbeard.immersivepetroleum.common.IPMenuTypes;
-import flaxbeard.immersivepetroleum.common.blocks.interfaces.ICanSkipGUI;
-import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
-import flaxbeard.immersivepetroleum.common.gui.CokerUnitContainer;
-import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
-import flaxbeard.immersivepetroleum.common.multiblocks.CokerUnitMultiblock;
-import flaxbeard.immersivepetroleum.common.util.AABBUtils;
-import flaxbeard.immersivepetroleum.common.util.FluidHelper;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitTileEntity, CokerUnitRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<CokerUnitTileEntity>, IEBlockInterfaces.IBlockBounds{
+@Deprecated(forRemoval = true)
+public class CokerUnitTileEntity //extends PoweredMultiblockBlockEntity<CokerUnitTileEntity, CokerUnitRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<CokerUnitTileEntity>, IEBlockInterfaces.IBlockBounds
+{
 	
-	public enum Inventory{
+	//public enum Inventory{
 		/** Inventory Item Input */
-		INPUT,
+	//	INPUT,
 		/** Inventory Fluid Input (Filled Bucket) */
-		INPUT_FILLED,
+	//	INPUT_FILLED,
 		/** Inventory Fluid Input (Empty Bucket) */
-		INPUT_EMPTY,
+	//	INPUT_EMPTY,
 		/** Inventory Fluid Output (Empty Bucket) */
-		OUTPUT_EMPTY,
+	//	OUTPUT_EMPTY,
 		/** Inventory Fluid Output (Filled Bucket) */
-		OUTPUT_FILLED;
+	//	OUTPUT_FILLED;
 		
-		public int id(){
-			return ordinal();
-		}
-	}
+	//	public int id(){
+	//		return ordinal();
+	//	}
+	//}
 	
 	/** Input Fluid Tank<br> */
-	public static final int TANK_INPUT = 0;
+	//public static final int TANK_INPUT = 0;
 	
 	/** Output Fluid Tank<br> */
-	public static final int TANK_OUTPUT = 1;
+	//public static final int TANK_OUTPUT = 1;
 	
 	/** Coker Chamber A<br> */
-	public static final int CHAMBER_A = 0;
+	//public static final int CHAMBER_A = 0;
 	
 	/** Coker Chamber B<br> */
-	public static final int CHAMBER_B = 1;
+	//public static final int CHAMBER_B = 1;
 	
 	/** Template-Location of the Chamber A Item Output */
-	public static final BlockPos Chamber_A_OUT = new BlockPos(2, 0, 2);
+	//public static final BlockPos Chamber_A_OUT = new BlockPos(2, 0, 2);
 	
 	/** Template-Location of the Chamber B Item Output */
-	public static final BlockPos Chamber_B_OUT = new BlockPos(6, 0, 2);
+	//public static final BlockPos Chamber_B_OUT = new BlockPos(6, 0, 2);
 	
 	/** Template-Location of the Fluid Input Port. (2 0 4)<br> */
-	public static final BlockPos Fluid_IN = new BlockPos(2, 0, 4);
+	//public static final BlockPos Fluid_IN = new BlockPos(2, 0, 4);
 	
 	/** Template-Location of the Fluid Output Port. (5 0 4)<br> */
-	public static final BlockPos Fluid_OUT = new BlockPos(5, 0, 4);
+	//public static final BlockPos Fluid_OUT = new BlockPos(5, 0, 4);
 	
 	/** Template-Location of the Item Input Port. (3 0 4)<br> */
-	public static final BlockPos Item_IN = new BlockPos(3, 0, 4);
+	//public static final BlockPos Item_IN = new BlockPos(3, 0, 4);
 	
 	/** Template-Location of the Energy Input Ports.<br><pre>1 1 0<br>2 1 0<br>3 1 0</pre><br> */
-	public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(
+	/*public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(
 			new MultiblockFace(6, 1, 4, RelativeBlockFace.FRONT),
 			new MultiblockFace(7, 1, 4, RelativeBlockFace.FRONT)
-	);
+	);*/
 	
 	/** Template-Location of the Redstone Input Port. (6 1 4)<br> */
-	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(1, 1, 4));
+	/*public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(1, 1, 4));
 	
 	public final NonNullList<ItemStack> inventory = NonNullList.withSize(Inventory.values().length, ItemStack.EMPTY);
 	public final FluidTank[] bufferTanks = {new FluidTank(16000), new FluidTank(16000)};
@@ -901,44 +841,44 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		return main;
 	}
-	
+	*/
 	// STATIC CLASSES
 	
-	public enum CokingState{
+	//public enum CokingState{
 		/** Wait for Input */
-		STANDBY,
+	//	STANDBY,
 		
 		/** Process materials into the result */
-		PROCESSING,
+	//	PROCESSING,
 		
 		/** Draining residual fluids from processing materials */
-		DRAIN_RESIDUE,
+	//	DRAIN_RESIDUE,
 		
 		/** Filling up the chamber with fluid, with the amount required by the recipe */
-		FLOODING,
+	//	FLOODING,
 		
 		/** Dumping the result below the chamber outout and voiding the flushing fluids */
-		DUMPING;
+	//	DUMPING;
 		
-		public int id(){
-			return ordinal();
-		}
-	}
+	//	public int id(){
+	//		return ordinal();
+	//	}
+	//}
 	
-	public static class CokingChamber{
+	/*public static class CokingChamber{
 		@Nullable
 		CokerUnitRecipe recipe = null;
 		CokingState state = CokingState.STANDBY;
 		FluidTank tank;
 		
 		/** Total capacity. inputAmount + outputAmount, should not go above this */
-		int capacity;
+	//	int capacity;
 		/** This has a ratio of X:1 to the input amount. (X amount of items always adds 1) */
-		int inputAmount = 0;
+	//	int inputAmount = 0;
 		/** This has a ratio of 1:1 to the output amount. */
-		int outputAmount = 0;
+	//	int outputAmount = 0;
 		
-		int timer = 0;
+	/*	int timer = 0;
 		
 		public CokingChamber(int itemCapacity, int fluidCapacity){
 			this.capacity = itemCapacity;
@@ -980,7 +920,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** Returns true when the recipe has been set, false if it already is set and the chamber is working */
-		public boolean setRecipe(@Nullable CokerUnitRecipe recipe){
+		/*public boolean setRecipe(@Nullable CokerUnitRecipe recipe){
 			if(state == CokingState.STANDBY){
 				this.recipe = recipe;
 				return true;
@@ -990,7 +930,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** Always returns 0 if the recipe hasnt been set yet, otherwise it pretty much does what you'd expect it to */
-		public int addStack(@Nonnull ItemStack stack, boolean simulate){
+		/*public int addStack(@Nonnull ItemStack stack, boolean simulate){
 			if(this.recipe != null && !stack.isEmpty() && this.recipe.inputItem.test(stack)){
 				int capacity = getCapacity() * recipe.inputItem.getCount();
 				int current = getTotalAmount() * recipe.inputItem.getCount();
@@ -1028,7 +968,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** returns the combined I/O Amount */
-		public int getTotalAmount(){
+		/*public int getTotalAmount(){
 			return this.inputAmount + this.outputAmount;
 		}
 		
@@ -1050,7 +990,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** Expected input. */
-		public ItemStack getInputItem(){
+		/*public ItemStack getInputItem(){
 			if(this.recipe == null){
 				return ItemStack.EMPTY;
 			}
@@ -1058,7 +998,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** Expected output. */
-		public ItemStack getOutputItem(){
+		/*public ItemStack getOutputItem(){
 			if(this.recipe == null){
 				return ItemStack.EMPTY;
 			}
@@ -1071,7 +1011,7 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 		}
 		
 		/** returns true when the coker should update, false otherwise */
-		public boolean tick(CokerUnitTileEntity cokerunit, int chamberId){
+		/*public boolean tick(CokerUnitTileEntity cokerunit, int chamberId){
 			if(this.recipe == null){
 				return setStage(CokingState.STANDBY);
 			}
@@ -1186,5 +1126,5 @@ public class CokerUnitTileEntity extends PoweredMultiblockBlockEntity<CokerUnitT
 			
 			return false;
 		}
-	}
+	}*/
 }

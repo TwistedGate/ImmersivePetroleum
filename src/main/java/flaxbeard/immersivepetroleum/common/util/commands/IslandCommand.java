@@ -1,12 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util.commands;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.Multimap;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.LongArgumentType;
@@ -16,7 +9,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
 import flaxbeard.immersivepetroleum.api.reservoir.AxisAlignedIslandBB;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
@@ -39,6 +31,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 public class IslandCommand{
 	private IslandCommand(){
@@ -84,13 +82,12 @@ public class IslandCommand{
 		};
 		
 		final ResourceKey<Level> dimKey = source.getLevel().dimension();
-		for(int i = 0;i < regions.length;i++){
-			RegionData rd = regions[i];
-			if(rd != null){
+		for (RegionData rd : regions) {
+			if (rd != null) {
 				Multimap<ResourceKey<Level>, ReservoirIsland> islands = rd.getReservoirIslandList();
-				synchronized(islands){
+				synchronized (islands) {
 					islands.get(dimKey).forEach(island -> {
-						if(island.getBoundingBox().getCenter().distToCenterSqr(dx, 0, dz) <= rangeSqr){
+						if (island.getBoundingBox().getCenter().distToCenterSqr(dx, 0, dz) <= rangeSqr) {
 							nearby.add(island);
 						}
 					});
@@ -145,10 +142,12 @@ public class IslandCommand{
 		
 		final ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + p.x() + " ~ " + p.z());
 		final HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip"));
-		
-		source.sendSuccess(Component.translatable("chat.immersivepetroleum.command.reservoir.locate",
-				closestIsland.getType().name,
-				ComponentUtils.wrapInSquareBrackets(Component.literal(p.x() + " " + p.z())).withStyle((s) -> {
+
+		ReservoirIsland finalClosestIsland = closestIsland;
+		ColumnPos finalP = p;
+		source.sendSuccess(() -> Component.translatable("chat.immersivepetroleum.command.reservoir.locate",
+				finalClosestIsland.getType().name,
+				ComponentUtils.wrapInSquareBrackets(Component.literal(finalP.x() + " " + finalP.z())).withStyle((s) -> {
 					return s.withColor(ChatFormatting.GREEN)
 							.withItalic(true)
 							.withClickEvent(clickEvent)
@@ -212,7 +211,7 @@ public class IslandCommand{
 	
 	static <T extends ArgumentBuilder<CommandSourceStack, T>> T positional(T builder, BiFunction<CommandContext<CommandSourceStack>, ReservoirIsland, Integer> function){
 		builder.executes(command -> {
-			ColumnPos pos = Utils.toColumnPos(new BlockPos(command.getSource().getPosition()));
+			ColumnPos pos = Utils.toColumnPos(BlockPos.containing(command.getSource().getPosition()));
 			
 			ReservoirIsland island = ReservoirHandler.getIsland(command.getSource().getLevel(), pos);
 			if(island == null){

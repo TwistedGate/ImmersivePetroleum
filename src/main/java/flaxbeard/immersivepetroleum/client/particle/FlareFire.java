@@ -1,11 +1,5 @@
 package flaxbeard.immersivepetroleum.client.particle;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
-import com.mojang.math.Vector3f;
-
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,6 +15,10 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Vector3f;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class FlareFire extends SimpleAnimatedParticle{

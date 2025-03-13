@@ -1,11 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks.wooden;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockBase;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockItemBase;
@@ -30,8 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -39,14 +33,26 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
 public class AutoLubricatorBlock extends IPBlockBase implements EntityBlock{
-	private static final Material material = new Material(MaterialColor.WOOD, false, false, true, true, false, false, PushReaction.BLOCK);
+	//private static final Material material = new Material(MaterialColor.WOOD, false, false, true, true, false, false, PushReaction.BLOCK);
 	
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 	public static final BooleanProperty SLAVE = BooleanProperty.create("slave");
 	
 	public AutoLubricatorBlock(){
-		super(Block.Properties.of(material).strength(5.0F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops().noOcclusion());
+		super(Block.Properties.of().
+				strength(5.0F, 6.0F).
+				sound(SoundType.WOOD).
+				requiresCorrectToolForDrops().
+				noOcclusion().
+				mapColor(MapColor.COLOR_GRAY).
+				instrument(NoteBlockInstrument.BASS).
+				sound(SoundType.CHERRY_WOOD).
+				pushReaction(PushReaction.BLOCK));
 		
 		registerDefaultState(getStateDefinition().any()
 				.setValue(FACING, Direction.NORTH)
@@ -127,7 +133,7 @@ public class AutoLubricatorBlock extends IPBlockBase implements EntityBlock{
 	
 	public static class AutoLubricatorBlockItem extends IPBlockItemBase{
 		public AutoLubricatorBlockItem(Block blockIn){
-			super(blockIn, new Item.Properties().tab(ImmersivePetroleum.creativeTab));
+			super(blockIn, new Item.Properties());
 		}
 		
 		@Override

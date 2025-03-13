@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
     "bottom": "immersivepetroleum:block/well_pipe_top",
-    "side": "immersiveengineering:block/stone_decoration/concrete",
+    "side": "immersiveengineering:block/stone_decoration/concrete/concrete0",
     "top": "immersivepetroleum:block/well_pipe_top"
   }
 }

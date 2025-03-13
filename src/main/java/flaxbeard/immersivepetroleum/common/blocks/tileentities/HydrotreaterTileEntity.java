@@ -1,86 +1,36 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-
-import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockBlockEntity;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcess;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcessInMachine;
-import blusunrize.immersiveengineering.common.util.MultiblockCapability;
-import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
-import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
-import flaxbeard.immersivepetroleum.common.IPMenuTypes;
-import flaxbeard.immersivepetroleum.common.blocks.interfaces.ICanSkipGUI;
-import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
-import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
-import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
-import flaxbeard.immersivepetroleum.common.util.AABBUtils;
-import flaxbeard.immersivepetroleum.common.util.FluidHelper;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<HydrotreaterTileEntity, HighPressureRefineryRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<HydrotreaterTileEntity>, IEBlockInterfaces.IBlockBounds{
+@Deprecated(forRemoval = true)
+public class HydrotreaterTileEntity //extends PoweredMultiblockBlockEntity<HydrotreaterTileEntity, HighPressureRefineryRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<HydrotreaterTileEntity>, IEBlockInterfaces.IBlockBounds
+{
 	/** Primary Fluid Input Tank<br> */
-	public static final int TANK_INPUT_A = 0;
+	//public static final int TANK_INPUT_A = 0;
 	
 	/** Secondary Fluid Input Tank<br> */
-	public static final int TANK_INPUT_B = 1;
+	//public static final int TANK_INPUT_B = 1;
 	
 	/** Output Fluid Tank<br> */
-	public static final int TANK_OUTPUT = 2;
-	
+	//public static final int TANK_OUTPUT = 2;
+
 	/** Template-Location of the Fluid Input Port. (1 0 3)<br> */
-	public static final BlockPos Fluid_IN_A = new BlockPos(1, 0, 3);
+	//public static final BlockPos Fluid_IN_A = new BlockPos(1, 0, 3);
 	
 	/** Template-Location of the Fluid Input Port. (2 2 1)<br> */
-	public static final BlockPos Fluid_IN_B = new BlockPos(2, 2, 1);
+	//public static final BlockPos Fluid_IN_B = new BlockPos(2, 2, 1);
 	
 	/** Template-Location of the Fluid Output Port. (0 1 2)<br> */
-	public static final BlockPos Fluid_OUT = new BlockPos(0, 1, 2);
+	//public static final BlockPos Fluid_OUT = new BlockPos(0, 1, 2);
 	
 	/** Template-Location of the Item Output Port. (0 0 2)<br> */
-	public static final BlockPos Item_OUT = new BlockPos(0, 0, 2);
+	//public static final BlockPos Item_OUT = new BlockPos(0, 0, 2);
 	
 	/** Template-Location of the Energy Input Ports. (2 2 3)<br> */
-	public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 2, 3, RelativeBlockFace.UP));
+	//public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 2, 3, RelativeBlockFace.UP));
 	
 	/** Template-Location of the Redstone Input Port. (0 1 3)<br> */
-	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
+	//public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
 	
-	public final FluidTank[] tanks = new FluidTank[]{new FluidTank(12000), new FluidTank(12000), new FluidTank(12000)};
+	/*public final FluidTank[] tanks = new FluidTank[]{new FluidTank(12000), new FluidTank(12000), new FluidTank(12000)};
 	public HydrotreaterTileEntity(BlockEntityType<HydrotreaterTileEntity> type, BlockPos pWorldPosition, BlockState pBlockState){
 		super(HydroTreaterMultiblock.INSTANCE, 8000, true, type, pWorldPosition, pBlockState);
 		tanks[TANK_INPUT_A].setValidator(fs -> HighPressureRefineryRecipe.hasRecipeWithInput(fs, true));
@@ -467,5 +417,5 @@ public class HydrotreaterTileEntity extends PoweredMultiblockBlockEntity<Hydrotr
 			main.add(AABBUtils.FULL);
 		}
 		return main;
-	}
+	}*/
 }

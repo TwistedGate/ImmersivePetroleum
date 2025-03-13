@@ -1,96 +1,42 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-
-import blusunrize.immersiveengineering.api.fluid.IFluidPipe;
-import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockBlockEntity;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcess;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcessInMachine;
-import blusunrize.immersiveengineering.common.util.MultiblockCapability;
-import blusunrize.immersiveengineering.common.util.Utils;
-import blusunrize.immersiveengineering.common.util.inventory.MultiFluidTank;
-import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
-import flaxbeard.immersivepetroleum.api.crafting.DistillationTowerRecipe;
-import flaxbeard.immersivepetroleum.common.IPMenuTypes;
-import flaxbeard.immersivepetroleum.common.blocks.interfaces.ICanSkipGUI;
-import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
-import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
-import flaxbeard.immersivepetroleum.common.multiblocks.DistillationTowerMultiblock;
-import flaxbeard.immersivepetroleum.common.util.AABBUtils;
-import flaxbeard.immersivepetroleum.common.util.FluidHelper;
-import flaxbeard.immersivepetroleum.common.util.inventory.MultiFluidTankFiltered;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-public class DistillationTowerTileEntity extends PoweredMultiblockBlockEntity<DistillationTowerTileEntity, DistillationTowerRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<DistillationTowerTileEntity>, IEBlockInterfaces.IBlockBounds{
+@Deprecated(forRemoval = true)
+public class DistillationTowerTileEntity //extends PoweredMultiblockBlockEntity<DistillationTowerTileEntity, DistillationTowerRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<DistillationTowerTileEntity>, IEBlockInterfaces.IBlockBounds
+{
 	/** Input Tank ID */
-	public static final int TANK_INPUT = 0;
+	//public static final int TANK_INPUT = 0;
 	
 	/** Output Tank ID */
-	public static final int TANK_OUTPUT = 1;
+	//public static final int TANK_OUTPUT = 1;
 	
 	/** Inventory Fluid Input (Filled Bucket) */
-	public static final int INV_0 = 0;
+	//public static final int INV_0 = 0;
 	
 	/** Inventory Fluid Input (Empty Bucket) */
-	public static final int INV_1 = 1;
+	//public static final int INV_1 = 1;
 	
 	/** Inventory Fluid Output (Empty Bucket) */
-	public static final int INV_2 = 2;
+	//public static final int INV_2 = 2;
 	
 	/** Inventory Fluid Output (Filled Bucket) */
-	public static final int INV_3 = 3;
+	//public static final int INV_3 = 3;
 	
 	/** Template-Location of the Fluid Input Port. (3 0 3) */
-	public static final BlockPos Fluid_IN = new BlockPos(3, 0, 3);
+	//public static final BlockPos Fluid_IN = new BlockPos(3, 0, 3);
 	
 	/** Template-Location of the Fluid Output Port. (1 0 3) */
-	public static final BlockPos Fluid_OUT = new BlockPos(1, 0, 3);
+	//public static final BlockPos Fluid_OUT = new BlockPos(1, 0, 3);
 	
 	/** Template-Location of the Item Output Port. (0 0 1) */
-	public static final BlockPos Item_OUT = new BlockPos(0, 0, 1);
+	//public static final BlockPos Item_OUT = new BlockPos(0, 0, 1);
 	
 	/** Template-Location of the Energy Input Port. (3 1 3) */
-	public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(3, 1, 3, RelativeBlockFace.UP));
+	//public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(3, 1, 3, RelativeBlockFace.UP));
 	
 	/** Template-Location of the Redstone Input Port. (0 1 3) */
-	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
+	//public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 3));
 	
-	public NonNullList<ItemStack> inventory = NonNullList.withSize(4, ItemStack.EMPTY);
+	/*public NonNullList<ItemStack> inventory = NonNullList.withSize(4, ItemStack.EMPTY);
 	public final MultiFluidTank[] tanks = new MultiFluidTank[]{
 			new MultiFluidTankFiltered(24000, fs -> DistillationTowerRecipe.findRecipe(fs) != null),
 			new MultiFluidTankFiltered(24000)
@@ -474,101 +420,5 @@ public class DistillationTowerTileEntity extends PoweredMultiblockBlockEntity<Di
 	
 	public boolean isLadder(){
 		return this.posInMultiblock.getY() > 0 && (this.posInMultiblock.getX() == 2 && this.posInMultiblock.getZ() == 0);
-	}
-	
-	private static final CachedShapesWithTransform<BlockPos, Pair<Direction, Boolean>> SHAPES = CachedShapesWithTransform.createForMultiblock(DistillationTowerTileEntity::getShape);
-	
-	@Override
-	@Nonnull
-	public VoxelShape getBlockBounds(CollisionContext ctx){
-		return SHAPES.get(this.posInMultiblock, Pair.of(getFacing(), getIsMirrored()));
-	}
-	
-	private static List<AABB> getShape(BlockPos posInMultiblock){
-		final int x = posInMultiblock.getX();
-		final int y = posInMultiblock.getY();
-		final int z = posInMultiblock.getZ();
-		
-		List<AABB> main = new ArrayList<>();
-		
-		// Redstone Input
-		if(y < 2){
-			if(x == 0 && z == 3){
-				if(y == 1){ // Actual Input
-					AABBUtils.box16(main, 0, 0, 0, 8, 16, 16);
-				}else{ // Input Legs
-					AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
-					AABBUtils.box16(main, 2, 0, 12, 6, 16, 14);
-					AABBUtils.box16(main, 2, 0, 2, 6, 16, 4);
-				}
-			}
-		}
-		
-		// Pipe over Furnace
-		if(y == 2 && x == 3 && z == 2){
-			AABBUtils.box16(main, -1, 6, 2, 1, 18, 14);
-			AABBUtils.box16(main, 2, 0, 2, 14, 2, 14);
-			AABBUtils.box16(main, 4, 0, 4, 12, 16, 12);
-			AABBUtils.box16(main, 0, 8, 4, 12, 16, 12);
-		}
-		
-		// Long Pipe
-		if(y > 0 && x == 1 && z == 3){
-			if(y != 15){
-				AABBUtils.box16(main, 3, 0, 3, 13, 16, 13);
-				if(y > 0 && y % 4 == 0){ // For pipe passing a platform
-					AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
-				}
-			}else{ // Pipe Top Bend
-				AABBUtils.box16(main, 3, 0, -1, 13, 10, 13);
-			}
-		}
-		
-		// Ladder
-		if(y > 0 && x == 2 && z == 0){
-			AABBUtils.box16(main, 1, y == 1 ? 2 : 0, 14, 15, 16, 17);
-			if(y > 0 && y % 4 == 0){
-				AABBUtils.box16(main, 0, 8, 14, 16, 16, 17);
-				AABBUtils.box16(main, 0, 8, 0, 16, 16, 1);
-			}
-		}
-		
-		// Center
-		if(x > 0 && x < 3 && z > 0 && z < 3){
-			if(y > 0){
-				// Distillation Column
-				AABB bb = AABBUtils.box16(1, 0, 1, 15, 16, 15);
-				if(z == 1){
-					if(x == 1) bb = AABBUtils.box16(1, 0, 1, 16, 16, 16);
-					if(x == 2) bb = AABBUtils.box16(0, 0, 1, 15, 16, 16);
-				}else if(z == 2){
-					if(x == 1) bb = AABBUtils.box16(1, 0, 0, 16, 16, 15);
-					if(x == 2) bb = AABBUtils.box16(0, 0, 0, 15, 16, 15);
-				}
-				main.add(bb);
-			}else{
-				// Distillation Column Base
-				AABBUtils.box16(main, -2, 8, -2, 18, 18, 18);
-				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
-			}
-		}
-		
-		// Platforms
-		if((y > 0 && y % 4 == 0) && !(x == 2 && z == 0) && !(x >= 1 && x <= 2 && z >= 1 && z <= 2)){
-			AABBUtils.box16(main, 0, 8, 0, 16, 16, 16);
-		}
-		
-		// Base
-		if(y == 0){
-			if(!((x == 0 && z == 1) || (x == 1 && z == 3) || (x == 3 && z == 2) || (x == 3 && z == 3))){
-				AABBUtils.box16(main, 0, 0, 0, 16, 8, 16);
-			}
-		}
-		
-		// Use default cube shape if nessesary
-		if(main.isEmpty()){
-			main.add(AABBUtils.FULL);
-		}
-		return main;
-	}
+	}*/
 }

@@ -1,16 +1,16 @@
 package flaxbeard.immersivepetroleum.common.lubehandlers;
 
-import java.util.function.Supplier;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelper;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelperMaster;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockBlockEntityMaster;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.util.MultiblockOrientation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
 import flaxbeard.immersivepetroleum.client.model.IPModel;
 import flaxbeard.immersivepetroleum.client.model.IPModels;
 import flaxbeard.immersivepetroleum.client.model.ModelLubricantPipes;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.PumpjackLogic;
 import flaxbeard.immersivepetroleum.common.blocks.tileentities.AutoLubricatorTileEntity;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,7 +29,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackTileEntity>{
+import java.util.function.Supplier;
+
+public class PumpjackLubricationHandler implements ILubricationHandler<IMultiblockBEHelper<PumpjackLogic.State>, PumpjackLogic.State>{
 	private static final Vec3i size = new Vec3i(4, 6, 3);
 	
 	@Override
@@ -38,21 +40,20 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 	}
 	
 	@Override
-	public boolean isMachineEnabled(Level world, PumpjackTileEntity mbte){
-		return mbte.wasActive;
+	public boolean isMachineEnabled(Level world, IMultiblockBEHelper<PumpjackLogic.State> mbte){
+		return mbte.getState().wasActive;
 	}
 	
 	@Override
 	public BlockEntity isPlacedCorrectly(Level world, AutoLubricatorTileEntity lubricator, Direction facing){
 		BlockPos target = lubricator.getBlockPos().relative(facing);
 		BlockEntity te = world.getBlockEntity(target);
-		
-		if(te instanceof PumpjackTileEntity master){
-			master = master.master();
-			
+
+		if(te instanceof MultiblockBlockEntityMaster<?> master){
+
 			if(master != null){
-				Direction f = master.getIsMirrored() ? facing : facing.getOpposite();
-				if(master.getFacing().getClockWise() == f){
+				Direction f = master.getHelper().getContext().getLevel().getOrientation().mirrored() ? facing : facing.getOpposite();
+				if(master.getHelper().getContext().getLevel().getOrientation().front().getClockWise() == f){
 					return master;
 				}
 			}
@@ -62,23 +63,24 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 	}
 	
 	@Override
-	public void lubricateClient(ClientLevel world, Fluid lubricant, int ticks, PumpjackTileEntity mbte){
-		mbte.activeTicks += 1F / 4F;
+	public void lubricateClient(ClientLevel world, Fluid lubricant, int ticks, IMultiblockBEHelper<PumpjackLogic.State> mbte){
+		mbte.getState().activeTicks += 1F / 4F;
 	}
 	
 	@Override
-	public void lubricateServer(ServerLevel world, Fluid lubricant, int ticks, PumpjackTileEntity mbte){
+	public void lubricateServer(ServerLevel world, Fluid lubricant, int ticks, IMultiblockBEHelper<PumpjackLogic.State> mbte){
 		if(ticks % 4 == 0){
-			mbte.tickServer();
+			if (mbte instanceof IMultiblockBEHelperMaster<PumpjackLogic.State> master)
+				master.tickServer();
 		}
 	}
 	
 	@Override
-	public void spawnLubricantParticles(ClientLevel world, AutoLubricatorTileEntity lubricator, Direction facing, PumpjackTileEntity mbte){
-		Direction f = mbte.getIsMirrored() ? facing : facing.getOpposite();
+	public void spawnLubricantParticles(ClientLevel world, AutoLubricatorTileEntity lubricator, Direction facing, IMultiblockBEHelper<PumpjackLogic.State> mbte){
+		Direction f = mbte.getContext().getLevel().getOrientation().mirrored() ? facing : facing.getOpposite();
 		float location = world.random.nextFloat();
 		
-		boolean flip = f.getAxis() == Axis.Z ^ facing.getAxisDirection() == AxisDirection.POSITIVE ^ !mbte.getIsMirrored();
+		boolean flip = f.getAxis() == Axis.Z ^ facing.getAxisDirection() == AxisDirection.POSITIVE ^ !mbte.getContext().getLevel().getOrientation().mirrored();
 		float xO = 2.5F;
 		float zO = -.15F;
 		float yO = 2.25F;
@@ -109,18 +111,16 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 	}
 	
 	@Override
-	public Tuple<BlockPos, Direction> getGhostBlockPosition(Level world, PumpjackTileEntity mbte){
-		if(!mbte.isDummy()){
-			Direction mbFacing = mbte.getFacing().getOpposite();
-			BlockPos pos = mbte.getBlockPos()
-					.relative(Direction.UP)
-					.relative(mbFacing, 4)
-					.relative(mbte.getIsMirrored() ? mbFacing.getClockWise() : mbFacing.getCounterClockWise(), 2);
+	public Tuple<BlockPos, Direction> getGhostBlockPosition(Level world, IMultiblockBEHelper<PumpjackLogic.State> mbte){
+		MultiblockOrientation orientation = mbte.getContext().getLevel().getOrientation();
+		Direction mbFacing = orientation.front().getOpposite();
+		BlockPos pos = mbte.getPositionInMB()
+				.relative(Direction.UP)
+				.relative(mbFacing, 4)
+				.relative(orientation.mirrored() ? mbFacing.getClockWise() : mbFacing.getCounterClockWise(), 2);
 			
-			Direction f = (mbte.getIsMirrored() ? mbte.getFacing().getOpposite() : mbte.getFacing()).getCounterClockWise();
-			return new Tuple<>(pos, f);
-		}
-		return null;
+		Direction f = (orientation.mirrored() ? orientation.front().getOpposite() : orientation.front()).getCounterClockWise();
+		return new Tuple<>(pos, f);
 	}
 	
 	private static final ResourceLocation TEXTURE = ResourceUtils.ip("textures/models/lube_pipe.png");
@@ -133,26 +133,27 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void renderPipes(AutoLubricatorTileEntity lubricator, PumpjackTileEntity mbte, PoseStack matrix, MultiBufferSource buffer, int combinedLight, int combinedOverlay){
+	public void renderPipes(AutoLubricatorTileEntity lubricator, IMultiblockBEHelper<PumpjackLogic.State> mbte, PoseStack matrix, MultiBufferSource buffer, int combinedLight, int combinedOverlay){
 		matrix.translate(0, -1, 0);
-		Vec3i offset = mbte.getBlockPos().subtract(lubricator.getBlockPos());
+		Vec3i offset = mbte.getPositionInMB().subtract(lubricator.getBlockPos());
 		matrix.translate(offset.getX(), offset.getY(), offset.getZ());
-		
-		Direction rotation = mbte.getFacing();
+
+		MultiblockOrientation orientation = mbte.getContext().getLevel().getOrientation();
+		Direction rotation = orientation.front();
 		switch(rotation){
 			case NORTH -> {
-				matrix.mulPose(new Quaternion(0, 90F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90F));
 				matrix.translate(-6, 1, -1);
 			}
 			case SOUTH -> {
-				matrix.mulPose(new Quaternion(0, 270F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(270F));
 				matrix.translate(-5, 1, -2);
 			}
 			case EAST -> {
 				matrix.translate(-5, 1, -1);
 			}
 			case WEST -> {
-				matrix.mulPose(new Quaternion(0, 180F, 0, true));
+				matrix.mulPose(com.mojang.math.Axis.YP.rotationDegrees(180F));
 				matrix.translate(-6, 1, -2);
 			}
 			default -> {
@@ -160,7 +161,7 @@ public class PumpjackLubricationHandler implements ILubricationHandler<PumpjackT
 		}
 		
 		IPModel model;
-		if(mbte.getIsMirrored()){
+		if(orientation.mirrored()){
 			if(pipes_mirrored == null)
 				pipes_mirrored = IPModels.getSupplier(ModelLubricantPipes.Pumpjack.ID_MIRRORED);
 			

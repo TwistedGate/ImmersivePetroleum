@@ -1,8 +1,6 @@
 package flaxbeard.immersivepetroleum.common.util.compat.crafttweaker;
 
-import org.openzen.zencode.java.ZenCodeType.Method;
-import org.openzen.zencode.java.ZenCodeType.Name;
-
+import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
@@ -12,14 +10,15 @@ import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.blamejared.crafttweaker.api.tag.type.KnownTag;
 import com.blamejared.crafttweaker.api.util.Many;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
-
-import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
 import flaxbeard.immersivepetroleum.api.crafting.IPRecipeTypes;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import org.openzen.zencode.java.ZenCodeType.Method;
+import org.openzen.zencode.java.ZenCodeType.Name;
 
 @ZenRegister
 @Document("mods/immersivepetroleum/SRU")
@@ -45,7 +44,7 @@ public class SulfurRecoveryRecipeTweaker implements IRecipeManager<HighPressureR
 	
 	@Method
 	public void removeByOutputFluid(IFluidStack output){
-		HighPressureRefineryRecipe.recipes.values().removeIf(recipe -> recipe.output.isFluidEqual(output.getInternal()));
+		HighPressureRefineryRecipe.recipes.values().removeIf(recipe -> recipe.output.isFluidEqual(output.<FluidStack>getInternal()));
 	}
 	
 	@Method

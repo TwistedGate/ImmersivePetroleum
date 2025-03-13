@@ -1,12 +1,8 @@
 package flaxbeard.immersivepetroleum.client.render;
 
-import javax.annotation.Nonnull;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-
+import com.mojang.math.Axis;
 import flaxbeard.immersivepetroleum.client.model.ModelMotorboat;
 import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
@@ -19,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class MotorboatRenderer extends EntityRenderer<MotorboatEntity>{
@@ -141,7 +139,7 @@ public class MotorboatRenderer extends EntityRenderer<MotorboatEntity>{
 	}
 	
 	public void setupRotation(MotorboatEntity boat, float entityYaw, float partialTicks, PoseStack matrix){
-		matrix.mulPose(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
+		matrix.mulPose(Axis.YP.rotationDegrees(180.0F - entityYaw));
 		float f = (float) boat.getHurtTime() - partialTicks;
 		float f1 = boat.getDamage() - partialTicks;
 		
@@ -150,14 +148,15 @@ public class MotorboatRenderer extends EntityRenderer<MotorboatEntity>{
 		}
 		
 		if(f > 0.0F){
-			matrix.mulPose(new Quaternion(Mth.sin(f) * f * f1 / 10.0F * (float) boat.getHurtDir(), 0.0F, 0.0F, true));
+			matrix.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) boat.getHurtDir()));
 		}
 		
 		if(boat.isBoosting){
-			matrix.mulPose(new Quaternion(3, 0, 0, true));
+			//FIXME: check is this in radians
+			matrix.mulPose(Axis.XP.rotationDegrees(3));
 		}
 		
 		matrix.scale(-1.0F, -1.0F, 1.0F);
-		matrix.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+		matrix.mulPose(Axis.YP.rotationDegrees(90.0F));
 	}
 }

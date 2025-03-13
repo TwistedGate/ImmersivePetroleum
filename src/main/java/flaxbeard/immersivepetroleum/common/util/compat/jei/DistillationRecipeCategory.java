@@ -1,14 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util.compat.jei;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import flaxbeard.immersivepetroleum.api.crafting.DistillationTowerRecipe;
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.IPContent;
@@ -29,12 +20,19 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class DistillationRecipeCategory extends IPRecipeCategory<DistillationTowerRecipe>{
 	public static final ResourceLocation ID = ResourceUtils.ip("distillation");
@@ -44,7 +42,7 @@ public class DistillationRecipeCategory extends IPRecipeCategory<DistillationTow
 		super(DistillationTowerRecipe.class, guiHelper, ID, "block.immersivepetroleum.distillation_tower");
 		ResourceLocation background = ResourceUtils.ip("textures/gui/jei/distillationtower.png");
 		setBackground(guiHelper.createDrawable(background, 0, 0, 120, 77));
-		setIcon(new ItemStack(IPContent.Multiblock.DISTILLATIONTOWER.get()));
+		setIcon(new ItemStack(IPContent.Multiblock.DISTILLATIONTOWER.block().get()));
 		this.tankOverlay = guiHelper.createDrawable(background, 120, 0, 20, 51);
 	}
 	
@@ -129,7 +127,7 @@ public class DistillationRecipeCategory extends IPRecipeCategory<DistillationTow
 	}
 	
 	@Override
-	public void draw(@Nonnull DistillationTowerRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull PoseStack matrix, double mouseX, double mouseY){
+	public void draw(@Nonnull DistillationTowerRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY){
 		IDrawable background = getBackground();
 		int bWidth = background.getWidth();
 		int bHeight = background.getHeight();
@@ -137,17 +135,17 @@ public class DistillationRecipeCategory extends IPRecipeCategory<DistillationTow
 		
 		int time = recipe.getTotalProcessTime();
 		int energy = recipe.getTotalProcessEnergy() / time;
-		
-		matrix.pushPose();
+
+		guiGraphics.pose().pushPose();
 		{
-			matrix.translate(23, 0, 0);
+			guiGraphics.pose().translate(23, 0, 0);
 			
 			String text0 = I18n.get("desc.immersiveengineering.info.ift", Utils.fDecimal(energy));
-			font.draw(matrix, text0, bWidth / 2 - font.width(text0) / 2, bHeight - (font.lineHeight * 2), 0);
+			guiGraphics.drawString(font, text0, bWidth / 2 - font.width(text0) / 2, bHeight - (font.lineHeight * 2), -1, false);
 			
 			String text1 = I18n.get("desc.immersiveengineering.info.seconds", Utils.fDecimal(time / 20D));
-			font.draw(matrix, text1, bWidth / 2 - font.width(text1) / 2, bHeight - font.lineHeight, 0);
+			guiGraphics.drawString(font, text1, bWidth / 2 - font.width(text1) / 2, bHeight - font.lineHeight, -1, false);
 		}
-		matrix.popPose();
+		guiGraphics.pose().popPose();
 	}
 }

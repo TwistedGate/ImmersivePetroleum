@@ -1,10 +1,7 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import blusunrize.immersiveengineering.api.Lib;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
 import flaxbeard.immersivepetroleum.api.crafting.LubricantHandler;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler;
@@ -43,6 +40,9 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPCommonTickableTile, IPlacementReader, IPlayerInteraction, IBlockEntityDrop, IEBlockInterfaces.IBlockOverlayText{
 	public boolean isSlave;
@@ -109,10 +109,14 @@ public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPComm
 			BlockPos target = this.worldPosition.relative(this.facing);
 			BlockEntity te = this.level.getBlockEntity(target);
 			
-			ILubricationHandler<BlockEntity> handler = LubricatedHandler.getHandlerForTile(te);
-			if(handler != null && handler.isPlacedCorrectly(this.level, this, this.facing) != null){
-				Utils.unlockIPAdvancement(player, "main/auto_lubricator");
+			if (te instanceof IMultiblockBE<?> me)
+			{
+				ILubricationHandler<?, ?> handler = LubricatedHandler.getHandlerForTile(me.getHelper());
+				if(handler != null && handler.isPlacedCorrectly(this.level, this, this.facing) != null){
+					Utils.unlockIPAdvancement(player, "main/auto_lubricator");
+				}
 			}
+
 		}
 	}
 	
@@ -237,6 +241,7 @@ public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPComm
 	int lastTank = 0;
 	
 	@Override
+	@SuppressWarnings("rawtypes, unchecked")
 	public void tickClient(){
 		if(this.isSlave){
 			return;
@@ -246,15 +251,22 @@ public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPComm
 			BlockPos target = this.worldPosition.relative(this.facing);
 			BlockEntity te = this.level.getBlockEntity(target);
 			
-			ILubricationHandler<BlockEntity> handler = LubricatedHandler.getHandlerForTile(te);
-			if(handler != null){
-				BlockEntity master = handler.isPlacedCorrectly(this.level, this, this.facing);
-				if(master != null && handler.isMachineEnabled(this.level, master)){
-					handler.lubricateClient((ClientLevel) this.level, this.tank.getFluid().getFluid(), this.count, master);
-					
-					if(this.countClient++ % 50 == 0){
-						this.countClient = this.level.random.nextInt(40);
-						handler.spawnLubricantParticles((ClientLevel) this.level, this, this.facing, master);
+			if (te instanceof IMultiblockBE<?> mb)
+			{
+				ILubricationHandler handler = LubricatedHandler.getHandlerForTile(mb.getHelper());
+				if(handler != null){
+					BlockEntity master = handler.isPlacedCorrectly(this.level, this, this.facing);
+					if (master instanceof IMultiblockBE<?> masterMB)
+					{
+						if(handler.isMachineEnabled(this.level, masterMB.getHelper()))
+						{
+							handler.lubricateClient((ClientLevel) this.level, this.tank.getFluid().getFluid(), this.count, masterMB.getHelper());
+
+							if(this.countClient++ % 50 == 0){
+								this.countClient = this.level.random.nextInt(40);
+								handler.spawnLubricantParticles((ClientLevel) this.level, this, this.facing, masterMB.getHelper());
+							}
+						}
 					}
 				}
 			}
@@ -262,6 +274,7 @@ public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPComm
 	}
 	
 	@Override
+	@SuppressWarnings("rawtypes, unchecked")
 	public void tickServer(){
 		if(this.isSlave){
 			return;
@@ -270,19 +283,23 @@ public class AutoLubricatorTileEntity extends IPTileEntityBase implements IPComm
 		if(!this.tank.isEmpty() && LubricantHandler.isValidLube(this.tank.getFluid()) && this.tank.getFluidAmount() >= LubricantHandler.getLubeAmount(this.tank.getFluid())){
 			BlockPos target = this.worldPosition.relative(this.facing);
 			BlockEntity te = this.level.getBlockEntity(target);
-			
-			ILubricationHandler<BlockEntity> handler = LubricatedHandler.getHandlerForTile(te);
-			if(handler != null){
+
+			if (te instanceof IMultiblockBE<?> mb)
+			{
+			ILubricationHandler handler = LubricatedHandler.getHandlerForTile(mb.getHelper());
+			if(handler != null) {
 				BlockEntity master = handler.isPlacedCorrectly(this.level, this, this.facing);
-				if(master != null && handler.isMachineEnabled(this.level, master)){
-					handler.lubricateServer((ServerLevel) this.level, this.tank.getFluid().getFluid(), this.count, master);
-					
-					if(this.count++ % 4 == 0){
+				if (master instanceof IMultiblockBE<?> masterMB && handler.isMachineEnabled(this.level, masterMB.getHelper())) {
+					handler.lubricateServer((ServerLevel) this.level, this.tank.getFluid().getFluid(), this.count, masterMB.getHelper());
+
+					if (this.count++ % 4 == 0) {
 						this.tank.drain(LubricantHandler.getLubeAmount(this.tank.getFluid()), FluidAction.EXECUTE);
 					}
-					
+
 					setChanged();
 				}
+
+			}
 			}
 		}
 		

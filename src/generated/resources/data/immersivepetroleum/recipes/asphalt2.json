@@ -1,5 +1,6 @@
 {
   "type": "immersiveengineering:shaped_fluid",
+  "category": "misc",
   "key": {
     "S": {
       "item": "immersivepetroleum:asphalt_slab"
@@ -11,5 +12,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:asphalt"
-  }
+  },
+  "show_notification": true
 }

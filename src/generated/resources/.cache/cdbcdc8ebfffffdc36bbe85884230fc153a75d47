@@ -1,0 +1,12 @@
+// 1.20.1	2024-04-27T19:07:09.4213782	Tags for minecraft:item mod id immersivepetroleum
+44071aaa634d65213ac8a605c3bfa9840fd6f8a9 data/forge/tags/items/asphalt.json
+0698d56b107c0da4d104756808f0564d553bac1e data/forge/tags/items/bitumen.json
+8bf48f32a530ba011a4ecd4b686e58679d98c4cb data/forge/tags/items/coal_petcoke.json
+f012daebe4bc922833aff7e73ab09ebafe58a418 data/forge/tags/items/dusts/coal_petcoke.json
+768e7878e2d54c535ba032c0f4cc40c078693e4d data/forge/tags/items/storage_blocks/coal_petcoke.json
+768e7878e2d54c535ba032c0f4cc40c078693e4d data/forge/tags/items/storage_blocks/petcoke.json
+f7161b8b51806509c5a4516551cbcc7eb3e3f976 data/forge/tags/items/storage_blocks/wax.json
+f7161b8b51806509c5a4516551cbcc7eb3e3f976 data/forge/tags/items/storage_blocks/wax/paraffin.json
+7132639b134b9d9161f499a222773db4b26e71e7 data/forge/tags/items/wax.json
+7132639b134b9d9161f499a222773db4b26e71e7 data/forge/tags/items/wax/paraffin.json
+02ed651bdc108b613b00970bb6435640f8e7f841 data/immersiveengineering/tags/items/toolbox/tools.json

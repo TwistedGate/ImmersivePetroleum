@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "c": {
       "tag": "forge:wax/paraffin"
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:paraffin_wax_block"
-  }
+  },
+  "show_notification": true
 }

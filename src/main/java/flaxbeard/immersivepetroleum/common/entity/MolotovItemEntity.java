@@ -1,9 +1,5 @@
 package flaxbeard.immersivepetroleum.common.entity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import flaxbeard.immersivepetroleum.common.IPContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,11 +16,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MolotovItemEntity extends ThrowableItemProjectile{
 	
@@ -59,20 +55,20 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 	public void tick(){
 		super.tick();
 		
-		if(this.level.isClientSide){
+		if(this.level().isClientSide){
 			double m = 0.125;
 			double x = getX() + (m - m * 2 * this.random.nextDouble());
 			double y = getY() + (m - m * 2 * this.random.nextDouble());
 			double z = getZ() + (m - m * 2 * this.random.nextDouble());
-			this.level.addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
+			this.level().addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
 		}
 	}
 	
 	@Override
 	protected void onHit(HitResult pResult){
 		super.onHit(pResult);
-		if(!this.level.isClientSide){
-			this.level.broadcastEntityEvent(this, (byte) 3);
+		if(!this.level().isClientSide){
+			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
 	}
@@ -81,8 +77,8 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 	protected void onHitEntity(EntityHitResult pResult){
 		super.onHitEntity(pResult);
 		
-		if(!this.level.isClientSide){
-			fire(new BlockPos(pResult.getLocation()));
+		if(!this.level().isClientSide){
+			fire(BlockPos.containing(pResult.getLocation()));
 		}
 	}
 	
@@ -90,18 +86,18 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 	protected void onHitBlock(BlockHitResult hitResult){
 		super.onHitBlock(hitResult);
 		
-		if(!this.level.isClientSide){
+		if(!this.level().isClientSide){
 			fire(hitResult.getBlockPos().relative(hitResult.getDirection()));
 		}
 	}
 	
 	private void fire(BlockPos pos){
-		if(this.level.getBlockState(pos).getMaterial().isLiquid()){
-			this.level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, this.level.getRandom().nextFloat() * 0.4F + 0.8F);
+		if(!this.level().getFluidState(pos).isEmpty()){
+			this.level().playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, this.level().getRandom().nextFloat() * 0.4F + 0.8F);
 			return;
 		}
 		
-		this.level.playSound(null, pos, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.3F, 0.7F);
+		this.level().playSound(null, pos, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.3F, 0.7F);
 		
 		Set<BlockPos> hits = new HashSet<>();
 		scanArea(pos, pos, hits, 9);
@@ -109,15 +105,15 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 			return;
 		hits.forEach(this::placeFire);
 		
-		this.level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
+		this.level().playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
 		
 		AABB bounds = AABB.ofSize(new Vec3(pos.getX(), pos.getY(), pos.getZ()), 6.5, 6.5, 6.5);
-		List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, bounds);
+		List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, bounds);
 		if(list.isEmpty())
 			return;
 		
 		if(getOwner() instanceof Player player){
-			final DamageSource src = DamageSource.playerAttack(player);
+			final DamageSource src = this.level().damageSources().playerAttack(player);
 			list.forEach(e -> e.hurt(src, 1.0F));
 		}
 		
@@ -131,7 +127,7 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 		int sqr = dif.getX() * dif.getX() + dif.getY() * dif.getY() + dif.getZ() * dif.getZ();
 		if(sqr > radiusSqr)
 			return;
-		if(pos != start && !this.level.getBlockState(pos).isAir())
+		if(pos != start && !this.level().getBlockState(pos).isAir())
 			return;
 		if(visited.contains(pos))
 			return;
@@ -146,7 +142,7 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 	}
 	
 	private void placeFire(BlockPos pos){
-		if(!this.level.getBlockState(pos).isAir())
+		if(!this.level().getBlockState(pos).isAir())
 			return;
 		
 		BlockState fire = Blocks.FIRE.defaultBlockState();
@@ -156,22 +152,22 @@ public class MolotovItemEntity extends ThrowableItemProjectile{
 		boolean east = false;
 		boolean south = false;
 		boolean west = false;
-		if(this.level.getBlockState(pos.below()).isAir()){
+		if(this.level().getBlockState(pos.below()).isAir()){
 			BlockPos abovePos = pos.above();
 			BlockPos northPos = pos.north();
 			BlockPos eastPos = pos.east();
 			BlockPos southPos = pos.south();
 			BlockPos westPos = pos.west();
 			
-			up = this.level.getBlockState(abovePos).isFlammable(this.level, abovePos, Direction.DOWN);
-			north = this.level.getBlockState(northPos).isFlammable(this.level, northPos, Direction.SOUTH);
-			east = this.level.getBlockState(eastPos).isFlammable(this.level, eastPos, Direction.WEST);
-			south = this.level.getBlockState(southPos).isFlammable(this.level, southPos, Direction.NORTH);
-			west = this.level.getBlockState(westPos).isFlammable(this.level, westPos, Direction.EAST);
+			up = this.level().getBlockState(abovePos).isFlammable(this.level(), abovePos, Direction.DOWN);
+			north = this.level().getBlockState(northPos).isFlammable(this.level(), northPos, Direction.SOUTH);
+			east = this.level().getBlockState(eastPos).isFlammable(this.level(), eastPos, Direction.WEST);
+			south = this.level().getBlockState(southPos).isFlammable(this.level(), southPos, Direction.NORTH);
+			west = this.level().getBlockState(westPos).isFlammable(this.level(), westPos, Direction.EAST);
 			
 			fire = fire.setValue(FireBlock.UP, up).setValue(FireBlock.NORTH, north).setValue(FireBlock.EAST, east).setValue(FireBlock.SOUTH, south).setValue(FireBlock.WEST, west);
 		}
 		
-		this.level.setBlock(pos, fire, 3);
+		this.level().setBlock(pos, fire, 3);
 	}
 }

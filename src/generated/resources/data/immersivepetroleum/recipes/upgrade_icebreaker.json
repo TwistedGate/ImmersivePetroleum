@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": {
       "tag": "forge:storage_blocks/steel"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:upgrade_icebreaker"
-  }
+  },
+  "show_notification": true
 }

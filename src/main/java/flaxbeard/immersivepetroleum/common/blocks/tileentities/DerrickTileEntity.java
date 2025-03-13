@@ -1,83 +1,14 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-
-import blusunrize.immersiveengineering.api.crafting.MultiblockRecipe;
-import blusunrize.immersiveengineering.api.fluid.IFluidPipe;
-import blusunrize.immersiveengineering.api.utils.shapes.CachedShapesWithTransform;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.PoweredMultiblockBlockEntity;
-import blusunrize.immersiveengineering.common.blocks.multiblocks.process.MultiblockProcess;
-import blusunrize.immersiveengineering.common.util.MultiblockCapability;
-import blusunrize.immersiveengineering.common.util.ResettableCapability;
-import blusunrize.immersiveengineering.common.util.orientation.RelativeBlockFace;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
-import flaxbeard.immersivepetroleum.client.ClientProxy;
-import flaxbeard.immersivepetroleum.client.gui.elements.PipeConfig;
-import flaxbeard.immersivepetroleum.common.ExternalModContent;
-import flaxbeard.immersivepetroleum.common.IPContent;
-import flaxbeard.immersivepetroleum.common.IPMenuTypes;
-import flaxbeard.immersivepetroleum.common.blocks.interfaces.ICanSkipGUI;
-import flaxbeard.immersivepetroleum.common.blocks.stone.WellPipeBlock;
-import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
-import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
-import flaxbeard.immersivepetroleum.common.gui.IPMenuProvider;
-import flaxbeard.immersivepetroleum.common.multiblocks.DerrickMultiblock;
-import flaxbeard.immersivepetroleum.common.util.AABBUtils;
-import flaxbeard.immersivepetroleum.common.util.FluidHelper;
-import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
-import flaxbeard.immersivepetroleum.common.util.Utils;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ColumnPos;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.registries.ForgeRegistries;
-
-public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileEntity, MultiblockRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<DerrickTileEntity>, IEBlockInterfaces.IBlockBounds{
+@Deprecated(forRemoval = true)
+public class DerrickTileEntity{ /*extends PoweredMultiblockBlockEntity<DerrickTileEntity, MultiblockRecipe> implements IPCommonTickableTile, ICanSkipGUI, IPMenuProvider<DerrickTileEntity>, IEBlockInterfaces.IBlockBounds{
 	public static final int REQUIRED_WATER_AMOUNT = 125;
 	public static final int REQUIRED_CONCRETE_AMOUNT = 125;
 	
 	public enum Inventory{
 		/** Item Pipe Input */
-		INPUT;
-		
+		/*INPUT;
+
 		public int id(){
 			return ordinal();
 		}
@@ -86,16 +17,16 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	public static final FluidTank DUMMY_TANK = new FluidTank(0);
 	
 	/** Template-Location of the Fluid Input Port. (2 0 4)<br> */
-	public static final BlockPos Fluid_IN = new BlockPos(2, 0, 4);
+	//public static final BlockPos Fluid_IN = new BlockPos(2, 0, 4);
 	
 	/** Template-Location of the Fluid Output Port. (4 0 2)<br> */
-	public static final BlockPos Fluid_OUT = new BlockPos(4, 0, 2);
+	//public static final BlockPos Fluid_OUT = new BlockPos(4, 0, 2);
 	
 	/** Template-Location of the Energy Input Ports.<br><pre>2 1 0</pre><br> */
-	public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 1, 0, RelativeBlockFace.UP));
+	//public static final Set<MultiblockFace> Energy_IN = ImmutableSet.of(new MultiblockFace(2, 1, 0, RelativeBlockFace.UP));
 	
 	/** Template-Location of the Redstone Input Port. (0 1 1)<br> */
-	public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 1));
+	/*public static final Set<BlockPos> Redstone_IN = ImmutableSet.of(new BlockPos(0, 1, 1));
 	
 	public int timer = 0;
 	public int rotation = 0;
@@ -105,7 +36,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	public final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
 	
 	/** Stores the current derrick configuration. */
-	@Nullable
+	/*@Nullable
 	public PipeConfig.Grid gridStorage;
 	
 	private Fluid fluidSpilled = Fluids.EMPTY;
@@ -165,7 +96,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 		ReservoirIsland island = ReservoirHandler.getIsland(getLevelNonnull(), getBlockPos());
 		if(island == null || this.worldPosition.getY() < getLevelNonnull().getSeaLevel())
 			return 10;
-		
+
 		return island.getFlowFromPressure(getLevelNonnull(), getBlockPos());
 	}
 	
@@ -215,7 +146,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	}
 	
 	/** Used as a list of blocks that should be used for the drill particle effect */
-	private static final BlockState[] PARTICLESTATES = new BlockState[]{
+	/*private static final BlockState[] PARTICLESTATES = new BlockState[]{
 			Blocks.STONE.defaultBlockState(),
 			Blocks.GRANITE.defaultBlockState(),
 			Blocks.GRAVEL.defaultBlockState(),
@@ -257,7 +188,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	public void tickServer(){
 		if(isDummy())
 			return;
-		
+
 		if(!this.level.isAreaLoaded(getBlockPos(), 2))
 			return;
 		
@@ -382,7 +313,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	 * @param popList Set to true, to try and populate the {@link WellTileEntity#tappedIslands} list.
 	 * @return WellTileEntity or possibly null
 	 */
-	public WellTileEntity createAndGetWell(boolean popList){
+	/*public WellTileEntity createAndGetWell(boolean popList){
 		if(this.wellCache != null && this.wellCache.isRemoved()){
 			this.wellCache = null;
 		}
@@ -425,7 +356,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	}
 	
 	/** Only gets the well if it exists, does not attempt to create it. May return null. */
-	@Nullable
+	/*@Nullable
 	public WellTileEntity getWell(){
 		if(this.wellCache != null && this.wellCache.isRemoved()){
 			this.wellCache = null;
@@ -484,7 +415,7 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 	}
 	
 	/** Only returns true if the timer reached zero */
-	private boolean advanceTimer(){
+	/*private boolean advanceTimer(){
 		if(this.timer-- <= 0){
 			this.timer = 10;
 			return true;
@@ -860,5 +791,5 @@ public class DerrickTileEntity extends PoweredMultiblockBlockEntity<DerrickTileE
 			main.add(AABBUtils.FULL);
 		}
 		return main;
-	}
+	}*/
 }

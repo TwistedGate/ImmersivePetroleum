@@ -1,66 +1,61 @@
 package flaxbeard.immersivepetroleum.common.data;
 
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.mutable.Mutable;
-import org.apache.commons.lang3.mutable.MutableObject;
-
-import com.google.common.base.Preconditions;
 
 import blusunrize.immersiveengineering.api.IEProperties;
 import blusunrize.immersiveengineering.api.multiblocks.TemplateMultiblock;
 import blusunrize.immersiveengineering.data.models.NongeneratedModels;
-import blusunrize.immersiveengineering.data.models.NongeneratedModels.NongeneratedModel;
 import blusunrize.immersiveengineering.data.models.SplitModelBuilder;
+import com.google.common.base.Preconditions;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.blocks.metal.FlarestackBlock;
 import flaxbeard.immersivepetroleum.common.blocks.metal.GasGeneratorBlock;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.*;
 import flaxbeard.immersivepetroleum.common.blocks.stone.WellPipeBlock;
 import flaxbeard.immersivepetroleum.common.blocks.wooden.AutoLubricatorBlock;
 import flaxbeard.immersivepetroleum.common.fluids.IPFluid;
-import flaxbeard.immersivepetroleum.common.multiblocks.CokerUnitMultiblock;
-import flaxbeard.immersivepetroleum.common.multiblocks.DerrickMultiblock;
-import flaxbeard.immersivepetroleum.common.multiblocks.DistillationTowerMultiblock;
-import flaxbeard.immersivepetroleum.common.multiblocks.HydroTreaterMultiblock;
-import flaxbeard.immersivepetroleum.common.multiblocks.OilTankMultiblock;
-import flaxbeard.immersivepetroleum.common.multiblocks.PumpjackMultiblock;
 import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder.PartialBlockstate;
 import net.minecraftforge.client.model.generators.loaders.ObjModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class IPBlockStates extends BlockStateProvider{
 	final ExistingFileHelper exFileHelper;
 	private final NongeneratedModels nongeneratedModels;
 	public IPBlockStates(DataGenerator gen, ExistingFileHelper exFileHelper){
-		super(gen, ImmersivePetroleum.MODID, exFileHelper);
+		super(gen.getPackOutput(), ImmersivePetroleum.MODID, exFileHelper);
 		this.exFileHelper = exFileHelper;
-		this.nongeneratedModels = new NongeneratedModels(gen, exFileHelper);
+		this.nongeneratedModels = new NongeneratedModels(gen.getPackOutput(), exFileHelper);
 	}
 	
 	@Override
@@ -98,7 +93,7 @@ public class IPBlockStates extends BlockStateProvider{
 			Block wellPipe = IPContent.Blocks.WELL_PIPE.get();
 			final ResourceLocation wellPipeRL = RegistryUtils.getRegistryNameOf(wellPipe);
 			
-			ResourceLocation ieConreteTexture = ResourceUtils.ie("block/stone_decoration/concrete");
+			ResourceLocation ieConreteTexture = ResourceUtils.ie("block/stone_decoration/concrete/concrete0");
 			ResourceLocation concrete_cracked = modLoc("block/concrete_cracked");
 			ResourceLocation wellPipeTexture = modLoc("block/well_pipe_top");
 			
@@ -175,10 +170,10 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/distillationtower.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/distillationtower_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.DISTILLATIONTOWER.get(), modelNormal, idleTexture, "_idle", DistillationTowerMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.DISTILLATIONTOWER.get(), modelMirrored, idleTexture, "_mirrored_idle", DistillationTowerMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.DISTILLATIONTOWER.block().get(), modelNormal, idleTexture, "_idle", DistillationTowerMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.DISTILLATIONTOWER.block().get(), modelMirrored, idleTexture, "_mirrored_idle", DistillationTowerMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.DISTILLATIONTOWER.get(), normal, mirrored, idleTexture);
+		createMultiblock(IPContent.Multiblock.DISTILLATIONTOWER.block().get(), normal, mirrored, idleTexture);
 	}
 	
 	private void pumpjack(){
@@ -186,10 +181,10 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/pumpjack.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/pumpjack_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.PUMPJACK.get(), modelNormal, texture, "", PumpjackMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.PUMPJACK.get(), modelMirrored, texture, "_mirrored", PumpjackMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.PUMPJACK.block().get(), modelNormal, texture, "", PumpjackMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.PUMPJACK.block().get(), modelMirrored, texture, "_mirrored", PumpjackMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.PUMPJACK.get(), normal, mirrored, texture);
+		createMultiblock(IPContent.Multiblock.PUMPJACK.block().get(), normal, mirrored, texture);
 	}
 	
 	private void cokerunit(){
@@ -197,10 +192,10 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/cokerunit.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/cokerunit_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.COKERUNIT.get(), modelNormal, texture, "", CokerUnitMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.COKERUNIT.get(), modelMirrored, texture, "_mirrored", CokerUnitMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.COKERUNIT.block().get(), modelNormal, texture, "", CokerUnitMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.COKERUNIT.block().get(), modelMirrored, texture, "_mirrored", CokerUnitMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.COKERUNIT.get(), normal, mirrored, texture);
+		createMultiblock(IPContent.Multiblock.COKERUNIT.block().get(), normal, mirrored, texture);
 	}
 	
 	private void hydrotreater(){
@@ -208,10 +203,10 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/hydrotreater.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/hydrotreater_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.HYDROTREATER.get(), modelNormal, texture, "", HydroTreaterMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.HYDROTREATER.get(), modelMirrored, texture, "_mirrored", HydroTreaterMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.HYDROTREATER.block().get(), modelNormal, texture, "", HydroTreaterMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.HYDROTREATER.block().get(), modelMirrored, texture, "_mirrored", HydroTreaterMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.HYDROTREATER.get(), normal, mirrored, texture);
+		createMultiblock(IPContent.Multiblock.HYDROTREATER.block().get(), normal, mirrored, texture);
 	}
 	
 	private void derrick(){
@@ -219,10 +214,10 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/derrick.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/derrick_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.DERRICK.get(), modelNormal, texture, "", DerrickMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.DERRICK.get(), modelMirrored, texture, "_mirrored", DerrickMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.DERRICK.block().get(), modelNormal, texture, "", DerrickMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.DERRICK.block().get(), modelMirrored, texture, "_mirrored", DerrickMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.DERRICK.get(), normal, mirrored, texture);
+		createMultiblock(IPContent.Multiblock.DERRICK.block().get(), normal, mirrored, texture);
 	}
 	
 	private void oiltank(){
@@ -230,14 +225,15 @@ public class IPBlockStates extends BlockStateProvider{
 		ResourceLocation modelNormal = modLoc("models/multiblock/obj/oiltank.obj");
 		ResourceLocation modelMirrored = modLoc("models/multiblock/obj/oiltank_mirrored.obj");
 		
-		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.OILTANK.get(), modelNormal, texture, "", OilTankMultiblock.INSTANCE, false);
-		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.OILTANK.get(), modelMirrored, texture, "_mirrored", OilTankMultiblock.INSTANCE, true);
+		BlockModelBuilder normal = multiblockModel(IPContent.Multiblock.OILTANK.block().get(), modelNormal, texture, "", OilTankMultiblock.INSTANCE, false);
+		BlockModelBuilder mirrored = multiblockModel(IPContent.Multiblock.OILTANK.block().get(), modelMirrored, texture, "_mirrored", OilTankMultiblock.INSTANCE, true);
 		
-		createMultiblock(IPContent.Multiblock.OILTANK.get(), normal, mirrored, texture);
+		createMultiblock(IPContent.Multiblock.OILTANK.block().get(), normal, mirrored, texture);
 	}
 	
 	private BlockModelBuilder multiblockModel(Block block, ResourceLocation model, ResourceLocation texture, String add, TemplateMultiblock mb, boolean mirror){
 		UnaryOperator<BlockPos> transform = UnaryOperator.identity();
+		loadTemplateFor(mb);
 		if(mirror){
 			Vec3i size = mb.getSize(null);
 			transform = p -> new BlockPos(size.getX() - p.getX() - 1, p.getY(), p.getZ());
@@ -245,13 +241,13 @@ public class IPBlockStates extends BlockStateProvider{
 		final Vec3i offset = mb.getMasterFromOriginOffset();
 		
 		Stream<Vec3i> partsStream = mb.getStructure(null).stream()
-			.filter(info -> !info.state.isAir())
-			.map(info -> info.pos)
+			.filter(info -> !info.state().isAir())
+			.map(info -> info.pos())
 			.map(transform)
 			.map(p -> p.subtract(offset));
 		
 		String name = getMultiblockPath(block) + add;
-		NongeneratedModel base = nongeneratedModels.withExistingParent(name, mcLoc("block"))
+		NongeneratedModels.NongeneratedModel base = nongeneratedModels.withExistingParent(name, mcLoc("block"))
 			.customLoader(ObjModelBuilder::begin).modelLocation(model).automaticCulling(false).flipV(true).end()
 			.texture("texture", texture)
 			.texture("particle", texture)
@@ -265,7 +261,35 @@ public class IPBlockStates extends BlockStateProvider{
 		
 		return split;
 	}
-	
+
+	private void loadTemplateFor(TemplateMultiblock mb)
+	{
+		final ResourceLocation name = mb.getUniqueName();
+		if(TemplateMultiblock.SYNCED_CLIENT_TEMPLATES.containsKey(name))
+			return;
+		final String filePath = "structures/"+name.getPath()+".nbt";
+		int slash = filePath.indexOf('/');
+		String prefix = filePath.substring(0, slash);
+		ResourceLocation shortLoc = new ResourceLocation(
+				name.getNamespace(),
+				filePath.substring(slash+1)
+		);
+		try
+		{
+			final Resource resource = exFileHelper.getResource(shortLoc, PackType.SERVER_DATA, "", prefix);
+			try(final InputStream input = resource.open())
+			{
+				final CompoundTag nbt = NbtIo.readCompressed(input);
+				final StructureTemplate template = new StructureTemplate();
+				template.load(BuiltInRegistries.BLOCK.asLookup(), nbt);
+				TemplateMultiblock.SYNCED_CLIENT_TEMPLATES.put(name, template);
+			}
+		} catch(IOException e)
+		{
+			throw new RuntimeException("Failed on "+name, e);
+		}
+	}
+
 	private void autolubricator(){
 		ResourceLocation texture = modLoc("models/lubricator");
 		
@@ -313,7 +337,8 @@ public class IPBlockStates extends BlockStateProvider{
 			.with(FlarestackBlock.SLAVE, true)
 			.setModels(emptyModel);
 	}
-	
+
+
 	private void seismicsurvey(){
 		ResourceLocation texture = modLoc("block/obj/seismic_survey_tool");
 		ConfiguredModel emptyModel = new ConfiguredModel(this.models().withExistingParent("seismic_empty", ResourceUtils.ie("block/ie_empty")).texture("particle", texture));
@@ -367,6 +392,7 @@ public class IPBlockStates extends BlockStateProvider{
 		VariantBlockStateBuilder builder = getVariantBuilder(b);
 		
 		boolean[] possibleMirrorStates;
+//		boolean[] possibleSlaveStates = new boolean[]{false, true};
 		if(mirroredState != null)
 			possibleMirrorStates = new boolean[]{false, true};
 		else
@@ -386,14 +412,14 @@ public class IPBlockStates extends BlockStateProvider{
 					angleX = 0;
 				}
 				
-				ModelFile model = mirrored ? mirroredModel : masterModel;
+			ModelFile model = mirrored ? mirroredModel : masterModel;
 				PartialBlockstate partialState = builder.partialState()
-//						.with(isSlave, false)
+						//.with(isSlave, slave)
 						.with(facing, dir);
-				
+
 				if(mirroredState != null)
 					partialState = partialState.with(mirroredState, mirrored);
-				
+
 				partialState.setModels(new ConfiguredModel(model, angleX, angleY, true));
 			}
 	}

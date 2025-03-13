@@ -1,18 +1,6 @@
 package flaxbeard.immersivepetroleum.api.reservoir;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.ImmutableList;
-
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.ReservoirRegionDataStorage;
 import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
@@ -27,9 +15,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * This takes care of dealing with generating, storing and caching (Faster access for regulary queried positions) reservoir islands.
@@ -209,7 +202,7 @@ public class ReservoirHandler{
 	public static void initGenerator(WorldGenLevel world){
 		if(generator == null || world.getSeed() != lastSeed){
 			lastSeed = world.getSeed();
-			generator = new PerlinSimplexNoise(new WorldgenRandom(new SingleThreadedRandomSource(lastSeed)), ImmutableList.of(0));
+			generator = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(lastSeed)), ImmutableList.of(0));
 			//generator = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(lastSeed)), ImmutableList.of(0));
 		}
 	}

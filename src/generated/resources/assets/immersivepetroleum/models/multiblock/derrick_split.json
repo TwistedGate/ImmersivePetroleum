@@ -14,6 +14,10 @@
     }
   },
   "loader": "immersiveengineering:basic_split",
+  "textures": {
+    "particle": "immersivepetroleum:multiblock/derrick",
+    "texture": "immersivepetroleum:multiblock/derrick"
+  },
   "split_parts": [
     [
       -1,

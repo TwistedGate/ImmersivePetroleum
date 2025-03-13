@@ -1,34 +1,9 @@
 package flaxbeard.immersivepetroleum.common.multiblocks;
 
-import static flaxbeard.immersivepetroleum.client.render.DerrickRenderer.DRILL;
-import static flaxbeard.immersivepetroleum.client.render.DerrickRenderer.PIPE_SEGMENT;
-import static flaxbeard.immersivepetroleum.client.render.DerrickRenderer.PIPE_TOP;
-
-import java.util.List;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.PoseStack.Pose;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-
-import blusunrize.immersiveengineering.api.ApiUtils;
-import blusunrize.immersiveengineering.api.multiblocks.ClientMultiblocks;
-import flaxbeard.immersivepetroleum.client.utils.MCUtil;
-import flaxbeard.immersivepetroleum.common.IPContent;
-import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.data.ModelData;;
-
-public class DerrickMultiblock extends IPTemplateMultiblock{
-	public static final DerrickMultiblock INSTANCE = new DerrickMultiblock();
+@Deprecated (forRemoval = true)
+public class DerrickMultiblock //extends IPTemplateMultiblock
+{
+/*	public static final DerrickMultiblock INSTANCE = new DerrickMultiblock();
 	
 	public DerrickMultiblock(){
 		super(ResourceUtils.ip("multiblocks/derrick"),
@@ -72,5 +47,5 @@ public class DerrickMultiblock extends IPTemplateMultiblock{
 				solid.putBulkData(last, quad, 1.0F, 1.0F, 1.0F, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 			}
 		}
-	}
+	}*/
 }

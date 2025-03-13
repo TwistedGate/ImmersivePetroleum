@@ -1,21 +1,20 @@
 package flaxbeard.immersivepetroleum.common.fluids;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import flaxbeard.immersivepetroleum.common.CommonEventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NapalmFluid extends IPFluid{
 	
@@ -63,7 +62,7 @@ public class NapalmFluid extends IPFluid{
 		public void onPlace(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState oldState, boolean isMoving){
 			for(Direction facing:Direction.values()){
 				BlockPos notifyPos = pos.relative(facing);
-				if(world.getBlockState(notifyPos).getBlock() instanceof FireBlock || world.getBlockState(notifyPos).getMaterial() == Material.FIRE){
+				if(world.getBlockState(notifyPos).getBlock() instanceof FireBlock || world.getBlockState(notifyPos).is(BlockTags.FIRE)){
 					world.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
 					break;
 				}
@@ -73,7 +72,7 @@ public class NapalmFluid extends IPFluid{
 		
 		@Override
 		public void neighborChanged(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Block blockIn, @Nonnull BlockPos fromPos, boolean isMoving){
-			if(world.getBlockState(fromPos).getBlock() instanceof FireBlock || world.getBlockState(fromPos).getMaterial() == Material.FIRE){
+			if(world.getBlockState(fromPos).getBlock() instanceof FireBlock || world.getBlockState(fromPos).is(BlockTags.FIRE)){
 				ResourceLocation d = world.dimension().location();
 				if(!CommonEventHandler.napalmPositions.containsKey(d) || !CommonEventHandler.napalmPositions.get(d).contains(fromPos)){
 					processFire(this.entry, world, pos);

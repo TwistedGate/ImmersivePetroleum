@@ -1,24 +1,14 @@
 package flaxbeard.immersivepetroleum.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
 import blusunrize.immersiveengineering.client.ClientUtils;
 import blusunrize.immersiveengineering.client.ItemOverlayUtils;
 import blusunrize.immersiveengineering.client.utils.GuiHelper;
-import blusunrize.immersiveengineering.common.items.BuzzsawItem;
-import blusunrize.immersiveengineering.common.items.ChemthrowerItem;
-import blusunrize.immersiveengineering.common.items.DrillItem;
-import blusunrize.immersiveengineering.common.items.IEShieldItem;
-import blusunrize.immersiveengineering.common.items.RailgunItem;
-import blusunrize.immersiveengineering.common.items.RevolverItem;
-import blusunrize.immersiveengineering.common.items.SpeedloaderItem;
+import blusunrize.immersiveengineering.common.items.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
@@ -38,6 +28,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
@@ -60,6 +51,10 @@ import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class ClientEventHandler{
 	
@@ -96,18 +91,18 @@ public class ClientEventHandler{
 						for(int z = -16;z <= 16;z++){
 							for(int y = -16;y <= 16;y++){
 								BlockPos pos = base.offset(x, y, z);
-								BlockEntity te = mc.player.level.getBlockEntity(pos);
+								BlockEntity te = mc.player.level().getBlockEntity(pos);
 								
-								if(te != null){
-									ILubricationHandler<BlockEntity> handler = LubricatedHandler.getHandlerForTile(te);
+								if(te instanceof IMultiblockBE<?> multiblockBE){
+									ILubricationHandler handler = LubricatedHandler.getHandlerForTile(multiblockBE.getHelper());
 									if(handler != null){
-										Tuple<BlockPos, Direction> target = handler.getGhostBlockPosition(mc.player.level, te);
+										Tuple<BlockPos, Direction> target = handler.getGhostBlockPosition(mc.player.level(), multiblockBE.getHelper());
 										if(target != null){
 											BlockPos targetPos = target.getA();
 											Direction targetFacing = target.getB();
-											BlockState targetState = mc.player.level.getBlockState(targetPos);
-											BlockState targetStateUp = mc.player.level.getBlockState(targetPos.above());
-											if(targetState.getMaterial().isReplaceable() && targetStateUp.getMaterial().isReplaceable()){
+											BlockState targetState = mc.player.level().getBlockState(targetPos);
+											BlockState targetStateUp = mc.player.level().getBlockState(targetPos.above());
+											if(targetState.is(BlockTags.REPLACEABLE) && targetStateUp.is(BlockTags.REPLACEABLE)){
 												VertexConsumer vBuilder = buffer.getBuffer(RenderType.translucent());
 												matrix.pushPose();
 												{
@@ -153,7 +148,7 @@ public class ClientEventHandler{
 			List<Component> debugOut = new ArrayList<>();
 			
 			if(!debugOut.isEmpty()){
-				PoseStack matrix = event.getPoseStack();
+				PoseStack matrix = event.getGuiGraphics().pose();
 				matrix.pushPose();
 				MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 				for(int i = 0;i < debugOut.size();i++){
@@ -165,7 +160,7 @@ public class ClientEventHandler{
 					GuiHelper.drawColouredRect(1, 1 + yOff, w + 1, 10, 0xAF_000000, buffer, matrix);
 					buffer.endBatch();
 					// Draw string without shadow
-					ClientUtils.font().draw(matrix, debugOut.get(i), 2, 2 + yOff, -1);
+					event.getGuiGraphics().drawString(ClientUtils.font(), debugOut.get(i), 2, 2 + yOff, -1, false);
 					matrix.popPose();
 				}
 				matrix.popPose();
@@ -193,7 +188,7 @@ public class ClientEventHandler{
 									if(text[i] != null){
 										int fx = event.getWindow().getGuiScaledWidth() / 2 + 8;
 										int fy = event.getWindow().getGuiScaledHeight() / 2 + 8 + i * font.lineHeight;
-										font.drawShadow(event.getPoseStack(), text[i], fx, fy, col);
+										event.getGuiGraphics().drawString(font, text[i], fx, fy, col);
 									}
 								}
 							}
@@ -208,7 +203,7 @@ public class ClientEventHandler{
 	public void onRenderOverlayPost(RenderGuiOverlayEvent.Post event){
 		if(MCUtil.getPlayer() != null && event.getOverlay().id() == VanillaGuiOverlay.HOTBAR.id()){
 			Player player = MCUtil.getPlayer();
-			PoseStack matrix = event.getPoseStack();
+			PoseStack matrix = event.getGuiGraphics().pose();
 			
 			if(player.getVehicle() instanceof MotorboatEntity motorboat){
 				int offset = 0;
@@ -257,7 +252,7 @@ public class ClientEventHandler{
 							int amount = fuel.getAmount();
 							float angle = 83 - (166 * amount / capacity);
 							matrix.pushPose();
-							matrix.mulPose(new Quaternion(0, 0, angle, true));
+							matrix.mulPose(Axis.ZP.rotationDegrees(angle));
 							GuiHelper.drawTexturedRect(builder, matrix, 6, -2, 24, 4, 256f, 91, 123, 80, 87);
 							matrix.popPose();
 							matrix.translate(23, 37, 0);
@@ -289,7 +284,7 @@ public class ClientEventHandler{
 							};
 							int w = 3, h = 3;
 							for(int i = 0;i < array.length;i++){
-								font.drawShadow(matrix, array[i], w, h + (9 * i), -1);
+								event.getGuiGraphics().drawString(font, array[i], w, h + (9 * i), -1);
 							}
 						}
 						matrix.popPose();

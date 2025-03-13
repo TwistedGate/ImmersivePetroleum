@@ -1,9 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import blusunrize.immersiveengineering.ImmersiveEngineering;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
 import flaxbeard.immersivepetroleum.api.crafting.FlarestackHandler;
@@ -11,12 +7,12 @@ import flaxbeard.immersivepetroleum.client.particle.IPParticleTypes;
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
 import flaxbeard.immersivepetroleum.common.blocks.ticking.IPCommonTickableTile;
 import flaxbeard.immersivepetroleum.common.util.Utils;
+import flaxbeard.immersivepetroleum.common.util.damageSources.IPDamageSources;
 import flaxbeard.immersivepetroleum.common.util.sounds.IPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.player.Player;
@@ -33,8 +29,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 public class FlarestackTileEntity extends IPTileEntityBase implements IPCommonTickableTile, IEBlockInterfaces.ISoundBE{
-	static final DamageSource FLARESTACK = new DamageSource("ipFlarestack").bypassArmor().setIsFire();
+
 	
 	protected boolean isRedstoneInverted;
 	protected boolean isActive;
@@ -185,7 +184,7 @@ public class FlarestackTileEntity extends IPTileEntityBase implements IPCommonTi
 				list.forEach(e -> {
 					if(!e.fireImmune()){
 						e.setSecondsOnFire(15);
-						e.hurt(FLARESTACK, 6.0F * (this.drained / (float) this.tank.getCapacity()));
+						e.hurt(IPDamageSources.flarestack(this.level), 6.0F * (this.drained / (float) this.tank.getCapacity()));
 					}
 				});
 				

@@ -2,7 +2,7 @@ package flaxbeard.immersivepetroleum.common;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import flaxbeard.immersivepetroleum.common.multiblocks.IPTemplateMultiblock;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;

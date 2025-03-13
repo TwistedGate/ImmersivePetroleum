@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/cokerunit"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/derrick"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/distillation_tower"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/distillation_tower_active"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/hydrotreater"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/oiltank"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:multiblock/pumpjack_base"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:models/lubricator"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:models/pumpjack_armature"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "immersivepetroleum:projectors/projector"
+    }
+  ]
+}

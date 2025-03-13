@@ -1,15 +1,7 @@
 package flaxbeard.immersivepetroleum.common;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import blusunrize.immersiveengineering.common.blocks.generic.MultiblockPartBlockEntity;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelper;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler;
 import flaxbeard.immersivepetroleum.api.crafting.LubricatedHandler.ILubricationHandler;
@@ -29,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
@@ -55,6 +48,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.*;
+
 public class CommonEventHandler{
 	@SubscribeEvent
 	public void onSave(LevelEvent.Save event){
@@ -79,7 +74,9 @@ public class CommonEventHandler{
 	
 	@SubscribeEvent
 	public void handleBoatImmunity(LivingAttackEvent event){
-		if(event.getSource() == DamageSource.LAVA || event.getSource() == DamageSource.ON_FIRE || event.getSource() == DamageSource.IN_FIRE){
+		Level level = event.getEntity().level();
+		DamageSources dmg = level.damageSources();
+		if(event.getSource() == dmg.lava() || event.getSource() == dmg.onFire() || event.getSource() == dmg.inFire()){
 			LivingEntity entity = event.getEntity();
 			if(entity.getVehicle() instanceof MotorboatEntity boat){
 				if(boat.isFireproof){
@@ -119,7 +116,7 @@ public class CommonEventHandler{
 		if(event.getEntityMounting() instanceof LivingEntity living && event.getEntityBeingMounted() instanceof MotorboatEntity boat){
 			if(event.isDismounting()){
 				if(boat.isFireproof){
-					FluidState fluidstate = event.getLevel().getBlockState(new BlockPos(boat.position().add(0.5, 0, 0.5))).getFluidState();
+					FluidState fluidstate = event.getLevel().getBlockState(BlockPos.containing(boat.position().add(0.5, 0, 0.5))).getFluidState();
 					if(fluidstate != Fluids.EMPTY.defaultFluidState() && fluidstate.is(FluidTags.LAVA)){
 						living.addEffect(new MobEffectInstance(IPEffects.ANTI_DISMOUNT_FIRE.get(), 1, 0, false, false));
 					}
@@ -142,43 +139,46 @@ public class CommonEventHandler{
 		for(LubricatedTileInfo info:LubricatedHandler.lubricatedTiles){
 			if(info.world == world.dimension() && world.isAreaLoaded(info.pos, 0)){
 				BlockEntity te = world.getBlockEntity(info.pos);
-				ILubricationHandler lubeHandler = LubricatedHandler.getHandlerForTile(te);
-				if(lubeHandler != null){
-					if(lubeHandler.isMachineEnabled(world, te)){
-						if(world.isClientSide){
-							lubeHandler.lubricateClient((ClientLevel) world, info.lubricant, info.ticks, te);
-						}else{
-							lubeHandler.lubricateServer((ServerLevel) world, info.lubricant, info.ticks, te);
+				if (te instanceof IMultiblockBEHelper<?> helper)
+				{
+					ILubricationHandler lubeHandler = LubricatedHandler.getHandlerForTile(helper);
+					if(lubeHandler != null){
+						if(lubeHandler.isMachineEnabled(world, helper)){
+							if(world.isClientSide){
+								lubeHandler.lubricateClient((ClientLevel) world, info.lubricant, info.ticks, helper);
+							}else{
+								lubeHandler.lubricateServer((ServerLevel) world, info.lubricant, info.ticks, helper);
+							}
 						}
-					}
-					
-					if(world.isClientSide){
-						if(te instanceof MultiblockPartBlockEntity<?> part){
-							
-							Vec3i size = lubeHandler.getStructureDimensions();
-							int numBlocks = (int) (size.getX() * size.getY() * size.getZ() * 0.25F);
-							for(int i = 0;i < numBlocks;i++){
-								BlockPos pos = part.getBlockPosForPos(new BlockPos(size.getX() * random.nextFloat(), size.getY() * random.nextFloat(), size.getZ() * random.nextFloat()));
-								
-								if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockEntity(pos) instanceof MultiblockPartBlockEntity part2 && part2.master() == part.master()){
-									for(Direction facing:Direction.Plane.HORIZONTAL){
-										if(world.random.nextInt(30) == 0){
-											Vec3i direction = facing.getNormal();
-											
-											float x = (pos.getX() + .5f) + (direction.getX() * .65f);
-											float y = pos.getY() + 1;
-											float z = (pos.getZ() + .5f) + (direction.getZ() * .65f);
-											
-											world.addParticle(ParticleTypes.FALLING_HONEY, x, y, z, 0, 0, 0);
+
+						if(world.isClientSide){
+							if(te instanceof IMultiblockBE<?> part){
+
+								Vec3i size = lubeHandler.getStructureDimensions();
+								int numBlocks = (int) (size.getX() * size.getY() * size.getZ() * 0.25F);
+								for(int i = 0;i < numBlocks;i++){
+									BlockPos pos = part.getHelper().getContext().getLevel().toAbsolute(BlockPos.containing(size.getX() * random.nextFloat(), size.getY() * random.nextFloat(), size.getZ() * random.nextFloat()));
+
+									if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockEntity(pos) instanceof IMultiblockBE<?> part2 && part2.getHelper().getContext().getState() == part.getHelper().getContext().getState()){
+										for(Direction facing:Direction.Plane.HORIZONTAL){
+											if(world.random.nextInt(30) == 0){
+												Vec3i direction = facing.getNormal();
+
+												float x = (pos.getX() + .5f) + (direction.getX() * .65f);
+												float y = pos.getY() + 1;
+												float z = (pos.getZ() + .5f) + (direction.getZ() * .65f);
+
+												world.addParticle(ParticleTypes.FALLING_HONEY, x, y, z, 0, 0, 0);
+											}
 										}
 									}
 								}
 							}
 						}
+
+						if(info.ticks-- <= 0)
+							toRemove.add(info);
 					}
-					
-					if(info.ticks-- <= 0)
-						toRemove.add(info);
 				}
 			}
 		}
@@ -212,11 +212,11 @@ public class CommonEventHandler{
 	
 	@SubscribeEvent
 	public void livingDeath(LivingDeathEvent event){
-		if(event.getEntity() instanceof Skeleton skelly && !skelly.level.isClientSide){
+		if(event.getEntity() instanceof Skeleton skelly && !skelly.level().isClientSide){
 			DamageSource src = event.getSource();
-			if(src.getEntity() instanceof Player player && !player.level.isClientSide){
-				if(player.getVehicle() instanceof MotorboatEntity motorboat && !motorboat.level.isClientSide){
-					if(src.isProjectile() && motorboat.isSpinningFastEnough() && motorboat.hasRudders){
+			if(src.getEntity() instanceof Player player && !player.level().isClientSide){
+				if(player.getVehicle() instanceof MotorboatEntity motorboat && !motorboat.level().isClientSide){
+					if(src.isIndirect() && motorboat.isSpinningFastEnough() && motorboat.hasRudders){
 						Utils.unlockIPAdvancement(player, "main/rudders");
 					}
 				}
@@ -233,31 +233,29 @@ public class CommonEventHandler{
 			return;
 		
 		ResourceLocation d = event.level.dimension().location();
-		
-		switch(event.phase){
-			case START:{
-				if(napalmPositions.get(d) != null){
+
+		switch (event.phase) {
+			case START -> {
+				if (napalmPositions.get(d) != null) {
 					List<BlockPos> trList = toRemove.computeIfAbsent(d, f -> new ArrayList<>());
-					
+
 					new ArrayList<>(napalmPositions.get(d)).forEach(pos -> {
 						BlockState state = event.level.getBlockState(pos);
-						if(state.getBlock() instanceof LiquidBlock fluidBlock && fluidBlock == IPContent.Fluids.NAPALM.block().get()){
+						if (state.getBlock() instanceof LiquidBlock fluidBlock && fluidBlock == IPContent.Fluids.NAPALM.block().get()) {
 							NapalmFluid.processFire(IPContent.Fluids.NAPALM, event.level, pos);
 						}
 						trList.add(pos);
 					});
 				}
-				
-				break;
+
 			}
-			case END:{
-				if(toRemove.get(d) != null && napalmPositions.get(d) != null){
+			case END -> {
+				if (toRemove.get(d) != null && napalmPositions.get(d) != null) {
 					List<BlockPos> list = new ArrayList<>(toRemove.get(d));
 					napalmPositions.get(d).removeAll(list);
 					toRemove.get(d).clear();
 				}
-				
-				break;
+
 			}
 		}
 	}

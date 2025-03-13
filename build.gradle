@@ -17,18 +17,20 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
 //----------------------------------------------------------------------------------------------------------------------
 
-version = '4.2.0-29'
+version = '4.2.0-30'
 group = 'flaxbeard.immersivepetroleum'
-archivesBaseName = 'ImmersivePetroleum-1.19.2'
+archivesBaseName = 'ImmersivePetroleum-1.20.1'
 
 repositories {
 	maven {	name = "BlameJared";	url = "https://maven.blamejared.com/" }			// IE & CT Files
 	maven { name = "DVS1 Maven FS"; url = "https://dvs1.progwml6.com/files/maven" }	// JEI & Tinkers Files
 	maven { name = "CurseMaven";	url = 'https://cfa2.cursemaven.com' }			// Needed for PNC
-	maven { // CC-Tweaked
-		url 'https://squiddev.cc/maven/'
-		content {
-			includeGroup 'org.squiddev'
+	repositories { //CC-Tweaked
+		maven {
+			url "https://squiddev.cc/maven/"
+			content {
+				includeGroup("cc.tweaked")
+			}
 		}
 	}
 	
@@ -124,13 +126,15 @@ dependencies {
 	//implementation fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67")
 	//implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:3913972")
 
-	compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:${version_ct}")
+	compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.20.1:${version_ct}")
 	
 	runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}-forge:${version_jei}")
 	compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}-forge-api:${version_jei}")
 	compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}-common-api:${version_jei}")
-	
-    compileOnly fg.deobf("org.squiddev:cc-tweaked-${version_minecraft}:${version_cctweaked}")
+
+	compileOnly("cc.tweaked:cc-tweaked-${version_minecraft}-core-api:${version_cctweaked}")
+	compileOnly(fg.deobf("cc.tweaked:cc-tweaked-${version_minecraft}-forge-api:${version_cctweaked}"))
+	runtimeOnly(fg.deobf("cc.tweaked:cc-tweaked-${version_minecraft}-forge:${version_cctweaked}"))
 }
 
 def customGradle = rootProject.file('custom.gradle');

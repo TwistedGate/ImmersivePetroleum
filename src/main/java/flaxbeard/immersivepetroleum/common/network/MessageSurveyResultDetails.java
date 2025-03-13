@@ -1,16 +1,5 @@
 package flaxbeard.immersivepetroleum.common.network;
 
-import static flaxbeard.immersivepetroleum.common.util.survey.SurveyScan.SCAN_RADIUS;
-import static flaxbeard.immersivepetroleum.common.util.survey.SurveyScan.SCAN_SIZE;
-
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.client.gui.SeismicSurveyScreen;
@@ -26,6 +15,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent.Context;
+
+import java.util.*;
+import java.util.function.Supplier;
+
+import static flaxbeard.immersivepetroleum.common.util.survey.SurveyScan.SCAN_RADIUS;
+import static flaxbeard.immersivepetroleum.common.util.survey.SurveyScan.SCAN_SIZE;
 
 public class MessageSurveyResultDetails{
 	
@@ -65,7 +60,7 @@ public class MessageSurveyResultDetails{
 		public void process(Supplier<Context> context){
 			context.get().enqueueWork(() -> {
 				final ServerPlayer sPlayer = Objects.requireNonNull(context.get().getSender());
-				final ServerLevel sLevel = sPlayer.getLevel();
+				final ServerLevel sLevel = sPlayer.serverLevel();
 				
 				if(sLevel.isAreaLoaded(new BlockPos(this.x, 0, this.z), SCAN_RADIUS)){
 					final BitSet set = compileBitSet(sLevel);
@@ -89,7 +84,7 @@ public class MessageSurveyResultDetails{
 							return res.contains(x, z);
 						}).findFirst();
 						
-						ReservoirIsland nearbyIsland = optional.isPresent() ? optional.get() : null;
+						ReservoirIsland nearbyIsland = optional.orElse(null);
 						if(nearbyIsland == null){
 							nearbyIsland = ReservoirHandler.getIslandNoCache(level, new ColumnPos(x, z));
 							

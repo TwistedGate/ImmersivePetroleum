@@ -1,5 +1,6 @@
 {
   "type": "immersiveengineering:shaped_fluid",
+  "category": "misc",
   "key": {
     "B": {
       "type": "immersiveengineering:fluid",
@@ -24,5 +25,6 @@
   "result": {
     "count": 8,
     "item": "immersivepetroleum:asphalt"
-  }
+  },
+  "show_notification": true
 }

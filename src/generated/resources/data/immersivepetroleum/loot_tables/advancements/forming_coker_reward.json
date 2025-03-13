@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:empty",
+  "type": "minecraft:advancement_reward",
   "pools": [
     {
       "bonus_rolls": 0.0,
@@ -23,5 +23,6 @@
       "name": "cookie_for_your_trouble",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "immersivepetroleum:advancements/forming_coker_reward"
 }

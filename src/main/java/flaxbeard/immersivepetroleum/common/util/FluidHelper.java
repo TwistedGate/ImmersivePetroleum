@@ -1,8 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import blusunrize.immersiveengineering.api.fluid.IFluidPipe;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +11,9 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class FluidHelper{
 	
@@ -68,7 +68,7 @@ public class FluidHelper{
 	
 	/**
 	 * Originally in IE as
-	 * {@link blusunrize.immersiveengineering.common.util.Utils#fillFluidContainer(IFluidHandler, ItemStack, ItemStack, PlayerEntity)}
+	 * {@link blusunrize.immersiveengineering.common.util.Utils#fillFluidContainer(IFluidHandler, ItemStack, ItemStack, Player)}
 	 */
 	public static ItemStack fillFluidContainer(IFluidHandler handler, ItemStack containerIn, ItemStack containerOut, @Nullable Player player){
 		if(containerIn == null || containerIn.isEmpty())
@@ -91,7 +91,7 @@ public class FluidHelper{
 	
 	/**
 	 * FluidStack based version of
-	 * {@link blusunrize.immersiveengineering.common.util.Utils#fillFluidContainer(IFluidHandler, ItemStack, ItemStack, PlayerEntity)} minus the
+	 * {@link blusunrize.immersiveengineering.common.util.Utils#fillFluidContainer(IFluidHandler, ItemStack, ItemStack, Player)} minus the
 	 * useless bits :D
 	 */
 	public static ItemStack fillFluidContainer(IFluidTank tank, FluidStack fluid, ItemStack containerIn, ItemStack containerOut){
@@ -117,7 +117,7 @@ public class FluidHelper{
 	}
 	
 	/**
-	 * FluidStack based version of {@link net.minecraftforge.fluids.FluidUtil#tryFillContainer(ItemStack, IFluidHandler, int, PlayerEntity, boolean)}
+	 * FluidStack based version of {@link net.minecraftforge.fluids.FluidUtil#tryFillContainer(ItemStack, IFluidHandler, int, Player, boolean)}
 	 * minus the useless bits :D
 	 */
 	static FluidActionResult tryFillContainer(IFluidTank tank, FluidStack fluidSource, @Nonnull ItemStack container, boolean doFill){

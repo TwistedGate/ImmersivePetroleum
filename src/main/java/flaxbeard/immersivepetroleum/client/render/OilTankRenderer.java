@@ -1,20 +1,15 @@
 package flaxbeard.immersivepetroleum.client.render;
 
-import javax.annotation.Nonnull;
-
+import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockBlockEntityMaster;
+import blusunrize.immersiveengineering.client.render.tile.IEBlockEntityRenderer;
+import blusunrize.immersiveengineering.client.utils.GuiHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-
-import blusunrize.immersiveengineering.client.utils.GuiHelper;
+import com.mojang.math.Axis;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.OilTankTileEntity;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.OilTankTileEntity.Port;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.OilTankTileEntity.PortState;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.OilTankLogic;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,36 +17,39 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import org.joml.Matrix4f;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = ImmersivePetroleum.MODID, bus = Bus.MOD)
-public class OilTankRenderer implements BlockEntityRenderer<OilTankTileEntity>{
+public class OilTankRenderer extends IEBlockEntityRenderer<MultiblockBlockEntityMaster<OilTankLogic.State>> {
 	@Override
-	public boolean shouldRenderOffScreen(@Nonnull OilTankTileEntity te){
+	public boolean shouldRenderOffScreen(@Nonnull MultiblockBlockEntityMaster<OilTankLogic.State> te){
 		return true;
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void render(OilTankTileEntity te, float partialTicks, @Nonnull PoseStack matrix, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay){
-		if(!te.formed || te.isDummy() || !te.getLevelNonnull().hasChunkAt(te.getBlockPos()))
+	public void render(MultiblockBlockEntityMaster<OilTankLogic.State> te, float partialTicks, @Nonnull PoseStack matrix, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay){
+		if(te.isRemoved() || !te.getLevel().hasChunkAt(te.getBlockPos()))
 			return;
 		
 		combinedOverlay = OverlayTexture.NO_OVERLAY;
 		
 		matrix.pushPose();
 		{
-			switch(te.getFacing()){
+			switch(te.getHelper().getContext().getLevel().getOrientation().front()){
 				case EAST -> {
-					matrix.mulPose(new Quaternion(0, 270F, 0, true));
+					matrix.mulPose(Axis.YP.rotationDegrees(270F));
 					matrix.translate(0, 0, -1);
 				}
 				case SOUTH -> {
-					matrix.mulPose(new Quaternion(0F, 180F, 0F, true));
+					matrix.mulPose(Axis.YP.rotationDegrees(180F));
 					matrix.translate(-1, 0, -1);
 				}
 				case WEST -> {
-					matrix.mulPose(new Quaternion(0, 90F, 0, true));
+					matrix.mulPose(Axis.YP.rotationDegrees(90F));
 					matrix.translate(-1, 0, 0);
 				}
 				default -> {
@@ -71,54 +69,48 @@ public class OilTankRenderer implements BlockEntityRenderer<OilTankTileEntity>{
 				builder.vertex(mat, 0F, 1F, 0.0F).color(34, 34, 34, 255).endVertex();
 				builder.vertex(mat, 0F, -0.5F, 0.0F).color(34, 34, 34, 255).endVertex();
 				
-				OilTankTileEntity master = te.master();
-				if(master != null){
-					FluidStack fs = master.tank.getFluid();
+					FluidStack fs = te.getHelper().getState().tank.getFluid();
 					if(!fs.isEmpty()){
 						matrix.pushPose();
 						{
 							matrix.translate(0.25, 0.875, 0.0025F);
 							matrix.scale(0.0625F, -0.0625F, 0.0625F);
 							
-							float h = fs.getAmount() / (float) master.tank.getCapacity();
+							float h = fs.getAmount() / (float) te.getHelper().getState().tank.getCapacity();
 							GuiHelper.drawRepeatedFluidSprite(buffer.getBuffer(RenderType.solid()), matrix, fs, 0, 0 + (1 - h) * 16, 16, h * 16);
 						}
 						matrix.popPose();
 					}
-				}
+
 			}
 			matrix.popPose();
 			
 			matrix.pushPose();
 			{
 				// Dynamic Fluid IO Ports
-				if(te.getIsMirrored()){
-					OilTankTileEntity master = te.master();
-					if(master != null){
-						for(Port port:Port.DYNAMIC_PORTS){
+				if(te.getHelper().getContext().getLevel().getOrientation().mirrored()){
+						for(OilTankLogic.Port port:OilTankLogic.Port.DYNAMIC_PORTS){
 							matrix.pushPose();
 							{
-								BlockPos p = port.posInMultiblock.subtract(te.posInMultiblock);
-								matrix.mulPose(new Quaternion(0, 180F, 0, true));
+								BlockPos p = port.posInMultiblock.posInMultiblock().subtract(te.getHelper().getPositionInMB());
+								matrix.mulPose(Axis.YP.rotationDegrees(180F));
 								matrix.translate(p.getX() - 1, p.getY(), -p.getZ() - 1);
-								quad(matrix, buffer, master.getPortStateFor(port), port.posInMultiblock.getX() == 4, combinedLight, combinedOverlay);
+								quad(matrix, buffer, te.getHelper().getState().getPortStateFor(port), port.posInMultiblock.posInMultiblock().getX() == 4, combinedLight, combinedOverlay);
 							}
 							matrix.popPose();
 						}
-					}
+
 				}else{
-					OilTankTileEntity master = te.master();
-					if(master != null){
-						for(Port port:Port.DYNAMIC_PORTS){
+						for(OilTankLogic.Port port:OilTankLogic.Port.DYNAMIC_PORTS){
 							matrix.pushPose();
 							{
-								BlockPos p = port.posInMultiblock.subtract(te.posInMultiblock);
+								BlockPos p = port.posInMultiblock.posInMultiblock().subtract(te.getHelper().getPositionInMB());
 								matrix.translate(p.getX(), p.getY(), p.getZ());
-								quad(matrix, buffer, master.getPortStateFor(port), port.posInMultiblock.getX() == 4, combinedLight, combinedOverlay);
+								quad(matrix, buffer, te.getHelper().getState().getPortStateFor(port), port.posInMultiblock.posInMultiblock().getX() == 4, combinedLight, combinedOverlay);
 							}
 							matrix.popPose();
 						}
-					}
+
 				}
 			}
 			matrix.popPose();
@@ -126,11 +118,11 @@ public class OilTankRenderer implements BlockEntityRenderer<OilTankTileEntity>{
 		matrix.popPose();
 	}
 	
-	public void quad(PoseStack matrix, MultiBufferSource buffer, PortState portState, boolean flip, int combinedLight, int combinedOverlay){
+	public void quad(PoseStack matrix, MultiBufferSource buffer, OilTankLogic.PortState portState, boolean flip, int combinedLight, int combinedOverlay){
 		Matrix4f mat = matrix.last().pose();
 		VertexConsumer builder = buffer.getBuffer(IPRenderTypes.OIL_TANK);
 		
-		boolean input = portState == PortState.INPUT;
+		boolean input = portState == OilTankLogic.PortState.INPUT;
 		float u0 = input ? 0.0F : 0.1F, v0 = 0.5F;
 		float u1 = u0 + 0.1F, v1 = v0 + 0.1F;
 		if(flip){

@@ -1,14 +1,13 @@
 package flaxbeard.immersivepetroleum.client.gui.elements;
 
-import java.util.List;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import blusunrize.immersiveengineering.client.gui.info.EnergyInfoArea;
 import blusunrize.immersiveengineering.client.gui.info.InfoArea;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.List;
 
 /**
  * Overengineered version of {@link EnergyInfoArea}
@@ -28,11 +27,10 @@ public class EnergyDisplay extends InfoArea{
 	}
 	
 	@Override
-	public void draw(PoseStack transform){
+	public void draw(GuiGraphics guiGraphics){
 		final int height = this.area.getHeight();
 		int stored = (int) (height * (this.storage.getEnergyStored() / (float) this.storage.getMaxEnergyStored()));
-		fillGradient(transform,
-			this.area.getX(), this.area.getY() + (height - stored),
+		guiGraphics.fillGradient(this.area.getX(), this.area.getY() + (height - stored),
 			this.area.getX() + this.area.getWidth(), this.area.getY() + this.area.getHeight(),
 			0xFFB51500, 0xFF600B00
 		);

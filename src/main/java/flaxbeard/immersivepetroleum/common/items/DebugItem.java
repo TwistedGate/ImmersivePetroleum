@@ -1,10 +1,5 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirType;
@@ -27,7 +22,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
@@ -38,6 +32,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Locale;
 
 public class DebugItem extends IPItemBase{
 	public enum Modes{
@@ -83,9 +81,9 @@ public class DebugItem extends IPItemBase{
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 	
-	@Override
+	/*@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab group, @Nonnull NonNullList<ItemStack> items){
-	}
+	}*/
 	
 	@Override
 	@Nonnull
@@ -244,7 +242,7 @@ public class DebugItem extends IPItemBase{
 	}
 	
 	public void onSpeedboatClick(MotorboatEntity speedboatEntity, Player player, ItemStack debugStack){
-		if(speedboatEntity.level.isClientSide || DebugItem.getMode(debugStack) != Modes.INFO_SPEEDBOAT){
+		if(speedboatEntity.level().isClientSide || DebugItem.getMode(debugStack) != Modes.INFO_SPEEDBOAT){
 			return;
 		}
 		

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "G": {
       "tag": "forge:glass"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:auto_lubricator"
-  }
+  },
+  "show_notification": true
 }

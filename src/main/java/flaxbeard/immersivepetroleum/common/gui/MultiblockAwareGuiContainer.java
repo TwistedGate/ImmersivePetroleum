@@ -1,54 +1,46 @@
 package flaxbeard.immersivepetroleum.common.gui;
 
-import javax.annotation.Nonnull;
-
-import blusunrize.immersiveengineering.common.blocks.generic.MultiblockPartBlockEntity;
 import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
-import blusunrize.immersiveengineering.common.gui.IEBaseContainerOld;
-import net.minecraft.core.BlockPos;
+import blusunrize.immersiveengineering.common.gui.IEContainerMenu;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.phys.AABB;
 
 /**
  * @author TwistedGate © 2021
  */
 @SuppressWarnings("deprecation")
 // TODO Replace IEBaseContainerOld as soon as possible
-public class MultiblockAwareGuiContainer<T extends MultiblockPartBlockEntity<T>> extends IEBaseContainerOld<T>{
-	static final Vec3i ONE = new Vec3i(1, 1, 1);
+public class MultiblockAwareGuiContainer extends IEContainerMenu {
+	//static final Vec3i ONE = new Vec3i(1, 1, 1);
 	
-	protected BlockPos templateSize;
-	public MultiblockAwareGuiContainer(MenuType<?> type, T tile, int id, IETemplateMultiblock template){
-		super(type, tile, id);
+	//protected BlockPos templateSize;
+	public MultiblockAwareGuiContainer(MenuContext ctx, IETemplateMultiblock template){
+		super(ctx);
 		
-		this.templateSize = new BlockPos(template.getSize(getTile().getLevelNonnull())).subtract(ONE);
+		//this.templateSize = new BlockPos(template.getSize(null));
 	}
 	
 	// TODO This is only Temporary until i've replaced IEBaseContainerOld
 	/** Only exists to keep the Deprecation warning at bay and will then be removed/replace */
-	public Container getInv(){
+	/*public Container getInv(){
 		return this.inv;
-	}
+	}*/
 	
 	// TODO This is only Temporary until i've replaced IEBaseContainerOld
 	/** Only exists to keep the Deprecation warning at bay and will then be removed/replace */
-	public T getTile(){
+	/*public T getTile(){
 		return this.tile;
-	}
+	}*/
 	
 	/**
 	 * Returns the maximum distance in blocks to the multiblock befor the GUI get's closed automaticly
 	 */
-	public int getMaxDistance(){
+	/*public int getMaxDistance(){
 		return 5;
-	}
+	}*/
 	
-	@Override
+	/*@Override
 	public boolean stillValid(@Nonnull Player player){
 		if(getInv() != null){
 			BlockPos min = getTile().getBlockPosForPos(BlockPos.ZERO);
@@ -60,7 +52,7 @@ public class MultiblockAwareGuiContainer<T extends MultiblockPartBlockEntity<T>>
 		}
 		
 		return false;
-	}
+	}*/
 	
 	protected final void addPlayerInventorySlots(Inventory playerInventory, int x, int y){
 		for(int i = 0;i < 3;i++){

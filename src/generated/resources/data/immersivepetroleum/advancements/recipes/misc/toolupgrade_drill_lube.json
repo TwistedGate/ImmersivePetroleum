@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_drill": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "immersiveengineering:drill"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "immersivepetroleum:toolupgrade_drill_lube"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_drill",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "immersivepetroleum:toolupgrade_drill_lube"
+    ]
+  },
+  "sends_telemetry_event": false
+}

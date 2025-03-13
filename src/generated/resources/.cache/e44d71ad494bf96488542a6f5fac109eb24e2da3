@@ -1,0 +1,12 @@
+// 1.20.1	2024-04-27T19:07:09.4173768	Tags for minecraft:block mod id immersivepetroleum
+44071aaa634d65213ac8a605c3bfa9840fd6f8a9 data/forge/tags/blocks/asphalt.json
+768e7878e2d54c535ba032c0f4cc40c078693e4d data/forge/tags/blocks/storage_blocks/petcoke.json
+4a064a98a622be74c2370ca0cb7f05803adec266 data/forge/tags/blocks/storage_blocks/wax.json
+4a064a98a622be74c2370ca0cb7f05803adec266 data/forge/tags/blocks/storage_blocks/wax/paraffin.json
+891660ec9f643da5e0b35cd1ca41ee950f4898a8 data/minecraft/tags/blocks/mineable/axe.json
+3de01300ebd6a367ca8c3f156524fc888d864db2 data/minecraft/tags/blocks/mineable/pickaxe.json
+4a064a98a622be74c2370ca0cb7f05803adec266 data/minecraft/tags/blocks/mineable/shovel.json
+dc835689cb60a8e5188881f707a3a49c1b96efb6 data/minecraft/tags/blocks/needs_iron_tool.json
+96d538985623f40c9a82231fdd7c102743436892 data/minecraft/tags/blocks/needs_stone_tool.json
+29b7081b5006eb357517d091bcdc5a5873f145d5 data/minecraft/tags/blocks/slabs.json
+789c63002225496d1700316335bee0b1212098ff data/minecraft/tags/blocks/stairs.json

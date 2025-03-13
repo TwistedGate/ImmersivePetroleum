@@ -1,11 +1,5 @@
 package flaxbeard.immersivepetroleum.common.blocks.stone;
 
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockBase;
 import flaxbeard.immersivepetroleum.common.blocks.IPBlockItemBase;
 import net.minecraft.ChatFormatting;
@@ -18,15 +12,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class ParaffinWaxBlock extends IPBlockBase{
 	
 	public ParaffinWaxBlock(){
-		super(Properties.of(Material.ICE_SOLID, MaterialColor.COLOR_YELLOW).strength(0.5F, 0.4F).sound(SoundType.HONEY_BLOCK).speedFactor(0.95F).friction(1.05F));
+		super(Properties.copy(Blocks.PACKED_ICE).mapColor(MapColor.COLOR_YELLOW).strength(0.5F, 0.4F).sound(SoundType.HONEY_BLOCK).speedFactor(0.95F).friction(1.05F));
 	}
 	
 	@Override
@@ -46,7 +44,7 @@ public class ParaffinWaxBlock extends IPBlockBase{
 	
 	@Override
 	public Supplier<BlockItem> blockItemSupplier(){
-		return () -> new IPBlockItemBase(this, new Item.Properties().tab(ImmersivePetroleum.creativeTab)){
+		return () -> new IPBlockItemBase(this, new Item.Properties()){
 			@Override
 			public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType){
 				return 8000;

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "P": {
       "tag": "forge:treated_wood"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "immersivepetroleum:upgrade_paddles"
-  }
+  },
+  "show_notification": true
 }

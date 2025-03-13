@@ -1,14 +1,7 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.google.common.collect.ImmutableSet;
-
 import blusunrize.immersiveengineering.api.tool.IUpgrade;
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -19,10 +12,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Set;
+
 public class IPUpgradeItem extends IPItemBase implements IUpgrade{
 	private Set<String> set;
 	public IPUpgradeItem(String type){
-		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
+		super(new Item.Properties().stacksTo(1));
 		this.set = ImmutableSet.of(type);
 	}
 	

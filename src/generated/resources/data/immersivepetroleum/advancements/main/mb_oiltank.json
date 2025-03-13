@@ -32,5 +32,6 @@
     [
       "oiltank"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

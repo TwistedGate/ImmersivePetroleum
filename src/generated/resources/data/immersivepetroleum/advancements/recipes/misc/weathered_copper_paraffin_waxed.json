@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_paraffin_wax": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:wax/paraffin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "immersivepetroleum:weathered_copper_paraffin_waxed"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_paraffin_wax",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "immersivepetroleum:weathered_copper_paraffin_waxed"
+    ]
+  },
+  "sends_telemetry_event": false
+}

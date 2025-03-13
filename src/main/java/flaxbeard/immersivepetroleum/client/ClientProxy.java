@@ -1,16 +1,8 @@
 package flaxbeard.immersivepetroleum.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.electronwill.nightconfig.core.Config;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Quaternion;
-
 import blusunrize.immersiveengineering.api.ManualHelper;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelper;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
 import blusunrize.immersiveengineering.common.blocks.metal.MetalScaffoldingType;
 import blusunrize.immersiveengineering.common.register.IEBlocks;
 import blusunrize.lib.manual.ManualElementItem;
@@ -19,6 +11,12 @@ import blusunrize.lib.manual.ManualEntry;
 import blusunrize.lib.manual.ManualEntry.EntryData;
 import blusunrize.lib.manual.ManualEntry.SpecialElementData;
 import blusunrize.lib.manual.ManualInstance;
+import com.electronwill.nightconfig.core.Config;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Axis;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.crafting.FlarestackHandler;
 import flaxbeard.immersivepetroleum.api.energy.FuelHandler;
@@ -34,7 +32,7 @@ import flaxbeard.immersivepetroleum.client.utils.MCUtil;
 import flaxbeard.immersivepetroleum.common.CommonProxy;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.IPMenuTypes;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.PumpjackTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.PumpjackLogic;
 import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
 import flaxbeard.immersivepetroleum.common.crafting.RecipeReloadListener;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
@@ -70,6 +68,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientProxy extends CommonProxy{
 	
@@ -148,23 +149,26 @@ public class ClientProxy extends CommonProxy{
 		// Crash prevention
 		if(tesr == null)
 			return;
-		
-		if(te instanceof PumpjackTileEntity pumpjack){
+
+		if(te instanceof IMultiblockBE<?> multiblockBE && multiblockBE.getHelper().getContext().getState() instanceof PumpjackLogic.State){
+			IMultiblockBEHelper<PumpjackLogic.State> helper = multiblockBE.getHelper().asType(IPContent.Multiblock.PUMPJACK);
+			PumpjackLogic.State state = helper.getState();
+
 			transform.pushPose();
-			transform.mulPose(new Quaternion(0, -90, 0, true));
+			transform.mulPose(Axis.YN.rotationDegrees(90));
 			transform.translate(1, 1, -2);
 			
 			float pt = 0;
 			if(MCUtil.getPlayer() != null){
-				pumpjack.activeTicks = MCUtil.getPlayer().tickCount;
+				state.activeTicks = MCUtil.getPlayer().tickCount;
 				pt = Minecraft.getInstance().getFrameTime();
 			}
 			
-			tesr.render(pumpjack, pt, transform, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY);
+			tesr.render(te, pt, transform, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY);
 			transform.popPose();
 		}else{
 			transform.pushPose();
-			transform.mulPose(new Quaternion(0, -90, 0, true));
+			transform.mulPose(Axis.YN.rotationDegrees(90));
 			transform.translate(0, 1, -4);
 			
 			tesr.render(te, 0, transform, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY);

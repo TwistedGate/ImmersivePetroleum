@@ -1,0 +1,18 @@
+// 1.20.1	2024-04-27T19:07:09.4183774	Tags for minecraft:fluid mod id immersivepetroleum
+265a341dafbc034fd13b0b9de158863eed79dee7 data/forge/tags/fluids/benzene.json
+bc810c5b354c445dfc8a5333589e1b3ed2ddc197 data/forge/tags/fluids/crude_oil.json
+0a908a333e7320f0fd5e1745b152b8ecbbf63749 data/forge/tags/fluids/diesel.json
+9793924b7c619524ea4455cd9487cf1177575bca data/forge/tags/fluids/diesel_sulfur.json
+cbfd3639e11af1de31718d5c1cfccb32d0e70e48 data/forge/tags/fluids/ethylene.json
+c8a06817d434da029972ce062ad58d028efa4612 data/forge/tags/fluids/gaseous.json
+c84d665373d02988473adb1fa74c94dcd0eb0d53 data/forge/tags/fluids/gasoline.json
+f3235731f274a3a7bcd697fd0059e454b2c1f6d6 data/forge/tags/fluids/gasoline_additives.json
+855b2eeaec5fb028fcd70df958f5fbee8c59abfa data/forge/tags/fluids/kerosene.json
+2d826334fb4a64bdee463f8257b3aee8ee023357 data/forge/tags/fluids/lubricant.json
+82b4f61f70b76739210eba7bb776ad131b91119b data/forge/tags/fluids/lubricant_cracked.json
+8c66f27deb92f0474b1f03ff15b69318f4c14955 data/forge/tags/fluids/napalm.json
+4ad3def09dcd8259462bab2520dcb1cc2a1cda63 data/forge/tags/fluids/naphtha.json
+922dfa10d3b824ce6c5782316d94b7d541661c7d data/forge/tags/fluids/naphtha_cracked.json
+12bbc06a3d6dcbde2e0f1a43b0dadc2f6bd7b0af data/forge/tags/fluids/propylene.json
+155387465c3c6cf0c48d0600c9f4098034e8eb7b data/immersiveengineering/tags/fluids/drill_fuel.json
+7af2ef8cae606e1f8131946bbcf0650aa3edacd6 data/immersivepetroleum/tags/fluids/burnable_in_flarestack.json

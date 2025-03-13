@@ -1,17 +1,16 @@
 package flaxbeard.immersivepetroleum.client.gui.elements;
 
+import blusunrize.immersiveengineering.api.multiblocks.blocks.env.IMultiblockBEHelper;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-
 import flaxbeard.immersivepetroleum.client.utils.MCUtil;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.DerrickTileEntity;
+import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.DerrickLogic;
 import flaxbeard.immersivepetroleum.common.cfg.IPClientConfig;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import flaxbeard.immersivepetroleum.common.util.Utils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.joml.Matrix4f;
 
 public class PipeConfig extends Button{
 	static final Button.OnPress NO_ACTION = b -> {
@@ -47,12 +47,13 @@ public class PipeConfig extends Button{
 	protected ColumnPos tilePos;
 	protected int gridWidthScaled, gridHeightScaled;
 	protected int gridScale;
-	public PipeConfig(DerrickTileEntity tile, int x, int y, int width, int height, int gridWidth, int gridHeight, int gridScale){
-		super(x, y, width, height, Component.empty(), NO_ACTION);
-		this.tilePos = Utils.toColumnPos(tile.getBlockPos());
-		
+	public PipeConfig(IMultiblockBEHelper<DerrickLogic.State> tile, int x, int y, int width, int height, int gridWidth, int gridHeight, int gridScale){
+		super(x, y, width, height, Component.empty(), NO_ACTION, DEFAULT_NARRATION);
+		this.tilePos = Utils.toColumnPos(tile.getContext().getLevel().getAbsoluteOrigin());
+
 		this.grid = new Grid(gridWidth, gridHeight);
-		copyGridFrom(tile.gridStorage);
+		copyGridFrom(tile.getState().gridStorage);
+
 		this.gridWidthScaled = gridWidth * gridScale;
 		this.gridHeightScaled = gridHeight * gridScale;
 		this.gridScale = Mth.clamp(gridScale, 1, Integer.MAX_VALUE);
@@ -71,8 +72,8 @@ public class PipeConfig extends Button{
 		updateTexture();
 	}
 	
-	public void reset(DerrickTileEntity tile){
-		copyGridFrom(tile.gridStorage);
+	public void reset(IMultiblockBEHelper<DerrickLogic.State> tile){
+		copyGridFrom(tile.getState().gridStorage);
 		updateTexture();
 	}
 	
@@ -150,14 +151,14 @@ public class PipeConfig extends Button{
 	}
 	
 	@Override
-	public void render(PoseStack matrix, int mx, int my, float partialTicks){
+	public void render(GuiGraphics gui, int mx, int my, float partialTicks){
 		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 		
 		VertexConsumer builder = buffer.getBuffer(this.gridTextureRenderType);
-		matrix.pushPose();
+		gui.pose().pushPose();
 		{
-			matrix.translate(this.x, this.y, 0);
-			Matrix4f mat = matrix.last().pose();
+			gui.pose().translate(this.getX(), this.getY(), 0);
+			Matrix4f mat = gui.pose().last().pose();
 			int x = this.grid.width * this.gridScale;
 			int y = this.grid.height * this.gridScale;
 			builder.vertex(mat, 0, y, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).uv2(0xF000F0).endVertex();
@@ -165,7 +166,7 @@ public class PipeConfig extends Button{
 			builder.vertex(mat, x, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0.0F).uv2(0xF000F0).endVertex();
 			builder.vertex(mat, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 0.0F).uv2(0xF000F0).endVertex();
 		}
-		matrix.popPose();
+		gui.pose().popPose();
 		buffer.endBatch();
 	}
 	
@@ -175,7 +176,7 @@ public class PipeConfig extends Button{
 			boolean flag = this.clicked(mouseX, mouseY);
 			if(flag){
 				this.playDownSound(Minecraft.getInstance().getSoundManager());
-				onGridClick((int) (mouseX - this.x) / this.gridScale, (int) (mouseY - this.y) / this.gridScale, button);
+				onGridClick((int) (mouseX - this.getX()) / this.gridScale, (int) (mouseY - this.getY()) / this.gridScale, button);
 				return true;
 			}
 		}

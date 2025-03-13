@@ -24,10 +24,11 @@
       ],
       "entries": [
         {
-          "type": "immersiveengineering:multiblock_original_block"
+          "type": "immersiveengineering:multiblock"
         }
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "immersivepetroleum:blocks/derrick"
 }

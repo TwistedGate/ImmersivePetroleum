@@ -1,12 +1,9 @@
 package flaxbeard.immersivepetroleum.common.crafting.serializers;
 
-import javax.annotation.Nonnull;
-
-import com.google.gson.JsonObject;
-
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
+import com.google.gson.JsonObject;
 import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
 import flaxbeard.immersivepetroleum.api.crafting.builders.DistillationTowerRecipeBuilder;
 import flaxbeard.immersivepetroleum.common.IPContent;
@@ -17,6 +14,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.conditions.ICondition.IContext;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
 
 public class HighPressureRefineryRecipeSerializer extends IERecipeSerializer<HighPressureRefineryRecipe>{
 	
@@ -81,6 +80,6 @@ public class HighPressureRefineryRecipeSerializer extends IERecipeSerializer<Hig
 	
 	@Override
 	public ItemStack getIcon(){
-		return new ItemStack(IPContent.Multiblock.HYDROTREATER.get());
+		return new ItemStack(IPContent.Multiblock.HYDROTREATER.iconStack().getItem());
 	}
 }

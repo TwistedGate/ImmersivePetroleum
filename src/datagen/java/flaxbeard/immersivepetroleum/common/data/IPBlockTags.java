@@ -1,25 +1,27 @@
 package flaxbeard.immersivepetroleum.common.data;
 
-import java.util.function.Supplier;
-
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.IPTags;
 import flaxbeard.immersivepetroleum.common.IPContent;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class IPBlockTags extends BlockTagsProvider{
-	public IPBlockTags(DataGenerator dataGen, ExistingFileHelper exFileHelper){
-		super(dataGen, ImmersivePetroleum.MODID, exFileHelper);
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+
+public class IPBlockTags extends BlockTagsProvider {
+	public IPBlockTags(DataGenerator dataGen, CompletableFuture<HolderLookup.Provider> provider,  ExistingFileHelper exFileHelper){
+		super(dataGen.getPackOutput(), provider, ImmersivePetroleum.MODID, exFileHelper);
 	}
 	
 	@Override
-	protected void addTags(){
+	protected void addTags(HolderLookup.Provider provider){
 		// IP Tags
 		
 		tag(IPTags.Blocks.asphalt).add(IPContent.Blocks.ASPHALT.get());
@@ -43,12 +45,12 @@ public class IPBlockTags extends BlockTagsProvider{
 			IPContent.Blocks.WELL_PIPE.get(),
 			IPContent.Blocks.SEISMIC_SURVEY.get(),
 			//MBs
-			IPContent.Multiblock.DERRICK.get(),
-			IPContent.Multiblock.PUMPJACK.get(),
-			IPContent.Multiblock.OILTANK.get(),
-			IPContent.Multiblock.DISTILLATIONTOWER.get(),
-			IPContent.Multiblock.COKERUNIT.get(),
-			IPContent.Multiblock.HYDROTREATER.get()
+			IPContent.Multiblock.DERRICK.block().get(),
+			IPContent.Multiblock.PUMPJACK.block().get(),
+			IPContent.Multiblock.OILTANK.block().get(),
+			IPContent.Multiblock.DISTILLATIONTOWER.block().get(),
+			IPContent.Multiblock.COKERUNIT.block().get(),
+			IPContent.Multiblock.HYDROTREATER.block().get()
 		);
 		
 		tag(BlockTags.MINEABLE_WITH_SHOVEL).add(IPContent.Blocks.PARAFFIN_WAX.get());

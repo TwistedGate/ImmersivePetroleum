@@ -1,32 +1,14 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiPredicate;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.glfw.GLFW;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
-
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader;
 import blusunrize.immersiveengineering.api.shader.CapabilityShader.ShaderWrapper_Item;
 import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
 import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.api.event.ProjectorEvent;
 import flaxbeard.immersivepetroleum.client.IPShaders;
@@ -47,26 +29,25 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
@@ -95,10 +76,21 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 
 public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 	public ProjectorItem(){
-		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
+		super(new Item.Properties().stacksTo(1));
 	}
 	
 	@Override
@@ -216,12 +208,12 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 		return nameCache.get(multiblock.getClass());
 	}
 	
-	@Override
+	/*@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab group, @Nonnull NonNullList<ItemStack> items){
 		if(this.allowedIn(group)){
 			items.add(new ItemStack(this, 1));
 		}
-	}
+	}*/
 	
 	@Override
 	@Nonnull
@@ -295,7 +287,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 			BlockState state = world.getBlockState(pos);
 			
 			final MutableBlockPos hit = pos.mutable();
-			if(!state.getMaterial().isReplaceable() && facing == Direction.UP){
+			if(!state.is(BlockTags.REPLACEABLE) && facing == Direction.UP){
 				hit.setWithOffset(hit, 0, 1, 0);
 			}
 			
@@ -313,7 +305,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 						BlockPos realPos = info.tPos.offset(hit);
 						BlockState tstate0 = info.getModifiedState(world, realPos);
 						
-						ProjectorEvent.PlaceBlock event = new ProjectorEvent.PlaceBlock(info.multiblock, info.templateWorld, info.tBlockInfo.pos, world, realPos, tstate0, settings.getRotation());
+						ProjectorEvent.PlaceBlock event = new ProjectorEvent.PlaceBlock(info.multiblock, info.templateWorld, info.tBlockInfo.pos(), world, realPos, tstate0, settings.getRotation());
 						if(!MinecraftForge.EVENT_BUS.post(event)){
 							BlockState tstate1 = event.getState();
 							
@@ -406,7 +398,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 							matrix.pushPose();
 							{
 								boolean renderMoving = i == mc.player.getInventory().selected || (i == 10 && off);
-								renderSchematic(matrix, settings, mc.player, mc.player.level, event.getPartialTick(), renderMoving);
+								renderSchematic(matrix, settings, mc.player, mc.player.level(), event.getPartialTick(), renderMoving);
 							}
 							matrix.popPose();
 						}
@@ -434,7 +426,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 				BlockPos pos = blockRTResult.getBlockPos();
 				
 				BlockState state = world.getBlockState(pos);
-				if(state.getMaterial().isReplaceable() || blockRTResult.getDirection() != Direction.UP){
+				if(state.is(BlockTags.REPLACEABLE) || blockRTResult.getDirection() != Direction.UP){
 					hit.set(pos);
 				}else{
 					hit.setWithOffset(pos, 0, 1, 0);
@@ -615,13 +607,13 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 			
 			BlockState state = rInfo.getModifiedState(realWorld, rInfo.tPos);
 			
-			ProjectorEvent.RenderBlock renderEvent = new ProjectorEvent.RenderBlock(rInfo.multiblock, rInfo.templateWorld, rInfo.tBlockInfo.pos, realWorld, rInfo.tPos, state, rInfo.settings.getRotation());
+			ProjectorEvent.RenderBlock renderEvent = new ProjectorEvent.RenderBlock(rInfo.multiblock, rInfo.templateWorld, rInfo.tBlockInfo.pos(), realWorld, rInfo.tPos, state, rInfo.settings.getRotation());
 			if(!MinecraftForge.EVENT_BUS.post(renderEvent)){
 				state = renderEvent.getState();
 				state.updateNeighbourShapes(realWorld, rInfo.tPos, 3);
 				
 				ModelData modelData = ModelData.EMPTY;
-				BlockEntity te = rInfo.templateWorld.getBlockEntity(rInfo.tBlockInfo.pos);
+				BlockEntity te = rInfo.templateWorld.getBlockEntity(rInfo.tBlockInfo.pos());
 				if(te != null){
 					te.blockState = state;
 					modelData = te.getModelData();
@@ -636,7 +628,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 						float green = (i >> 8 & 0xFF) / 255F;
 						float blue = (i & 0xFF) / 255F;
 						
-						modelData = ibakedmodel.getModelData(rInfo.templateWorld, rInfo.tBlockInfo.pos, state, modelData);
+						modelData = ibakedmodel.getModelData(rInfo.templateWorld, rInfo.tBlockInfo.pos(), state, modelData);
 						
 						IPShaders.projNoise(flicker * alpha, MCUtil.getPlayer().tickCount + partialTicks);
 						
@@ -647,7 +639,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 					case ENTITYBLOCK_ANIMATED -> {
 						ItemStack stack = new ItemStack(state.getBlock());
 						
-						MCUtil.getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, 0xF000F0, OverlayTexture.NO_OVERLAY, matrix, buffer, 0);
+						MCUtil.getItemRenderer().renderStatic(stack, ItemDisplayContext.NONE, 0xF000F0, OverlayTexture.NO_OVERLAY, matrix, buffer, realWorld, 0);
 					}
 					default -> {}
 				}
@@ -699,7 +691,7 @@ public class ProjectorItem extends IPItemBase implements IUpgradeableTool{
 		private static void line(VertexConsumer out, PoseStack mat, Vec3 min, Vec3 max, int startBits, int endBits, int rgba){
 			Vector3f start = combine(min, max, startBits);
 			Vector3f end = combine(min, max, endBits);
-			Vector3f delta = end.copy();
+			Vector3f delta = new Vector3f(end);
 			delta.sub(start);
 			out.vertex(mat.last().pose(), start.x(), start.y(), start.z())
 					.color(rgba)

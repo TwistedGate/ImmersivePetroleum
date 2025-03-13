@@ -1,6 +1,5 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import flaxbeard.immersivepetroleum.ImmersivePetroleum;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.entity.MolotovItemEntity;
 import net.minecraft.nbt.Tag;
@@ -27,7 +26,7 @@ public class MolotovItem extends IPItemBase{
 				.durability(SECONDS)
 				.setNoRepair();
 		if(!isLit){
-			prop.tab(ImmersivePetroleum.creativeTab);
+			//prop.tab(ImmersivePetroleum.creativeTab);
 		}
 		return prop;
 	}

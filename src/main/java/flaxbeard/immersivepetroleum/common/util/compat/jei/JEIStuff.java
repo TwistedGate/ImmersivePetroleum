@@ -1,9 +1,5 @@
 package flaxbeard.immersivepetroleum.common.util.compat.jei;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import flaxbeard.immersivepetroleum.api.crafting.CokerUnitRecipe;
 import flaxbeard.immersivepetroleum.api.crafting.DistillationTowerRecipe;
 import flaxbeard.immersivepetroleum.api.crafting.HighPressureRefineryRecipe;
@@ -22,6 +18,9 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 @JeiPlugin
 public class JEIStuff implements IModPlugin{
@@ -54,16 +53,16 @@ public class JEIStuff implements IModPlugin{
 	
 	@Override
 	public void registerRecipes(IRecipeRegistration registration){
-		registration.addRecipes(this.distillation_type, new ArrayList<>(DistillationTowerRecipe.recipes.values()));
-		registration.addRecipes(this.coker_type, new ArrayList<>(CokerUnitRecipe.recipes.values()));
-		registration.addRecipes(this.recovery_type, new ArrayList<>(HighPressureRefineryRecipe.recipes.values()));
+		registration.addRecipes(this.distillation_type, DistillationTowerRecipe.recipes.values().stream().map(Function.identity()).toList());
+		registration.addRecipes(this.coker_type, CokerUnitRecipe.recipes.values().stream().map(Function.identity()).toList());
+		registration.addRecipes(this.recovery_type, HighPressureRefineryRecipe.recipes.values().stream().map(Function.identity()).toList());
 	}
 	
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration){
-		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.DISTILLATIONTOWER.get()), this.distillation_type);
-		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.COKERUNIT.get()), this.coker_type);
-		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.HYDROTREATER.get()), this.recovery_type);
+		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.DISTILLATIONTOWER.block().get()), this.distillation_type);
+		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.COKERUNIT.block().get()), this.coker_type);
+		registration.addRecipeCatalyst(new ItemStack(IPContent.Multiblock.HYDROTREATER.block().get()), this.recovery_type);
 	}
 	
 	@Override

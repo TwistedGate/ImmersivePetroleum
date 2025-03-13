@@ -1,10 +1,5 @@
 package flaxbeard.immersivepetroleum.common.items;
 
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import blusunrize.immersiveengineering.api.tool.IUpgrade;
 import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
@@ -44,11 +39,15 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.Supplier;
+
 public class MotorboatItem extends IPItemBase implements IUpgradeableTool{
 	public static final String UPGRADE_TYPE = "MOTORBOAT";
 	
 	public MotorboatItem(){
-		super(new Item.Properties().stacksTo(1).tab(ImmersivePetroleum.creativeTab));
+		super(new Item.Properties().stacksTo(1));
 	}
 	
 	@Override
@@ -222,7 +221,7 @@ public class MotorboatItem extends IPItemBase implements IUpgradeableTool{
 			return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
 		}else{
 			Vec3 hit = raytraceresult.getLocation();
-			Block block = worldIn.getBlockState(new BlockPos(hit.add(0, .5, 0))).getBlock();
+			Block block = worldIn.getBlockState(BlockPos.containing(hit.add(0, .5, 0))).getBlock();
 			boolean flag1 = block == Blocks.WATER;
 			MotorboatEntity entityboat = new MotorboatEntity(worldIn, hit.x, flag1 ? hit.y - 0.12D : hit.y, hit.z);
 			{

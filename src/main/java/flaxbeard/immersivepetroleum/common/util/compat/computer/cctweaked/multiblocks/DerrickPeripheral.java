@@ -1,22 +1,8 @@
 package flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks;
 
-import java.util.Map;
-
-import dan200.computercraft.api.lua.LuaFunction;
-import dan200.computercraft.api.lua.MethodResult;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
-import flaxbeard.immersivepetroleum.common.ExternalModContent;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.DerrickTileEntity;
-import flaxbeard.immersivepetroleum.common.blocks.tileentities.WellTileEntity;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.CCTUtils;
-import flaxbeard.immersivepetroleum.common.util.compat.computer.cctweaked.multiblocks.generic.PoweredMultiblockPeripheral;
-import net.minecraft.server.level.ColumnPos;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-
-public class DerrickPeripheral extends PoweredMultiblockPeripheral{
-	DerrickTileEntity master;
+public class DerrickPeripheral //extends PoweredMultiblockPeripheral
+{
+	/*DerrickTileEntity master;
 	public DerrickPeripheral(DerrickTileEntity tower){
 		super(tower);
 		this.master = tower.master();
@@ -48,13 +34,13 @@ public class DerrickPeripheral extends PoweredMultiblockPeripheral{
 	}
 	
 	/** Returns the current content of the internal tank */
-	@LuaFunction
+	/*@LuaFunction
 	public final Map<String, Object> getInputTank(){
 		return CCTUtils.fluidToMap(this.master.tank.getFluid());
 	}
 	
 	/** Returns the currently expected fluid to be supplied to the derrick, or nil */
-	@LuaFunction
+	/*@LuaFunction
 	public final MethodResult getExpectedFluid(){
 		final WellTileEntity well;
 		if((well = this.master.getWell()) == null){
@@ -76,7 +62,7 @@ public class DerrickPeripheral extends PoweredMultiblockPeripheral{
 	}
 	
 	/** Returns the highest pressure of a tapped islands */
-	@LuaFunction
+	/*@LuaFunction
 	public final float getPressure(){
 		final WellTileEntity well;
 		if((well = this.master.getWell()) == null){
@@ -98,7 +84,7 @@ public class DerrickPeripheral extends PoweredMultiblockPeripheral{
 	}
 	
 	/** Returns the combined flowrate of all tapped islands */
-	@LuaFunction
+	/*@LuaFunction
 	public final int getFlowrate(){
 		final WellTileEntity well;
 		if((well = this.master.getWell()) == null){
@@ -115,5 +101,5 @@ public class DerrickPeripheral extends PoweredMultiblockPeripheral{
 		}
 		
 		return totalFlowrate;
-	}
+	}*/
 }
