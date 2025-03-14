@@ -1,0 +1,47 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "runClient",
+      "request": "launch",
+      "mainClass": "cpw.mods.bootstraplauncher.BootstrapLauncher",
+      "projectName": "ImmersivePetroleum",
+      "cwd": "${workspaceFolder}\\run",
+      "vmArgs": "-Dforge.logging.console.level\u003dinfo -Dforge.logging.markers\u003d -Dfml.earlyprogresswindow\u003dfalse -DlegacyClassPath.file\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum\\build\\classpath\\runClient_minecraftClasspath.txt -Dmixin.env.remapRefMap\u003dtrue -Dmixin.env.refMapRemappingFile\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum/build/createSrgToMcp/output.srg -DignoreList\u003dbootstraplauncher,securejarhandler,asm-commons,asm-util,asm-analysis,asm-tree,asm,JarJarFileSystems,client-extra,fmlcore,javafmllanguage,lowcodelanguage,mclanguage,forge- -DmergeModules\u003djna-5.10.0.jar,jna-platform-5.10.0.jar -Dforge.enableGameTest\u003dtrue -Djava.net.preferIPv6Addresses\u003dsystem -p C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\bootstraplauncher\\1.1.2\\c546e00443d8432cda6baa1c860346980742628\\bootstraplauncher-1.1.2.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\securejarhandler\\2.1.10\\51e6a22c6c716beb11e244bf5b8be480f51dd6b5\\securejarhandler-2.1.10.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-commons\\9.7\\e86dda4696d3c185fcc95d8d311904e7ce38a53f\\asm-commons-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-util\\9.7\\c0655519f24d92af2202cb681cd7c1569df6ead6\\asm-util-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-analysis\\9.7\\e4a258b7eb96107106c0599f0061cfc1832fe07a\\asm-analysis-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-tree\\9.7\\e446a17b175bfb733b87c5c2560ccb4e57d69f1a\\asm-tree-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm\\9.7\\73d7b3086e14beb604ced229c302feff6449723\\asm-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\net.minecraftforge\\JarJarFileSystems\\0.3.19\\2464eb7d6b9ddb9db36a82cf8a95193e5c6fe020\\JarJarFileSystems-0.3.19.jar --add-modules ALL-MODULE-PATH --add-opens java.base/java.util.jar\u003dcpw.mods.securejarhandler --add-opens java.base/java.lang.invoke\u003dcpw.mods.securejarhandler --add-exports java.base/sun.security.util\u003dcpw.mods.securejarhandler --add-exports jdk.naming.dns/com.sun.jndi.dns\u003djava.naming -XX:HeapDumpPath\u003dMojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump",
+      "args": "--launchTarget forgeclientuserdev --version MOD_DEV --assetIndex 5 --assetsDir C:\\Users\\Utente\\.gradle\\caches\\forge_gradle\\assets --gameDir . --fml.forgeVersion 47.2.23 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412",
+      "env": {
+        "MOD_CLASSES": "immersivepetroleum%%${workspaceFolder}\\bin\\main;immersivepetroleum%%${workspaceFolder}\\bin\\main",
+        "MCP_MAPPINGS": "parchment_1.20.1-2023.09.03-1.20.1"
+      }
+    },
+    {
+      "type": "java",
+      "name": "runData",
+      "request": "launch",
+      "mainClass": "cpw.mods.bootstraplauncher.BootstrapLauncher",
+      "projectName": "ImmersivePetroleum",
+      "cwd": "${workspaceFolder}\\run",
+      "vmArgs": "-Dforge.logging.console.level\u003dinfo -Dforge.logging.markers\u003d -Dfml.earlyprogresswindow\u003dfalse -DlegacyClassPath.file\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum\\build\\classpath\\runData_minecraftClasspath.txt -Dmixin.env.remapRefMap\u003dtrue -Dmixin.env.refMapRemappingFile\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum/build/createSrgToMcp/output.srg -DignoreList\u003dbootstraplauncher,securejarhandler,asm-commons,asm-util,asm-analysis,asm-tree,asm,JarJarFileSystems,client-extra,fmlcore,javafmllanguage,lowcodelanguage,mclanguage,forge- -DmergeModules\u003djna-5.10.0.jar,jna-platform-5.10.0.jar -Djava.net.preferIPv6Addresses\u003dsystem -p C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\bootstraplauncher\\1.1.2\\c546e00443d8432cda6baa1c860346980742628\\bootstraplauncher-1.1.2.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\securejarhandler\\2.1.10\\51e6a22c6c716beb11e244bf5b8be480f51dd6b5\\securejarhandler-2.1.10.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-commons\\9.7\\e86dda4696d3c185fcc95d8d311904e7ce38a53f\\asm-commons-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-util\\9.7\\c0655519f24d92af2202cb681cd7c1569df6ead6\\asm-util-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-analysis\\9.7\\e4a258b7eb96107106c0599f0061cfc1832fe07a\\asm-analysis-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-tree\\9.7\\e446a17b175bfb733b87c5c2560ccb4e57d69f1a\\asm-tree-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm\\9.7\\73d7b3086e14beb604ced229c302feff6449723\\asm-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\net.minecraftforge\\JarJarFileSystems\\0.3.19\\2464eb7d6b9ddb9db36a82cf8a95193e5c6fe020\\JarJarFileSystems-0.3.19.jar --add-modules ALL-MODULE-PATH --add-opens java.base/java.util.jar\u003dcpw.mods.securejarhandler --add-opens java.base/java.lang.invoke\u003dcpw.mods.securejarhandler --add-exports java.base/sun.security.util\u003dcpw.mods.securejarhandler --add-exports jdk.naming.dns/com.sun.jndi.dns\u003djava.naming",
+      "args": "--launchTarget forgedatauserdev --assetIndex 5 --assetsDir C:\\Users\\Utente\\.gradle\\caches\\forge_gradle\\assets --gameDir . --fml.forgeVersion 47.2.23 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412 --mod immersivepetroleum --all --output C:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum\\src\\generated\\resources --validate --existing C:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum\\src\\main\\resources --existing-mod immersiveengineering",
+      "env": {
+        "MOD_CLASSES": "immersivepetroleum%%${workspaceFolder}\\bin\\main;immersivepetroleum%%${workspaceFolder}\\bin\\main;immersivepetroleum%%${workspaceFolder}\\bin\\datagen;immersivepetroleum%%${workspaceFolder}\\bin\\datagen",
+        "MCP_MAPPINGS": "parchment_1.20.1-2023.09.03-1.20.1"
+      }
+    },
+    {
+      "type": "java",
+      "name": "runServer",
+      "request": "launch",
+      "mainClass": "cpw.mods.bootstraplauncher.BootstrapLauncher",
+      "projectName": "ImmersivePetroleum",
+      "cwd": "${workspaceFolder}\\run",
+      "vmArgs": "-Dforge.logging.console.level\u003dinfo -Dforge.logging.markers\u003d -Dfml.earlyprogresswindow\u003dfalse -DlegacyClassPath.file\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum\\build\\classpath\\runServer_minecraftClasspath.txt -Dmixin.env.remapRefMap\u003dtrue -Dmixin.env.refMapRemappingFile\u003dC:\\Users\\Utente\\Documents\\GitHub\\ImmersivePetroleum/build/createSrgToMcp/output.srg -DignoreList\u003dbootstraplauncher,securejarhandler,asm-commons,asm-util,asm-analysis,asm-tree,asm,JarJarFileSystems,client-extra,fmlcore,javafmllanguage,lowcodelanguage,mclanguage,forge- -DmergeModules\u003djna-5.10.0.jar,jna-platform-5.10.0.jar -Dforge.enableGameTest\u003dtrue -Djava.net.preferIPv6Addresses\u003dsystem -p C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\bootstraplauncher\\1.1.2\\c546e00443d8432cda6baa1c860346980742628\\bootstraplauncher-1.1.2.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\cpw.mods\\securejarhandler\\2.1.10\\51e6a22c6c716beb11e244bf5b8be480f51dd6b5\\securejarhandler-2.1.10.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-commons\\9.7\\e86dda4696d3c185fcc95d8d311904e7ce38a53f\\asm-commons-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-util\\9.7\\c0655519f24d92af2202cb681cd7c1569df6ead6\\asm-util-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-analysis\\9.7\\e4a258b7eb96107106c0599f0061cfc1832fe07a\\asm-analysis-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm-tree\\9.7\\e446a17b175bfb733b87c5c2560ccb4e57d69f1a\\asm-tree-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\org.ow2.asm\\asm\\9.7\\73d7b3086e14beb604ced229c302feff6449723\\asm-9.7.jar;C:\\Users\\Utente\\.gradle\\caches\\modules-2\\files-2.1\\net.minecraftforge\\JarJarFileSystems\\0.3.19\\2464eb7d6b9ddb9db36a82cf8a95193e5c6fe020\\JarJarFileSystems-0.3.19.jar --add-modules ALL-MODULE-PATH --add-opens java.base/java.util.jar\u003dcpw.mods.securejarhandler --add-opens java.base/java.lang.invoke\u003dcpw.mods.securejarhandler --add-exports java.base/sun.security.util\u003dcpw.mods.securejarhandler --add-exports jdk.naming.dns/com.sun.jndi.dns\u003djava.naming",
+      "args": "--launchTarget forgeserveruserdev --gameDir . --fml.forgeVersion 47.2.23 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412 -nogui",
+      "env": {
+        "MOD_CLASSES": "immersivepetroleum%%${workspaceFolder}\\bin\\main;immersivepetroleum%%${workspaceFolder}\\bin\\main",
+        "MCP_MAPPINGS": "parchment_1.20.1-2023.09.03-1.20.1"
+      }
+    }
+  ]
+}
