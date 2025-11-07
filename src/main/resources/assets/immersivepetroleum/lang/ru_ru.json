@@ -1,7 +1,7 @@
 {
 	"itemGroup.immersivepetroleum": "Immersive Petroleum",
 	
-	"_comment": "################## Blocks ##################",
+	"_comment": "################## Блоки ##################",
 	
 	"block.immersivepetroleum.fluid_diesel": "Дизельное топливо",
 	"block.immersivepetroleum.fluid_crude_oil": "Сырая нефть",
@@ -13,15 +13,19 @@
 	"block.immersivepetroleum.asphalt_slab": "Плита из асфальтобетона",
 	"block.immersivepetroleum.asphalt_stairs": "Ступеньки из асфальтобетона",
 	"block.immersivepetroleum.petcoke_block": "Блок нефтяного кокса",
+	"block.immersivepetroleum.paraffin_wax_block": "Блок парафина",
 	
 	"block.immersivepetroleum.auto_lubricator": "Смазочное устройство",
 	"block.immersivepetroleum.gas_generator": "Переносной генератор",
-	"block.immersivepetroleum.flarestack": "Факельная установка",
+	"block.immersivepetroleum.flarestack": "Газовый факел",
+	"block.immersivepetroleum.seismic_survey": "Устройство сейсморазведки",
 	
 	"block.immersivepetroleum.pumpjack": "Штанговый насос",
 	"block.immersivepetroleum.distillationtower": "Ректификационная колонна",
 	"block.immersivepetroleum.cokerunit": "Установка для коксования",
 	"block.immersivepetroleum.hydrotreater": "Установка для извлечения серы",
+	"block.immersivepetroleum.derrick": "Буровая вышка",
+	"block.immersivepetroleum.oiltank": "Нефтехранилище",
 	
 	"fluid.immersivepetroleum.diesel": "Дизельное топливо",
 	"fluid.immersivepetroleum.diesel_sulfur": "Сернистое дизельное топливо",
@@ -29,23 +33,36 @@
 	"fluid.immersivepetroleum.lubricant": "Смазка",
 	"fluid.immersivepetroleum.gasoline": "Бензин",
 	"fluid.immersivepetroleum.napalm": "Напалм",
+	"fluid_type.immersivepetroleum.naphtha": "Лигроин",
+	"fluid_type.immersivepetroleum.benzol": "Бензол",
+	"fluid_type.immersivepetroleum.petroleum_gas": "Попутный нефтяной газ",
+	"fluid_type.immersivepetroleum.kerosene": "Керосин",
 	
-	"_comment": "################## Items ##################",
+	"_comment": "################## Предметы ##################",
 	
 	"item.immersivepetroleum.projector": "Проектор",
 	"item.immersivepetroleum.projector.specific": "Проектор: %s",
 	"item.immersivepetroleum.speedboat": "Моторная лодка",
 	"item.immersivepetroleum.oil_can": "Канистра для смазки",
+	"item.immersivepetroleum.survey_result": "Отчёт сейсморазведки",
+	"item.immersivepetroleum.gasoline_bottle":"Бутылочка с бензином",
+	"item.immersivepetroleum.molotov":"Молотов",
+	"item.immersivepetroleum.molotov_lit":"Горящий молотов",
 	
 	"item.immersivepetroleum.bitumen": "Битум",
 	"item.immersivepetroleum.petcoke": "Нефтяной кокс",
 	"item.immersivepetroleum.petcoke_dust": "Пыль нефтяного кокса",
 	"item.immersivepetroleum.diesel_bucket": "Ведро дизельного топлива",
+	"item.immersivepetroleum.diesel_sulfur_bucket": "Ведро сернистого дезельного топлива",
 	"item.immersivepetroleum.crudeoil_bucket": "Ведро нефти",
 	"item.immersivepetroleum.lubricant_bucket": "Ведро смазки",
 	"item.immersivepetroleum.gasoline_bucket": "Ведро бензина",
 	"item.immersivepetroleum.napalm_bucket": "Ведро напалма",
-	"item.immersivepetroleum.diesel_sulfur_bucket": "Ведро сернистого дезельного топлива",
+	"item.immersivepetroleum.naphtha_bucket": "Ведро лигроина",
+	"item.immersivepetroleum.benzol_bucket": "Ведро бензола",
+	"item.immersivepetroleum.petroleum_gas_bucket": "Ведро попутного нефтеного газа",
+	"item.immersivepetroleum.kerosene_bucket": "Ведро керосина",
+	"item.immersivepetroleum.paraffin_wax": "Парафин",
 	
 	"item.immersivepetroleum.upgrade_reinforced_hull": "Укреплённый корпус",
 	"item.immersivepetroleum.upgrade_icebreaker": "Ледокольный нос",
@@ -53,14 +70,18 @@
 	"item.immersivepetroleum.upgrade_rudders": "Дополнительный руль",
 	"item.immersivepetroleum.upgrade_paddles": "Аварийные вёсла",
 	
-	"_comment": "################## Descriptions ##################",
+	"_comment": "################# Энтити ################",
+
+	"entity.immersivepetroleum.speedboat": "Моторная лодка",
 	
-	"_comment":"Replaced the IP with IE to save me from headaches. ~TwistedGate",
-	"desc.immersiveengineering.info.multiblock.IE:DistillationTower": "Ректификационная колонна",
-	"desc.immersiveengineering.info.multiblock.IE:Pumpjack": "Штанговый насос",
-	"desc.immersiveengineering.info.multiblock.IE:CokerUnit": "Установка для коксования",
-	"desc.immersiveengineering.info.multiblock.IE:HydroTreater": "Установка для извлечения серы",
+	"_comment": "################## Подсказки ##################",
 	
+	"desc.immersivepetroleum.info.survey_result.amount": "Количество: %1 Вёдер. (%2%%)",
+	"desc.immersivepetroleum.info.survey_result.expected": "Ожидаемое давление %1 mB/t.",
+
+	"desc.immersivepetroleum.info.oiltank.input": "Вход",
+	"desc.immersivepetroleum.info.oiltank.output": "Выход",
+
 	"desc.immersivepetroleum.info.reservoir.oil": "Нефтеносный пласт",
 	"desc.immersivepetroleum.info.reservoir.aquifer": "Водоносный пласт",
 	"desc.immersivepetroleum.info.reservoir.lava": "Магматический очаг",
@@ -72,10 +93,15 @@
 	"desc.immersivepetroleum.flavour.upgrade_paddles": "Позволяют плыть на моторной лодке, когда нет топлива",
 	
 	"desc.immersivepetroleum.flavour.asphalt": "Увеличивает скорость передвижения на %1$s",
+	"desc.immersivepetroleum.flavour.paraffin_wax": "Уменьшает скорость передвижения на 5%",
 	
 	"_comment": "This is for the upgrade list of the speedboat tooltip",
-	"desc.immersivepetroleum.flavour.speedboat0": "Улучшение(я)",
+	"desc.immersivepetroleum.flavour.speedboat.prefix": "Улучшенная ",
+	"desc.immersivepetroleum.flavour.speedboat.upgrade": "Улучшение %d: ",
 	
+	"desc.immersivepetroleum.flavour.surveytool.rightclickme": "ПКМ для открытия",
+	"desc.immersivepetroleum.flavour.surveytool.location": "Точка %d, %d",
+
 	"desc.immersivepetroleum.info.projector.noMultiblock": "ПКМ для открытия меню",
 	"desc.immersivepetroleum.info.projector.size": "Размер: %d x %d x %d",
 	"desc.immersivepetroleum.info.projector.build0": "Отображает проекцию",
@@ -103,6 +129,15 @@
 	"desc.immersivepetroleum.info.projector.control2": "%s для отражения",
 	"desc.immersivepetroleum.info.projector.control3": "Shift+ПКМ для смены режима",
 	
+	"desc.immersiveengineering.info.shader.immersivepetroleum:projector": "Проектор",
+
+	"_comment": "################## Предмет-Шейдеры ##################",
+	"_comment": "те самые шейдеры из IE, переводить не надо, я проверил",
+	"item.immersivepetroleum.shader.name.blue": "Blue ASHPD",
+	"item.immersivepetroleum.shader.name.orange": "Orange ASHPD",
+	"item.immersivepetroleum.shader.name.cube0": "Storage Cube",
+	"item.immersivepetroleum.shader.name.cube1": "Companion Cube",
+
 	"_comment": "################## GUI ##################",
 	
 	"gui.immersivepetroleum.projector.search": "Поиск",
@@ -112,13 +147,46 @@
 	"gui.immersivepetroleum.projector.button.rcw": "Вращать по час. стрелке",
 	"gui.immersivepetroleum.projector.button.rccw": "Вращать против час. стрелки",
 	
+	"gui.immersivepetroleum.derrick.msg.disabled": "Выключено редстоуном",
+	"gui.immersivepetroleum.derrick.msg.drilling": "Бурит... %1$s",
+	"gui.immersivepetroleum.derrick.msg.out_of_pipes": "Трубы закончились",
+	"gui.immersivepetroleum.derrick.msg.not_enough_power": "Недостаточно энергии",
+	"gui.immersivepetroleum.derrick.msg.missing": "Необходимо %1$s",
+	"gui.immersivepetroleum.derrick.msg.completed": "Бурение завершено!<br>Приятного дня :3",
+	"gui.immersivepetroleum.derrick.msg.safety_valve": "! ВНИМАНИЕ !<br>ПРЕДОХРАНИТЕЛЬНЫЙ КЛАПАН ОТКРЫТ<br>ДАВЛЕНИЕ СЛИШКОМ ВЫСОКО",
+	"gui.immersivepetroleum.derrick.msg.water_table": "! ВНИМАНИЕ !<br>Ниже уровня грунтовых вод!<br>Затоплено водой!",
+	"gui.immersivepetroleum.derrick.msg.set_in_stone": "Set In Stone",
+	"gui.immersivepetroleum.derrick.msg.config": "Конфигурация",
+
+	"gui.immersivepetroleum.derrick.settings.button.set": "Взять",
+	"gui.immersivepetroleum.derrick.settings.button.set.desc": "Взять путь к буровой вышке.",
+	"gui.immersivepetroleum.derrick.settings.button.reset": "Сбросить",
+	"gui.immersivepetroleum.derrick.settings.button.reset.desc": "Сбросить последнию конфигурацию если возможно.",
+	"gui.immersivepetroleum.derrick.settings.button.close": "Закрыть",
+	"gui.immersivepetroleum.derrick.settings.button.close.desc": "Вернуться к буровой вышке.",
+	"gui.immersivepetroleum.derrick.settings.derrickishere": "Центрировать (Буровой вышка)",
+	"gui.immersivepetroleum.derrick.settings.pipe.normal": "Normal Pipe §7(Click to Change)§r",
+	"gui.immersivepetroleum.derrick.settings.pipe.perforated": "Perforated Pipe §7(Click to Change)§r",
+	"gui.immersivepetroleum.derrick.settings.pipe.perforated_fixed": "Perforated Pipe §c(Fixed)§r",
+
+	"_comment": "These are general purpose",
+	"gui.immersivepetroleum.dirs.north": "Север",
+	"gui.immersivepetroleum.dirs.east": "Восток",
+	"gui.immersivepetroleum.dirs.south": "Юг",
+	"gui.immersivepetroleum.dirs.west": "Запад",
+
+	"gui.immersivepetroleum.seismicsurvey.worldcoords": "Точка: x%1$d z%2$d",
+	"gui.immersivepetroleum.seismicsurvey.takenhere": "Точка разведки.",
+	"gui.immersivepetroleum.seismicsurvey.possibility": "Возможное месторождение неизвестной жидкости",
+	"gui.immersivepetroleum.seismicsurvey.awaitingresponse": "Ожидание данных с сервера...",
+
 	"_comment": "################## IE-Manual ##################",
 	
 	"effect.immersivepetroleum.anti_fire": "",
 	
 	"_comment": "################## IE-Manual ##################",
 	
-	"manual.immersivepetroleum.main": "Обработка нефти",
+	"manual.immersivepetroleum.petroleum": "Переработка нефти",
 	
 	"ie.manual.entry.blank_text": "",
 	
@@ -127,8 +195,10 @@
 	
 	"ie.manual.entry.reservoirs.oil0": "Копаясь недалеко от коренной породы, вы можете наткнуться на скользкую чёрную горючую субстанцию - нефть. Пока вы будете строить гипотезы, что же ещё может быть спрятано под этими непроницаемыми скалами, вы не сможете самостоятельно справиться с найденными нефтяными запасами, так что стройте <link;immersivepetroleum:pumpjack;§o§nсозданную именно для этого §o§nмашину§r>, и накладывайте свои руки на сие ценное топливо.<np>",
 	"ie.manual.entry.reservoirs.oil1": "<link;minerals;§o§nКолонковый §o§nбур§r> поможет определить, может ли нефть быть найдена в этом чанке, и даёт представление о размере найденного месторождения.<br><br>Несмотря на конечные запасы нефти в месторождении, остаточные количества нефти всё ещё могут собираться в истощённых месторождениях. Использование более чем одного штангового насоса в истощенных чанках не принесёт никакой пользы.<np>",
+	"ie.manual.entry.reservoirs.oil2": "Из одного месторождения может поступать только один вид жидкости, виды которой перечислены далее.<np>",
 	
-	"ie.manual.entry.reservoirs.consonant": "",
+	"_comment": "Below are used for Dynamic page generation of all reservoirs",
+	"ie.manual.entry.reservoirs.consonant": "A",
 	"ie.manual.entry.reservoirs.vowel": "An",
 	
 	"ie.manual.entry.reservoirs.dim.valid": "%3$s §l%1$s§r это месторождение можно найти в %2$s.",
@@ -139,31 +209,98 @@
 	"ie.manual.entry.reservoirs.bio.invalid": "Это месторождение не будет генерироваться в %s биомах.",
 	"ie.manual.entry.reservoirs.bio.any": "Это месторождение будет генерироваться во всех Биомах.",
 	
-	"ie.manual.entry.reservoirs.content": "%1$s %6$s\nСодержит от %3$s до %4$s mB%2$s.%5$s",
+	"ie.manual.entry.reservoirs.content": "%1$s %6$s\nСодержит от %3$s до %4$s mB %2$s.%5$s",
 	"ie.manual.entry.reservoirs.replenish": "\nПосле того как месторождение будет исчерпано, %1$d mB/tick остатков %2$s можно будет извлечь с помощью одного Штангового Насоса.",
+	"ie.manual.entry.reservoirs.replenish_depleted": "\nПосле того как месторождение будет исчерпано, %1$dmB/tick остатков %2$s можно будет извлечь с помощью одного Штангового Насоса.",
 	
-	"_comment": "################## Chat ##################",
+	"_comment": "################## Чат ##################",
+
+	"chat.immersivepetroleum.command.reservoir.notfound": "Месторождение не найдено.",
+	"chat.immersivepetroleum.command.reservoir.locate": "Найдено %1$s at %2$s",
+	"chat.immersivepetroleum.command.reservoir.set.amount.success": "Месторождение содержит: %1$s",
+	"chat.immersivepetroleum.command.reservoir.set.capacity.success": "Вместимость месторождения: %1$s",
+	"chat.immersivepetroleum.command.reservoir.set.type.success": "Вид месторождение: %1$s",
+	"chat.immersivepetroleum.command.reservoir.set.type.fail": "§cInvalid reservoir, '%1$s' is not a valid identifier.§r",
+	"chat.immersivepetroleum.command.reservoir.get": "%1$s (%2$s%%) of %3$s",
+
+	"key.categories.immersivepetroleum": "Immersive Petroleum",
+	"key.immersivepetroleum.projector.flip": "Зеркальная проекция"
 	
-	"chat.immersivepetroleum.command.help.help": "§6Usage: /ip help <command> [sub-commands ...]§r\nTo get more info on the specified command or, optionally, its sub commands",
-	"chat.immersivepetroleum.command.reservoir.help": "§6Usage: /ip reservoir <list|get|set|setAmount|setCapacity>§r",
-	"chat.immersivepetroleum.command.reservoir.list.help": "§6Usage: /ip reservoir list§r<br> Lists all registered reservoirs",
-	"chat.immersivepetroleum.command.reservoir.get.help": "§6Usage: /ip reservoir get§r<br> Displays the reservoir for the chunk",
-	"chat.immersivepetroleum.command.reservoir.set.help": "§6Usage: /ip reservoir set [reservoir]§r<br> Sets a reservoir override for the chunk. Specify no reservoir to clear the override.",
-	"chat.immersivepetroleum.command.reservoir.setAmount.help": "§6Usage: /ip reservoir setAmount <number>§r<br> Set the amount of mB of fluid left inside the chunk.",
-	"chat.immersivepetroleum.command.reservoir.setCapacity.help": "§6Usage: /ip reservoir setCapacity <number>§r<br> Set the maximum amount of mB of fluid in the chunk.",
-	"chat.immersivepetroleum.command.reservoir.get": "Chunk contains: %1$s <br>Override: %2$s <br>Amount: %3$s",
-	"chat.immersivepetroleum.command.reservoir.set.invalidReservoir": "§cInvalid reservoir, '%1$s' is not a valid identifier. Use '/ip reservoir list' for a list of all identifiers.§r",
-	"chat.immersivepetroleum.command.reservoir.set.sucess": "Reservoir override set to: %1$s",
-	"chat.immersivepetroleum.command.reservoir.set.clear": "Reservoir override cleared. (%1$s)",
-	"chat.immersivepetroleum.command.reservoir.setAmount.sucess": "Reservoir amount set to: %1$s",
-	"chat.immersivepetroleum.command.reservoir.setAmount.NFE": "Error, '%1$s' is not a valid number",
-	"chat.immersivepetroleum.command.reservoir.setCapacity.sucess": "Reservoir capacity set to: %1$s",
-	"chat.immersivepetroleum.command.reservoir.setCapacity.NFE": "Error, '%1$s' is not a valid number",
+	"death.attack.ipFlarestack": "%1$s сгорел дотла",
+	"death.attack.ipFlarestack.player": "%1$s сгорел дотла из-за %2$s",
+
+	"_comment": "################## Достижения ##################",
+
+	"advancement.immersivepetroleum.root": "Immersive Petroleum",
+	"advancement.immersivepetroleum.root.desc": "Найдите нефтяное месторождение с помощью сейсморазведки",
+	"advancement.immersivepetroleum.projector": "Как мне построить эту штуку?",
+	"advancement.immersivepetroleum.projector.desc": "Создайте прожектор",
+	"advancement.immersivepetroleum.flarestack": "Я монстер!",
+	"advancement.immersivepetroleum.flarestack.desc": "Убейте козу с помощью газового факела",
+	"advancement.immersivepetroleum.napalm": "Счастливый сын",
+	"advancement.immersivepetroleum.napalm.desc": "Смешайте немного напалма",
+	"advancement.immersivepetroleum.mb_derrick": "Baku Blowout Blast",
+	"advancement.immersivepetroleum.mb_derrick.desc": "Сформируйте буровую вышку",
+	"advancement.immersivepetroleum.mb_oiltank": "Слава саморегуляции!",
+	"advancement.immersivepetroleum.mb_oiltank.desc": "Сформируйте нефтехранилище",
+	"advancement.immersivepetroleum.mb_pumpjack": "Это не база, это генштаб!",
+	"advancement.immersivepetroleum.mb_pumpjack.desc": "Сформируйте штанговый насос",
+	"advancement.immersivepetroleum.mb_distillationtower": "Это только начало",
+	"advancement.immersivepetroleum.mb_distillationtower.desc": "Сформируйте ректификационную колонну",
+	"advancement.immersivepetroleum.bitumen": "Оно липкое!",
+	"advancement.immersivepetroleum.bitumen.desc": "Возьмите немного битума",
+	"advancement.immersivepetroleum.asphalt": "Ускорь меня Scotty",
+	"advancement.immersivepetroleum.asphalt.desc": "Sprint-Jump по асфальту",
+	"advancement.immersivepetroleum.mb_cokerunit": "Это ",
+	"advancement.immersivepetroleum.mb_cokerunit.desc": "Сформируйте установку для коксования",
+	"advancement.immersivepetroleum.petcoke": "Можем мы оставить это, пожалуйста?",
+	"advancement.immersivepetroleum.petcoke.desc": "Возьмите немного нефтяного кокса",
+	"advancement.immersivepetroleum.mb_hydrotreater": "Очистить™ дизель",
+	"advancement.immersivepetroleum.mb_hydrotreater.desc": "Сформируйте установку для извлечения серы",
+	"advancement.immersivepetroleum.gas_generator": "Двойная энергия",
+	"advancement.immersivepetroleum.gas_generator.desc": "Заправьте немного бензина в переносной генератор",
+	"advancement.immersivepetroleum.motorboat": "Расслабляющее приключение",
+	"advancement.immersivepetroleum.motorboat.desc": "Fзаправить моторную лодку бензином",
+	"advancement.immersivepetroleum.ice_breaker": "Титаник позавидовал бы",
+	"advancement.immersivepetroleum.ice_breaker.desc": "Разбивайте лед на моторной лодке. (Установлена модернизация ледокола)",
+	"advancement.immersivepetroleum.paddles": "Вернемся к исходной точке",
+	"advancement.immersivepetroleum.paddles.desc": "В моторной лодке закончилось топливо. (Установлена модернизация аварийные весла)",
+	"advancement.immersivepetroleum.reinforced_hull": "Это реально безопасно?",
+	"advancement.immersivepetroleum.reinforced_hull.desc": "Поднимите паруса в незере. (Установлена модернизация укреплённый корпус)",
+	"advancement.immersivepetroleum.rudders": "360 No-Scope",
+	"advancement.immersivepetroleum.rudders.desc": "Убейте скелета из лука, вращаясь по кругу. (Установлена модернизация дополнительный руль)",
+	"advancement.immersivepetroleum.tank": "Накопитель бензина",
+	"advancement.immersivepetroleum.tank.desc": "Пусть моторная лодка до краев наполнится бензином. (Установлена модернизация расширенный топливный бак)",
+	"advancement.immersivepetroleum.auto_lubricator": "Автоматизированные впрыскивание",
+	"advancement.immersivepetroleum.auto_lubricator.desc": "Установите смазочное устройство рядом с машиной",
+	"advancement.immersivepetroleum.oil_can": "Несколько брызг тут и там",
+	"advancement.immersivepetroleum.oil_can.desc": "Смажьте машину вручную",
+	"advancement.immersivepetroleum.cracking": "Смертоносная сауна",
+	"advancement.immersivepetroleum.cracking.desc": "Используйте УИС, чтобы крекинговать немного лигроина",
+	"advancement.immersivepetroleum.duroplast": "Новые современные материалы",
+	"advancement.immersivepetroleum.duroplast.desc": "Производят дюропластовые блоки из нефти",
+	"advancement.immersivepetroleum.kerosene": "Шуховская башня",
+	"advancement.immersivepetroleum.kerosene.desc": "Превратите керосин в бензол и сернистое дизельное топливо",
+	"advancement.immersivepetroleum.gasoline": "Превосходное октановое число",
+	"advancement.immersivepetroleum.gasoline.desc": "Превратите немного лигроина в бензин",
+
+	"_comment": "################## Субтитры ##################",
+
+	"subtitle.immersivepetroleum.projector": "Жужжание проектора",
+	"subtitle.immersivepetroleum.flarestack_fire":"Горение газового факела",
+
+	"_comment": "##################### JEI #####################",
+	"desc.immersivepetroleum.compat.jei.distillation.byproduct": "Вторичный выход"
+	
+		"_comment": "################## Старые части перевода ##################",
 	
 	"chat.immersivepetroleum.info.coresample.oil": "Месторождение: %s",
 	"chat.immersivepetroleum.info.coresample.oilRep": "Up to %d mB/tick of trace %s",
 	"chat.immersivepetroleum.info.coresample.noOil": "В месторождении отсутствуют жидкости",
 	
-	"key.categories.immersivepetroleum": "Immersive Petroleum",
-	"key.immersivepetroleum.projector.flip": "Зеркальная проекция"
+		"_comment":"Replaced the IP with IE to save me from headaches. ~TwistedGate",
+	"desc.immersiveengineering.info.multiblock.IE:DistillationTower": "Ректификационная колонна",
+	"desc.immersiveengineering.info.multiblock.IE:Pumpjack": "Штанговый насос",
+	"desc.immersiveengineering.info.multiblock.IE:CokerUnit": "Установка для коксования",
+	"desc.immersiveengineering.info.multiblock.IE:HydroTreater": "Установка для извлечения серы",
 }
