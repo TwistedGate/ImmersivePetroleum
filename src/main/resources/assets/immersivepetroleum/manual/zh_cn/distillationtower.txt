@@ -10,23 +10,13 @@
 
 蒸馏塔能将下列流体分离为其组分：
 
-按50mB/t将<link;immersivepetroleum:fluids;§n§o原油§r;crude>加工为
-|   15mB/t <link;immersivepetroleum:fluids;§n§o石脑油§r;naphtha>
-|   18mB/t <link;immersivepetroleum:fluids;§n§o煤油§r;kerosene>
-|   30mB/t <link;immersivepetroleum:fluids;§n§o含硫柴油§r;diesel>
-|   12mB/t <link;immersivepetroleum:fluids;§n§o润滑油§r;lubricant>
-|   0.07/t <link;immersivepetroleum:fluids;§n§o沥青§r;bitumen>
+按50mB/t将<link;immersivepetroleum:fluids;原油;crude>加工为
+|   15mB/t <link;immersivepetroleum:fluids;石脑油;naphtha>
+|   18mB/t <link;immersivepetroleum:fluids;煤油;kerosene>
+|   30mB/t <link;immersivepetroleum:fluids;含硫柴油;diesel>
+|   12mB/t <link;immersivepetroleum:fluids;润滑油;lubricant>
+|   0.07/t <link;immersivepetroleum:fluids;沥青;bitumen>。
 
-按10mB/t将<link;immersivepetroleum:plastics;§n§o裂化石脑油§r;plastics1>加工为
-|   6mB/t <link;immersivepetroleum:fluids;§n§o乙烯§r;naphtha_derivates>
-|   2mB/t <link;immersivepetroleum:fluids;§n§o丙烯§r;naphtha_derivates>
-|   2mB/t <link;immersivepetroleum:fluids;§n§o苯§r;naphtha_derivates>
-
-按12mB/t将<link;immersivepetroleum:fluids;§n§o裂化润滑油§r;lubricant>加工为
-|   6mB/t  <link;immersivepetroleum:fluids;§n§o煤油§r;kerosene>
-|   10mB/t <link;immersivepetroleum:fluids;§n§o含硫柴油§r;diesel>
-
-按10mB/t将<link;immersivepetroleum:fluids;§n§o煤油§r;kerosene>加工为
-|   2mB/t <link;immersivepetroleum:fluids;§n§o石脑油§r;naphtha>
-|   3mB/t <link;immersivepetroleum:fluids;§n§o汽油添加剂§r;gasoline>
-|   5mB/t <link;immersivepetroleum:fluids;§n§o含硫柴油§r;diesel>
+按50mB/t将<link;immersivepetroleum:fluids;煤油;lubricant>加工为
+|   5mB/t <link;immersivepetroleum:fluids;粗苯;benzol>
+|   5mB/t <link;immersivepetroleum:fluids;含硫柴油;diesel>。

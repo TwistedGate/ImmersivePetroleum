@@ -34,13 +34,9 @@
 	"fluid_type.immersivepetroleum.gasoline": "汽油",
 	"fluid_type.immersivepetroleum.napalm": "凝固汽油",
 	"fluid_type.immersivepetroleum.naphtha": "石脑油",
-	"fluid_type.immersivepetroleum.naphtha_cracked": "裂化石脑油",
-	"fluid_type.immersivepetroleum.benzene": "苯",
-	"fluid_type.immersivepetroleum.propylene": "丙烯",
-	"fluid_type.immersivepetroleum.ethylene": "乙烯",
-	"fluid_type.immersivepetroleum.lubricant_cracked": "裂化润滑油",
+	"fluid_type.immersivepetroleum.benzol": "粗苯",
+	"fluid_type.immersivepetroleum.petroleum_gas": "石油气",
 	"fluid_type.immersivepetroleum.kerosene": "煤油",
-	"fluid_type.immersivepetroleum.gasoline_additives": "汽油添加剂",
 	
 	"_comment": "################## Items ##################",
 	
@@ -63,13 +59,9 @@
 	"item.immersivepetroleum.gasoline_bucket": "汽油桶",
 	"item.immersivepetroleum.napalm_bucket": "凝固汽油桶",
 	"item.immersivepetroleum.naphtha_bucket": "石脑油桶",
-	"item.immersivepetroleum.naphtha_cracked_bucket": "裂化石脑油桶",
-	"item.immersivepetroleum.benzene_bucket": "苯桶",
-	"item.immersivepetroleum.propylene_bucket": "丙烯桶",
-	"item.immersivepetroleum.ethylene_bucket": "乙烯桶",
-	"item.immersivepetroleum.lubricant_cracked_bucket": "裂化润滑油桶",
+	"item.immersivepetroleum.benzol_bucket": "粗苯桶",
+	"item.immersivepetroleum.petroleum_gas_bucket": "石油气桶",
 	"item.immersivepetroleum.kerosene_bucket": "煤油桶",
-	"item.immersivepetroleum.gasoline_additives_bucket": "汽油添加剂桶",
 	"item.immersivepetroleum.paraffin_wax": "石蜡",
 	
 	"item.immersivepetroleum.upgrade_reinforced_hull": "强化船体",
@@ -128,7 +120,7 @@
 	"desc.immersivepetroleum.info.projector.mode_1": "投影模式",
 	
 	"desc.immersivepetroleum.info.projector.holdshift": "按住Shift",
-	"desc.immersivepetroleum.info.projector.holdshift.text": "查看被设定参数",
+	"desc.immersivepetroleum.info.projector.holdshift.text": "查看统计数据",
 
 	"desc.immersivepetroleum.info.projector.holdctrl": "按住Ctrl",
 	"desc.immersivepetroleum.info.projector.holdctrl.text": "查看操作键位",
@@ -147,6 +139,9 @@
 	"item.immersivepetroleum.shader.name.cube1": "Companion Cube",
 	
 	"_comment": "################## GUI ##################",
+
+	"gui.immersivepetroleum.tank.input": "输入槽",
+	"gui.immersivepetroleum.tank.output": "输出槽",
 	
 	"gui.immersivepetroleum.projector.search": "搜索",
 	"gui.immersivepetroleum.projector.button.confirm": "确认",
@@ -155,13 +150,18 @@
 	"gui.immersivepetroleum.projector.button.rcw": "顺时针旋转",
 	"gui.immersivepetroleum.projector.button.rccw": "逆时针旋转",
 
+	"gui.immersivepetroleum.hydrotreater.tank.primary": "主槽",
+	"gui.immersivepetroleum.hydrotreater.tank.secondary": "副槽",
+
+	"gui.immersivepetroleum.derrick.status_console.desc": "井架状态控制台",
 	"gui.immersivepetroleum.derrick.msg.disabled": "被红石控制关闭",
 	"gui.immersivepetroleum.derrick.msg.drilling": "钻探中……%1$s",
 	"gui.immersivepetroleum.derrick.msg.out_of_pipes": "管道不足",
+	"gui.immersivepetroleum.derrick.msg.not_enough_power": "能量不足",
 	"gui.immersivepetroleum.derrick.msg.missing": "缺少%1$s",
 	"gui.immersivepetroleum.derrick.msg.completed": "钻探已完成！<br>祝今日顺利 :3",
 	"gui.immersivepetroleum.derrick.msg.safety_valve": "警告！<br>安全阀已打开<br>压力过高",
-	"gui.immersivepetroleum.derrick.msg.water_table": "警告！<br>低于地下水位！<br>已被水堵塞！",
+	"gui.immersivepetroleum.derrick.msg.water_table": "警告！<br>低于地下水位<br>已被水堵塞",
 	"gui.immersivepetroleum.derrick.msg.set_in_stone": "已设定",
 	"gui.immersivepetroleum.derrick.msg.config": "配置",
 	
@@ -171,8 +171,18 @@
 	"gui.immersivepetroleum.derrick.settings.button.reset.desc": "重设为上一可用配置",
 	"gui.immersivepetroleum.derrick.settings.button.close": "关闭",
 	"gui.immersivepetroleum.derrick.settings.button.close.desc": "返回井架界面",
+	"gui.immersivepetroleum.derrick.settings.derrickishere": "中心（井架）",
+	"gui.immersivepetroleum.derrick.settings.pipe.normal": "普通管道§7（点击以切换）§r",
+	"gui.immersivepetroleum.derrick.settings.pipe.perforated": "多孔管道§7（点击以切换）§r",
+	"gui.immersivepetroleum.derrick.settings.pipe.perforated_fixed": "多孔管道§c（固定）§r",
 	
-	"gui.immersivepetroleum.seismicsurvey.northarrow": "北",
+	"_comment": "These are general purpose",
+	"gui.immersivepetroleum.dirs.north": "北",
+	"gui.immersivepetroleum.dirs.east": "东",
+	"gui.immersivepetroleum.dirs.south": "南",
+	"gui.immersivepetroleum.dirs.west": "西",
+	"gui.immersivepetroleum.empty": "空",
+	
 	"gui.immersivepetroleum.seismicsurvey.worldcoords": "坐标：x%1$d z%2$d",
 	"gui.immersivepetroleum.seismicsurvey.takenhere": "取样点。",
 	"gui.immersivepetroleum.seismicsurvey.possibility": "可能存在未知类型的流体储层",
@@ -192,7 +202,7 @@
 	"ie.manual.entry.reservoirs.subtitle": "黑色的黄金",
 
 	"ie.manual.entry.reservoirs.oil0": "当你在基岩附近挖矿时，你偶尔会看到一种黏稠的黑色易燃物质：<link;immersivepetroleum:fluids;§o§n原油§r>。原油只是这坚不可摧的基岩下方的数种流体之一，但凭你自己的力量无法触及这些流体储层。\n\n在<link;immersivepetroleum:derrick;§o§n经过特别设计的机器§r>的帮助下，你才能把这些流体矿藏收入囊中。<np>",
-	"ie.manual.entry.reservoirs.oil1": "§o§n震波探测器§r能以反射回来的次声波探测地下的流体储层，而探测用次声波可由<link;bullets;§o§n鹿弹§r;buckshot>产生。需将鹿弹装填至探测器内，再启动仪器，就可产出一张记录有周围流体储层信息的地图，凭此能三角定位出确切位置。<np>",
+	"ie.manual.entry.reservoirs.oil1": "§o§n震波探测器§r能以反射回来的次声波探测地下的流体储层，而探测用次声波可由<link;revolver_cartridges;§o§n鹿弹§r;buckshot>产生。将鹿弹装填至探测器内，再启动仪器，就可产出一张记录有周围流体储层信息的地图，凭此能三角定位出确切位置。<np>",
 	"ie.manual.entry.reservoirs.oil2": "每个流体储层只能产出一种流体，各类型的具体信息已罗列在后页。<np>",
 	
 	"_comment": "Below are used for Dynamic page generation of all reservoirs",
@@ -275,12 +285,10 @@
 	"advancement.immersivepetroleum.oil_can.desc": "手动给机器润滑",
 	"advancement.immersivepetroleum.cracking": "致命桑拿",
 	"advancement.immersivepetroleum.cracking.desc": "用高压精炼装置裂化石脑油",
-	"advancement.immersivepetroleum.naphtha_distillates": "有权获得经济补偿",
-	"advancement.immersivepetroleum.naphtha_distillates.desc": "制得所有石脑油制品各一桶",
 	"advancement.immersivepetroleum.duroplast": "全新现代材料",
 	"advancement.immersivepetroleum.duroplast.desc": "用原油制得工程塑胶块",
 	"advancement.immersivepetroleum.kerosene": "舒霍夫裂解",
-	"advancement.immersivepetroleum.kerosene.desc": "将煤油加工为汽油添加剂",
+	"advancement.immersivepetroleum.kerosene.desc": "将煤油加工为粗苯和含硫柴油",
 	"advancement.immersivepetroleum.gasoline": "辛烷值过大",
 	"advancement.immersivepetroleum.gasoline.desc": "将石脑油加工为汽油",
 	
@@ -288,7 +296,9 @@
 	
 	"subtitle.immersivepetroleum.projector": "投影仪：嗡嗡声",
 	"subtitle.immersivepetroleum.flarestack_fire": "焚油烟囱：火焰嗖嗖声",
-	
+	"subtitle.immersivepetroleum.gas_generator": "便携式发电机：嘈杂声",
+	"subtitle.immersivepetroleum.motorboat_engine": "快艇：乱晃？",
+
 	"_comment": "##################### JEI #####################",
 	"desc.immersivepetroleum.compat.jei.distillation.byproduct": "副产物"
 }

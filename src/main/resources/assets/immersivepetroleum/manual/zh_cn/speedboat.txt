@@ -1,9 +1,9 @@
 汽艇
 乘风破浪
-<&speedboat0>汽艇是标准木船的升级版。汽艇马达运行所需的燃料与<link;immersivepetroleum:portablegenerator;§n§o便携式发电机§r>的相同，其带来的加速效果是手动划桨不能比拟的。如桶和<link;jerrycan;§n§o油罐§r>等任意便携式流体储罐都可为汽艇加入燃料。<np>
+<&speedboat0>汽艇是标准木船的升级版。汽艇马达运行所需的燃料与<link;immersivepetroleum:portable_generator;便携式发电机>的相同，其带来的加速效果是手动划桨不能比拟的。如桶和<link;jerrycan;油罐>等任意便携式流体储罐都可为汽艇加入燃料。<np>
 燃料会在引擎启动时以恒定速率消耗，汽艇向前或向后航行都是一样。按住“跳跃”键则能增加汽艇的速度，尽管燃料消耗速率和转弯半径也会随之升高。
 
-和其他设备一样，汽艇也能在<link;workbench;§o§n工程师装配台§r>中进行修改。<np>
+和其他设备一样，汽艇也能在<link;engineers_workbench;工程师装配台>中进行修改。<np>
 <&speedboat1>
 §2扩展油箱§r将允许汽艇装载两倍的油量。
 <&speedboat2>一套§2机动船舵§r将赋予汽艇更快的转向能力，从而大幅提高稳定性。此升级安装后，汽艇的转弯半径将会大大缩短。
