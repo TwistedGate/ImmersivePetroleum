@@ -1,5 +1,13 @@
 package flaxbeard.immersivepetroleum.common.blocks.tileentities;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
+
 import blusunrize.immersiveengineering.ImmersiveEngineering;
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.api.TargetingInfo;
@@ -16,7 +24,6 @@ import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
 import blusunrize.immersiveengineering.common.blocks.PlacementLimitation;
 import blusunrize.immersiveengineering.common.config.IEServerConfig;
 import blusunrize.immersiveengineering.common.util.IESounds;
-import com.google.common.collect.ImmutableList;
 import flaxbeard.immersivepetroleum.api.energy.FuelHandler;
 import flaxbeard.immersivepetroleum.common.IPTileTypes;
 import flaxbeard.immersivepetroleum.common.blocks.interfaces.IBlockEntityDrop;
@@ -54,11 +61,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
 
 public class GasGeneratorTileEntity extends ImmersiveConnectableBlockEntity implements IPCommonTickableTile, IPlacementReader, IPlayerInteraction, IBlockEntityDrop, IEBlockInterfaces.IDirectionalBE, IEBlockInterfaces.IBlockOverlayText, IEBlockInterfaces.ISoundBE, EnergyTransferHandler.EnergyConnector{
 	public static final int FUEL_CAPACITY = 8000;
@@ -137,12 +139,34 @@ public class GasGeneratorTileEntity extends ImmersiveConnectableBlockEntity impl
 	
 	@Override
 	public void readOnPlacement(LivingEntity placer, ItemStack stack){
-		if(stack.hasTag()){
-			CompoundTag nbt = stack.getOrCreateTag();
-			
+		if(!stack.hasTag())
+			return;
+		
+		CompoundTag nbt = stack.getOrCreateTag();
+		
+		if(nbt.contains("tank", Tag.TAG_COMPOUND))
 			this.tank.readFromNBT(nbt.getCompound("tank"));
+		
+		if(nbt.contains("energy"))
 			this.energyStorage.deserializeNBT(nbt.get("energy"));
-		}
+	}
+	
+	@Nonnull
+	public List<ItemStack> getBlockEntityDrop(LootContext context){
+		ItemStack stack = new ItemStack(getBlockState().getBlock());
+		
+		CompoundTag nbt = new CompoundTag();
+		
+		if(this.tank.getFluidAmount() > 0)
+			nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
+		
+		if(this.energyStorage.getEnergyStored() > 0)
+			nbt.put("energy", this.energyStorage.serializeNBT());
+		
+		if(!nbt.isEmpty())
+			stack.setTag(nbt);
+		
+		return ImmutableList.of(stack);
 	}
 	
 	@Override
@@ -245,28 +269,6 @@ public class GasGeneratorTileEntity extends ImmersiveConnectableBlockEntity impl
 		}
 		
 		return InteractionResult.FAIL;
-	}
-	
-	@Nonnull
-	public List<ItemStack> getBlockEntityDrop(LootContext context){
-		ItemStack stack = new ItemStack(getBlockState().getBlock());
-		
-		CompoundTag nbt = new CompoundTag();
-		
-		if(this.tank.getFluidAmount() > 0){
-			CompoundTag tankNbt = this.tank.writeToNBT(new CompoundTag());
-			nbt.put("tank", tankNbt);
-		}
-		
-		if(this.energyStorage.getEnergyStored() > 0){
-			Tag energyNbt = this.energyStorage.serializeNBT();
-			nbt.put("energy", energyNbt);
-		}
-		
-		if(!nbt.isEmpty())
-			stack.setTag(nbt);
-		
-		return ImmutableList.of(stack);
 	}
 	
 	@Override
