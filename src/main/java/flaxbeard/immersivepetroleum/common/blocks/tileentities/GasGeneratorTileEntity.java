@@ -139,12 +139,34 @@ public class GasGeneratorTileEntity extends ImmersiveConnectableBlockEntity impl
 	
 	@Override
 	public void readOnPlacement(LivingEntity placer, ItemStack stack){
-		if(stack.hasTag()){
-			CompoundTag nbt = stack.getOrCreateTag();
-			
+		if(!stack.hasTag())
+			return;
+		
+		CompoundTag nbt = stack.getOrCreateTag();
+		
+		if(nbt.contains("tank", Tag.TAG_COMPOUND))
 			this.tank.readFromNBT(nbt.getCompound("tank"));
+		
+		if(nbt.contains("energy"))
 			this.energyStorage.deserializeNBT(nbt.get("energy"));
-		}
+	}
+	
+	@Nonnull
+	public List<ItemStack> getBlockEntityDrop(LootContext context){
+		ItemStack stack = new ItemStack(getBlockState().getBlock());
+		
+		CompoundTag nbt = new CompoundTag();
+		
+		if(this.tank.getFluidAmount() > 0)
+			nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
+		
+		if(this.energyStorage.getEnergyStored() > 0)
+			nbt.put("energy", this.energyStorage.serializeNBT());
+		
+		if(!nbt.isEmpty())
+			stack.setTag(nbt);
+		
+		return ImmutableList.of(stack);
 	}
 	
 	@Override
@@ -240,27 +262,6 @@ public class GasGeneratorTileEntity extends ImmersiveConnectableBlockEntity impl
 		}
 		
 		return InteractionResult.FAIL;
-	}
-	
-	@Nonnull
-	public List<ItemStack> getBlockEntityDrop(LootContext context){
-		ItemStack stack = new ItemStack(getBlockState().getBlock());
-		
-		CompoundTag nbt = new CompoundTag();
-		
-		if(this.tank.getFluidAmount() > 0){
-			CompoundTag tankNbt = this.tank.writeToNBT(new CompoundTag());
-			nbt.put("tank", tankNbt);
-		}
-		
-		if(this.energyStorage.getEnergyStored() > 0){
-			Tag energyNbt = this.energyStorage.serializeNBT();
-			nbt.put("energy", energyNbt);
-		}
-		
-		if(!nbt.isEmpty())
-			stack.setTag(nbt);
-		return ImmutableList.of(stack);
 	}
 	
 	@Override
