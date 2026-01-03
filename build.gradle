@@ -133,6 +133,18 @@ dependencies {
     compileOnly fg.deobf("org.squiddev:cc-tweaked-${version_minecraft}:${version_cctweaked}")
 }
 
+def version_replaces = [
+		'version'		: project.version,
+		'mc_version'	: version_minecraft,
+		'forge_version'	: version_forge,
+		'ie_version'	: version_ie,
+]
+processResources {
+	filesMatching("META-INF/mods.toml") {
+		expand version_replaces
+	}
+}
+
 def customGradle = rootProject.file('custom.gradle');
 if(customGradle.exists()){
 	apply from: customGradle;

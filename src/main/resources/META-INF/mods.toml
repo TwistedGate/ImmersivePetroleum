@@ -5,7 +5,7 @@ license="All rights reserved"
 
 [[mods]] #mandatory
 	modId="immersivepetroleum"
-	version="${file.jarVersion}"
+	version="${version}"
 	displayName="Immersive Petroleum"
 	displayURL="https://minecraft.curseforge.com/projects/immersive-petroleum"
 	authors="Flaxbeard and Maintained by TwistedGate"
@@ -17,20 +17,20 @@ license="All rights reserved"
 [[dependencies.immersivepetroleum]]
 	modId="immersiveengineering"
 	mandatory=true
-	versionRange="[1.19.2-9.2.2-165,)"
+	versionRange="[${ie_version},)"
 	ordering="BEFORE"
 	side="BOTH"
 
 [[dependencies.immersivepetroleum]]
 	modId="forge"
 	mandatory=true
-	versionRange="[43.2.0,)"
+	versionRange="[${forge_version},)"
 	ordering="NONE"
 	side="BOTH"
 
 [[dependencies.immersivepetroleum]]
 	modId="minecraft"
 	mandatory=true
-	versionRange="[1.19.2]"
+	versionRange="[${mc_version}]"
 	ordering="NONE"
 	side="BOTH"
