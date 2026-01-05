@@ -1,4 +1,0 @@
-Tarmac
-Motorway material
-<&asphalt0>Tarmac, held together by gooey Bitumen, is a darker coloured alternative to regular Concrete. It may be produced using the bitumen byproducts of distilling Crude Oil in the <link;immersivepetroleum:distillationtower;§n§oDistillation §n§oTower§r>.<np>
-Tarmac is a high-quality road material, and entities that walk atop it will find their journeys to go quicker - 20% faster on average. Stairs and slabs can be made of Tarmac, with the same effects of being a high-quality road material.

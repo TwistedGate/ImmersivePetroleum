@@ -1,6 +1,0 @@
-Asfaltobeton
-Dálnicový materiál
-<&asphalt0>Asfaltobeton je tmavší, dehtová alternativa pro klasický beton. Asfalt je vyroben ze živic jako vazivo v betonu, což dělá asfaltobeton přebytkový výrobek destilace <link;immersivepetroleum:fluids;§n§oropy§r;crude>.<np>
-Asfaltobeton může být řezán na schody a půlbloky pomocí řezače kamení, ale nemůže být nakrájen na plátky jako normální beton.
-
-Hladký povrch asfaltobetonu a jeho řezaných forem dělá dobré cesty, dodávající 20% pohybové rychlosti navíc.

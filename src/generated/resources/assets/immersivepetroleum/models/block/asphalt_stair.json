@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "immersivepetroleum:block/asphalt",
-    "side": "immersivepetroleum:block/asphalt",
-    "top": "immersivepetroleum:block/asphalt"
-  }
-}

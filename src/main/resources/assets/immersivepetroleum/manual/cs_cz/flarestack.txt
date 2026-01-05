@@ -1,7 +1,0 @@
-Fléra
-Tvé problémy shoří
-<&flarestack0>Fléra se zbaví jakékoliv hořlavé kapaliny pumpované do vstupního otvoru na spodku a zapálení jej.
-
-Hlavní světlo fléry je pořád zapnuté, a stání na vrchu způsobí poškození popálením.<np>
-Rychlost hoření je rovná síle ruditového signálu, s maximální rychlostí 250mB/t. Toto chování lze obrátit pomocí Inženýrova šroubováku.<np>
-Pod tímto textem je seznam kapalin které lze spálit

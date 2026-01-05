@@ -1,6 +1,0 @@
-{
-  "parent": "immersivepetroleum:block/asphalt_stair",
-  "textures": {
-    "particle": "immersivepetroleum:block/asphalt"
-  }
-}

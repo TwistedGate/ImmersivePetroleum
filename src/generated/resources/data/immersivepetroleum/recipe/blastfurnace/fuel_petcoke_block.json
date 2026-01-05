@@ -1,7 +1,0 @@
-{
-  "type": "immersiveengineering:blast_furnace_fuel",
-  "input": {
-    "tag": "neoforge:storage_blocks/coal_petcoke"
-  },
-  "time": 12000
-}

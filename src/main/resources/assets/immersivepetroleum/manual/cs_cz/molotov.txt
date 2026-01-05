@@ -1,8 +1,0 @@
-Molotovův koktejl
-Protesty jsou číslo jedna
-<&molotov>
-Naplň prázdnou lahev pomocí <link;bottling_machine;§o§nPlnícího §o§nstroje§r> s <link;immersivepetroleum:fluids;§n§oBenzínem§r;gasoline>.
-Nacpi tam nějakou vlnu nebo <link;hemp;Tvrdou tkaninu;fabric_recipe> do hrdla benzínem naplněné lahve. 
-
-Jakmile ho chceš hodit, drž křesadlo ve vedlejší ruce a nezapálený Molotov v hlavní ruce a drž pravé tlačítko pro zapálení.<np>
-Máš §o15 sekund§r na hození, jinak všechen benzín v lahvi bude využit a zůstaneš znovu s prázdnou lahví.

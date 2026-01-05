@@ -1,6 +1,0 @@
-{
-  "parent": "immersivepetroleum:block/paraffin_wax_block",
-  "textures": {
-    "particle": "immersivepetroleum:block/paraffin_wax_block"
-  }
-}
