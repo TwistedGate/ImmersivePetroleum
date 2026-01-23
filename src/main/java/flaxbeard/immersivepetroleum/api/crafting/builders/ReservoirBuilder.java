@@ -158,9 +158,9 @@ public class ReservoirBuilder extends IEFinishedRecipe<ReservoirBuilder>{
 	/**
 	 * <i>This may only be called once.</i><br>
 	 * <br>
-	 * Dimension check for this Reservior.
+	 * Dimension check for this Reservoir.
 	 * 
-	 * @param isBlacklist Marks this as a blacklist when true. Whilelist otherwise.
+	 * @param isBlacklist Marks this as a blacklist when true. Whitelist otherwise.
 	 * @param dimensions  Dimensions to blacklist/whitelist
 	 * @return {@link ReservoirBuilder}
 	 * @throws IllegalArgumentException when it has already been set
@@ -173,8 +173,11 @@ public class ReservoirBuilder extends IEFinishedRecipe<ReservoirBuilder>{
 		
 		this.isDimBlacklist = isBlacklist;
 		for(ResourceLocation rl:dimensions){
-			if(rl != null && !this.dimensions.contains(new JsonPrimitive(rl.toString()))){
-				this.dimensions.add(rl.toString());
+			if(rl != null){
+				String rlString = rl.toString();
+				if(!this.dimensions.contains(new JsonPrimitive(rlString))){
+					this.dimensions.add(rlString);
+				}
 			}
 		}
 		
@@ -184,9 +187,9 @@ public class ReservoirBuilder extends IEFinishedRecipe<ReservoirBuilder>{
 	/**
 	 * <i>This may only be called once.</i><br>
 	 * <br>
-	 * Biome check for this Reservior.
+	 * Biome check for this Reservoir.
 	 * 
-	 * @param isBlacklist Marks this as a blacklist when true. Whilelist otherwise.
+	 * @param isBlacklist Marks this as a blacklist when true. Whitelist otherwise.
 	 * @param biomes      Biomes to blacklist/whitelist
 	 * @return {@link ReservoirBuilder}
 	 * @throws IllegalArgumentException when it has already been set
@@ -199,8 +202,11 @@ public class ReservoirBuilder extends IEFinishedRecipe<ReservoirBuilder>{
 		
 		this.isBioBlacklist = isBlacklist;
 		for(ResourceLocation rl:biomes){
-			if(rl != null && !this.biomes.contains(new JsonPrimitive(rl.toString()))){
-				this.biomes.add(rl.toString());
+			if(rl != null){
+				String rlString = rl.toString();
+				if(!this.biomes.contains(new JsonPrimitive(rlString))){
+					this.biomes.add(rlString);
+				}
 			}
 		}
 		

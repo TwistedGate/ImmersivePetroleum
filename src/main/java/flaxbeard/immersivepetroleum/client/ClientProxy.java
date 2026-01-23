@@ -35,6 +35,7 @@ import flaxbeard.immersivepetroleum.common.IPMenuTypes;
 import flaxbeard.immersivepetroleum.common.blocks.multiblocks.logic.PumpjackLogic;
 import flaxbeard.immersivepetroleum.common.cfg.IPServerConfig;
 import flaxbeard.immersivepetroleum.common.crafting.RecipeReloadListener;
+import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
 import flaxbeard.immersivepetroleum.common.util.ResourceUtils;
 import flaxbeard.immersivepetroleum.common.util.Utils;
 import net.minecraft.client.Minecraft;
@@ -48,6 +49,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -344,9 +346,26 @@ public class ClientProxy extends CommonProxy{
 			if(reservoir.getBiomes().hasEntries()){
 				StringBuilder strBuilder = new StringBuilder();
 				
-				reservoir.getBiomes().forEach(rl -> {
-					Biome bio = ForgeRegistries.BIOMES.getValue(rl);
-					strBuilder.append((strBuilder.length() > 0) ? ", " : "").append(bio != null ? bio.toString() : rl);
+				reservoir.getBiomes().forEach(v -> {
+					if(!strBuilder.isEmpty())
+						strBuilder.append(", ");
+					
+					if(!v.isTag()){
+						strBuilder.append(v.location().getPath());
+						return;
+					}
+					
+					RegistryUtils.listBiomesInTag(v.getTag()).ifPresentOrElse(list -> {
+						for(int j = 0, len = list.size();j < len;j++){
+							ResourceKey<Biome> biomeResourceKey = list.get(j).unwrapKey().orElse(null);
+							if(biomeResourceKey != null){
+								strBuilder.append(biomeResourceKey.location().getPath());
+								
+								if(j < (len - 1))
+									strBuilder.append(", ");
+							}
+						}
+					}, () -> strBuilder.append("#").append(v.location().getPath()));
 				});
 				
 				if(reservoir.getBiomes().isBlacklist()){

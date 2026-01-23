@@ -1,8 +1,13 @@
 package flaxbeard.immersivepetroleum.common.util;
 
+import flaxbeard.immersivepetroleum.ImmersivePetroleum;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
@@ -13,11 +18,29 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
+@EventBusSubscriber(modid = ImmersivePetroleum.MODID, bus = Bus.FORGE)
 public class RegistryUtils{
+	private static Registry<Biome> BIOME_REGISTRY;
+	
+	@SubscribeEvent
+	public static void serverStart(ServerStartingEvent event){
+		BIOME_REGISTRY = event.getServer().registryAccess().registryOrThrow(Registries.BIOME);
+	}
+	
+	public static Optional<List<Holder<Biome>>> listBiomesInTag(TagKey<Biome> tag){
+		return BIOME_REGISTRY.getTag(tag).map(holders -> holders.stream().toList());
+	}
+	
 	@Nullable
 	public static ResourceLocation getRegistryNameOf(Item item){
 		return ForgeRegistries.ITEMS.getKey(item);

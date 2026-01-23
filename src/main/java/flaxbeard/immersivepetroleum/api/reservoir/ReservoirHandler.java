@@ -6,6 +6,7 @@ import flaxbeard.immersivepetroleum.common.ReservoirRegionDataStorage;
 import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
 import flaxbeard.immersivepetroleum.common.util.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ColumnPos;
@@ -15,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
@@ -45,8 +47,7 @@ public class ReservoirHandler{
 		int chunkX = chunkPos.getMinBlockX();
 		int chunkZ = chunkPos.getMinBlockZ();
 		
-		ResourceKey<Level> dimensionKey = world.dimension();
-		ResourceLocation dimensionRL = dimensionKey.location();
+		ResourceKey<Level> dimension = world.dimension();
 		
 		final ReservoirRegionDataStorage storage = ReservoirRegionDataStorage.get();
 		
@@ -61,7 +62,7 @@ public class ReservoirHandler{
 				
 				
 				// Getting the biome now to prevent lockups
-				ResourceLocation biomeRL = RegistryUtils.getRegistryNameOf(world.getBiome(new BlockPos(x, 64, z)).value());
+				Holder<Biome> biome = world.getBiome(new BlockPos(x, 64, z));
 				
 				final ColumnPos current = new ColumnPos(x, z);
 				if(storage.existsAt(current))
@@ -69,11 +70,11 @@ public class ReservoirHandler{
 				
 				
 				ReservoirType reservoir = null;
-				int totalWeight = getTotalWeight(dimensionRL, biomeRL);
+				int totalWeight = getTotalWeight(dimension, biome);
 				if(totalWeight > 0){
 					int weight = Math.abs(randomSource.nextInt() % totalWeight);
 					for(ReservoirType res:ReservoirType.map.values()){
-						if(res.getDimensions().valid(dimensionRL) && res.getBiomes().valid(biomeRL)){
+						if(res.getDimensions().isValid(dimension) && res.getBiomes().isValid(biome)){
 							weight -= res.weight;
 							if(weight < 0){
 								reservoir = res;
@@ -91,7 +92,7 @@ public class ReservoirHandler{
 							int amount = (int) Mth.lerp(randomSource.nextFloat(), reservoir.minSize, reservoir.maxSize);
 							
 							ReservoirIsland island = new ReservoirIsland(poly, reservoir, amount);
-							storage.addIsland(dimensionKey, island);
+							storage.addIsland(dimension, island);
 						}
 					}
 				}
@@ -106,23 +107,21 @@ public class ReservoirHandler{
 	 * @param biome     The biome to check
 	 * @return The total weight associated with the dimension/biome pair
 	 */
-	public static int getTotalWeight(ResourceLocation dimension, ResourceLocation biome){
-		Map<ResourceLocation, Integer> map = totalWeightMap.computeIfAbsent(dimension, k -> new HashMap<>());
+	public static int getTotalWeight(ResourceKey<Level> dimension, Holder<Biome> biome){
+		final ResourceLocation dimensionRL = dimension.location();
+		final ResourceLocation biomeRL = biome.unwrapKey().get().location();
 		
-		Integer totalWeight = map.get(biome);
-		if(totalWeight == null){
-			totalWeight = 0;
-			
-			for(ReservoirType reservoir:ReservoirType.map.values()){
-				if(reservoir.getDimensions().valid(dimension) && reservoir.getBiomes().valid(biome)){
+		Map<ResourceLocation, Integer> map = totalWeightMap.computeIfAbsent(dimensionRL, k -> new HashMap<>());
+		
+		return map.computeIfAbsent(biomeRL, r -> {
+			int totalWeight = 0;
+			for(ReservoirType reservoir: ReservoirType.map.values()){
+				if(reservoir.getDimensions().isValid(dimension) && reservoir.getBiomes().isValid(biome)){
 					totalWeight += reservoir.weight;
 				}
 			}
-			
-			map.put(biome, totalWeight);
-		}
-		
-		return totalWeight;
+			return totalWeight;
+		});
 	}
 	
 	/** May only be called on the server-side. Returns null on client-side. */

@@ -3,21 +3,22 @@ package flaxbeard.immersivepetroleum.common.items;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirHandler;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirIsland;
 import flaxbeard.immersivepetroleum.api.reservoir.ReservoirType;
-import flaxbeard.immersivepetroleum.api.reservoir.ReservoirType.BWList;
 import flaxbeard.immersivepetroleum.client.model.IPModel;
 import flaxbeard.immersivepetroleum.client.model.IPModels;
 import flaxbeard.immersivepetroleum.common.IPContent;
 import flaxbeard.immersivepetroleum.common.entity.MotorboatEntity;
 import flaxbeard.immersivepetroleum.common.network.IPPacketHandler;
 import flaxbeard.immersivepetroleum.common.network.MessageDebugSync;
-import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
+import flaxbeard.immersivepetroleum.common.reservoir.util.BWListBiome;
+import flaxbeard.immersivepetroleum.common.reservoir.util.BWListDimension;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -207,17 +209,17 @@ public class DebugItem extends IPItemBase{
 					
 					BlockPos pos = context.getClickedPos();
 					
-					ResourceLocation dimensionRL = world.dimension().location();
-					ResourceLocation biomeRL = RegistryUtils.getRegistryNameOf(world.getBiome(pos).value());
+					ResourceKey<Level> dimension = world.dimension();
+					Holder<Biome> biome = world.getBiome(pos);
 					
-					player.displayClientMessage(Component.literal(dimensionRL.toString()), false);
+					player.displayClientMessage(Component.literal(dimension.location().toString()), false);
 					
 					for(ReservoirType res:ReservoirType.map.values()){
-						BWList dims = res.getDimensions();
-						BWList biom = res.getBiomes();
+						BWListDimension listDimension = res.getDimensions();
+						BWListBiome listBiome = res.getBiomes();
 						
-						boolean validDimension = dims.valid(dimensionRL);
-						boolean validBiome = biom.valid(biomeRL);
+						boolean validDimension = listDimension.isValid(dimension);
+						boolean validBiome = listBiome.isValid(biome);
 						
 						MutableComponent component = Component.literal(res.name)
 							.append(Component.literal(" Dimension").withStyle(validDimension ? ChatFormatting.GREEN : ChatFormatting.RED))

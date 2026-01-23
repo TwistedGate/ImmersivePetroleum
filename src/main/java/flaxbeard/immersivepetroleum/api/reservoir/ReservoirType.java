@@ -4,6 +4,8 @@ import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
 import blusunrize.immersiveengineering.api.crafting.IESerializableRecipe;
 import flaxbeard.immersivepetroleum.api.crafting.IPRecipeTypes;
 import flaxbeard.immersivepetroleum.common.crafting.Serializers;
+import flaxbeard.immersivepetroleum.common.reservoir.util.BWListBiome;
+import flaxbeard.immersivepetroleum.common.reservoir.util.BWListDimension;
 import flaxbeard.immersivepetroleum.common.util.RegistryUtils;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -43,8 +46,8 @@ public class ReservoirType extends IESerializableRecipe{
 	
 	private final Fluid fluid;
 	
-	private BWList biomes = new BWList(false);
-	private BWList dimensions = new BWList(false);
+	private BWListBiome biomes = new BWListBiome(false);
+	private BWListDimension dimensions = new BWListDimension(false);
 	
 	/**
 	 * Creates a new reservoir.
@@ -99,8 +102,8 @@ public class ReservoirType extends IESerializableRecipe{
 		this.residual = nbt.getInt("residual");
 		this.equilibrium = nbt.getInt("equilibrium");
 		
-		this.biomes = new BWList(nbt.getCompound("biomes"));
-		this.dimensions = new BWList(nbt.getCompound("dimensions"));
+		this.biomes.readFromNbt(nbt.getCompound("biomes"));
+		this.dimensions.readFromNbt(nbt.getCompound("dimensions"));
 		
 		this.weight = nbt.getInt("weight");
 	}
@@ -124,49 +127,43 @@ public class ReservoirType extends IESerializableRecipe{
 		nbt.putInt("residual", this.residual);
 		nbt.putInt("equilibrium", this.equilibrium);
 		
-		nbt.put("biomes", this.biomes.toNbt());
-		nbt.put("dimensions", this.dimensions.toNbt());
+		nbt.put("biomes", this.biomes.writeToNbt());
+		nbt.put("dimensions", this.dimensions.writeToNbt());
 		
 		nbt.putInt("weight", this.weight);
 		
 		return nbt;
 	}
 	
-	public void setBiomes(boolean blacklist, ResourceLocation... names){
-		setBiomes(blacklist, Arrays.asList(names));
-	}
-	
+	@Deprecated(forRemoval = true)
 	public void setBiomes(boolean blacklist, List<ResourceLocation> names){
-		this.biomes = new BWList(new HashSet<>(names), blacklist);
+		throw new UnsupportedOperationException();
 	}
 	
-	public void setDimensions(boolean blacklist, ResourceLocation... names){
-		setDimensions(blacklist, Arrays.asList(names));
-	}
-	
+	@Deprecated(forRemoval = true)
 	public void setDimensions(boolean blacklist, List<ResourceLocation> names){
-		this.dimensions = new BWList(new HashSet<>(names), blacklist);
+		throw new UnsupportedOperationException();
 	}
 	
-	public Set<ResourceLocation> getBiomeList(){
-		return this.biomes.getSet();
+	public void setBiomes(@Nonnull BWListBiome list){
+		this.biomes = Objects.requireNonNull(list);
 	}
 	
-	public Set<ResourceLocation> getDimensionList(){
-		return this.dimensions.getSet();
+	public void setDimensions(@Nonnull BWListDimension list){
+		this.dimensions = Objects.requireNonNull(list);
 	}
 	
-	public BWList getDimensions(){
+	public BWListDimension getDimensions(){
 		return this.dimensions;
 	}
 	
-	public BWList getBiomes(){
+	public BWListBiome getBiomes(){
 		return this.biomes;
 	}
 	
-	@Override
 	@Nonnull
-	public ItemStack getResultItem(RegistryAccess registryAccess){
+	@Override
+	public ItemStack getResultItem(@Nonnull RegistryAccess registryAccess){
 		return ItemStack.EMPTY;
 	}
 	
@@ -177,112 +174,5 @@ public class ReservoirType extends IESerializableRecipe{
 	@Override
 	public String toString(){
 		return this.writeToNBT().toString();
-	}
-	
-	static Set<ResourceLocation> toSet(ListTag nbtList){
-		Set<ResourceLocation> set = new HashSet<>();
-		if(!nbtList.isEmpty()){
-			nbtList.forEach(tag -> {
-				if(tag instanceof StringTag){
-					set.add(ResourceLocation.parse(tag.getAsString()));
-				}
-			});
-		}
-		return set;
-	}
-	
-	static ListTag toNbt(Set<ResourceLocation> set){
-		ListTag nbtList = new ListTag();
-		if(!set.isEmpty()){
-			set.forEach(rl -> nbtList.add(StringTag.valueOf(rl.toString())));
-		}
-		return nbtList;
-	}
-	
-	/**
-	 * Simple Black/White-List.
-	 * 
-	 * @author TwistedGate
-	 */
-	public static class BWList{
-		private Set<ResourceLocation> set;
-		private boolean isBlacklist;
-		public BWList(boolean isBlacklist){
-			this(new HashSet<>(), isBlacklist);
-		}
-		
-		public BWList(Set<ResourceLocation> set, boolean isBlacklist){
-			this.set = set;
-			this.isBlacklist = isBlacklist;
-		}
-		
-		public BWList(CompoundTag tag){
-			this.isBlacklist = tag.getBoolean("isBlacklist");
-			
-			if(tag.contains("list", Tag.TAG_LIST)){
-				ListTag list = tag.getList("list", Tag.TAG_STRING);
-				
-				Set<ResourceLocation> set = new HashSet<>();
-				if(list.size() > 0){
-					list.forEach(t -> {
-						if(t instanceof StringTag){
-							set.add(ResourceLocation.parse(t.getAsString()));
-						}
-					});
-				}
-				this.set = set;
-			}else{
-				this.set = new HashSet<>();
-			}
-		}
-		
-		public boolean isBlacklist(){
-			return this.isBlacklist;
-		}
-		
-		public boolean add(ResourceLocation rl){
-			return this.set.add(rl);
-		}
-		
-		public boolean addAll(Collection<? extends ResourceLocation> c){
-			return this.set.addAll(c);
-		}
-		
-		public boolean hasEntries(){
-			return this.set.size() > 0;
-		}
-		
-		public boolean valid(ResourceLocation rl){
-			if(this.set.isEmpty()){
-				// An empty set is considered to be "allow anywhere". Regardless of "isBlacklist" value.
-				return true;
-			}
-			
-			boolean contains = this.set.contains(rl);
-			return this.isBlacklist ? !contains : contains;
-		}
-		
-		public Set<ResourceLocation> getSet(){
-			return Collections.unmodifiableSet(this.set);
-		}
-		
-		public void forEach(Consumer<ResourceLocation> action){
-			this.set.forEach(action);
-		}
-		
-		public CompoundTag toNbt(){
-			CompoundTag tag = new CompoundTag();
-			tag.putBoolean("isBlacklist", this.isBlacklist);
-			tag.put("list", toNbtList());
-			return tag;
-		}
-		
-		private ListTag toNbtList(){
-			ListTag nbtList = new ListTag();
-			if(hasEntries()){
-				this.set.forEach(rl -> nbtList.add(StringTag.valueOf(rl.toString())));
-			}
-			return nbtList;
-		}
 	}
 }
