@@ -11,7 +11,7 @@ license="All rights reserved"
 	authors="Flaxbeard and Maintained by TwistedGate."
 	description="Adds oil and oil processing features to Immersive Engineering."
 	logoFile="logo.png"
-	#updateJSONURL=""
+	updateJSONURL="https://raw.githubusercontent.com/TwistedGate/ImmersivePetroleum/changelogs/${mc_version}/change.json"
 	#credits=""
 
 [[dependencies.immersivepetroleum]]
