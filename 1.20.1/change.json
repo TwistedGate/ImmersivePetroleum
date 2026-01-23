@@ -1,0 +1,9 @@
+{
+	"homepage": "https://www.curseforge.com/minecraft/mc-mods/immersive-petroleum",
+	"promos":{
+		"1.20.1-latest": "4.3.1-36", "1.20.1-recommended": "4.3.1-36"
+	},
+	"1.20.1":{
+		"4.3.1-36": "- Reservoirs: Added tag support for Biome-List. (TwistedGate) (From "1.21.1-4.4.0-37")\n- Fixed HPRU side texture being off by 1 pixel. (TwistedGate) (From "1.21.1-4.4.0-32")\n- Fixed multiblock blocks being washed away. (TwistedGate)\n- Added support for the updateJSON. (TwistedGate)"
+	}
+}
