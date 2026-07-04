@@ -1,9 +1,10 @@
 {
 	"homepage": "https://www.curseforge.com/minecraft/mc-mods/immersive-petroleum",
 	"promos":{
-		"1.21.1-latest": "4.4.1-37", "1.21.1-recommended": "4.4.1-37"
+		"1.21.1-latest": "4.4.1-38", "1.21.1-recommended": "4.4.1-38"
 	},
 	"1.21.1":{
+		"4.4.1-38": "- Added config option to re-generate reservoirs on pre-existing world. (TwistedGate)\n- Fixed freeze on world creating with AnvilCraft is installed. (TwistedGate)\n- Fixed faulty common-tags. (TwistedGate)",
 		"4.4.1-37": "- Reservoirs: Added tag support for Biome-List. (TwistedGate)",
 		"4.4.0-35": "- Fixed crash caused by placing a Chest at Derrick fluid output-port. (TwistedGate)\n\nAnd finally adding support for the updateJSON."
 	}
