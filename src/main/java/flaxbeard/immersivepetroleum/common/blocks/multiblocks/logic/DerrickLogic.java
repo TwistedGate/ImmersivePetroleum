@@ -521,14 +521,16 @@ public class DerrickLogic implements IMultiblockLogic<State>, IServerTickableCom
 			return;
 		
 		IMultiblockLevel mbLevel = context.getLevel();
-		Level rawLevel = mbLevel.getRawLevel();
 		
 		WellTileEntity well = context.getState().getWell(mbLevel, mbLevel.toRelative(IPContent.Multiblock.DERRICK.masterPosInMB()));
 		if(well != null && !well.drillingCompleted){
 			if(well.wellPipeLength > 0){
 				well.startSelfDestructSequence();
 			}else{
-				rawLevel.setBlockAndUpdate(well.getBlockPos(), Blocks.BEDROCK.defaultBlockState());
+				Level rawLevel = mbLevel.getRawLevel();
+				if(rawLevel.isLoaded(well.getBlockPos())){
+					rawLevel.setBlockAndUpdate(well.getBlockPos(), Blocks.BEDROCK.defaultBlockState());
+				}
 			}
 		}
 	}
