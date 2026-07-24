@@ -27,6 +27,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -73,7 +74,7 @@ public class ImmersivePetroleum{
 		eBus.addListener(this::setup);
 		eBus.addListener(this::loadComplete);
 		
-		MinecraftForge.EVENT_BUS.addListener(this::worldLoad);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::worldLoad);
 		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 		MinecraftForge.EVENT_BUS.addListener(this::registerCommand);
 		MinecraftForge.EVENT_BUS.addListener(this::addReloadListeners);
