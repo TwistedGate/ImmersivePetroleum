@@ -7,6 +7,7 @@ import flaxbeard.immersivepetroleum.api.crafting.CokerUnitRecipe;
 import flaxbeard.immersivepetroleum.common.util.inventory.FluidTankFiltered;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -16,8 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -200,7 +203,7 @@ public class CokingChamber{
 		}
 		
 		CokerUnitLogic.State logicState = context.getState();
-		
+
 		switch(this.state){
 			case STANDBY -> {
 				if(this.rHolder != null){
@@ -276,21 +279,55 @@ public class CokingChamber{
 					this.timer = 0;
 					
 					if(this.outputAmount > 0){
-						IMultiblockLevel multiLevel = context.getLevel();
-						Level world = multiLevel.getRawLevel();
-						int amount = Math.min(this.outputAmount, 1);
-						ItemStack copy = this.rHolder.value().getOutputItem();
-						copy.setCount(amount);
-						
-						// Drop item(s) at the designated chamber output location
-						BlockPos itemOutPos = multiLevel.toAbsolute(chamberId == 0 ? CokerUnitLogic.Chamber_A_OUT.posInMultiblock() : CokerUnitLogic.Chamber_B_OUT.posInMultiblock());
-						Vec3 center = new Vec3(itemOutPos.getX() + 0.5, itemOutPos.getY() - 0.5, itemOutPos.getZ() + 0.5);
-						ItemEntity ent = new ItemEntity(world, center.x, center.y, center.z, copy);
-						ent.setDeltaMovement(0.0, 0.0, 0.0); // Any movement has the potential to end with the stack bouncing all over the place
-						world.addFreshEntity(ent);
-						this.outputAmount -= amount;
-						
-						update = true;
+
+						CokerUnitRecipe recipe = this.rHolder.value();
+						ItemStack copy = recipe.getOutputItem();
+						int amount = this.outputAmount;
+
+						if(copy.getCount() > 0){
+							IMultiblockLevel multiLevel = context.getLevel();
+							Level world = multiLevel.getRawLevel();
+
+							// Drop item(s) at the designated chamber output location
+							BlockPos itemOutPos = multiLevel.toAbsolute(chamberId == 0 ? CokerUnitLogic.Chamber_A_OUT.posInMultiblock() : CokerUnitLogic.Chamber_B_OUT.posInMultiblock()).below();
+							IItemHandler container = world.getCapability(Capabilities.ItemHandler.BLOCK, itemOutPos, Direction.UP);
+
+							if(container!=null && container.getSlots() > 0){
+								int recipeItemCount = copy.getCount();
+								int itemCount = amount * recipeItemCount;
+
+								copy.setCount(itemCount);
+								int i;
+								for(i = 0; i < container.getSlots(); i++){
+									if((copy = container.insertItem(i, copy, true)).isEmpty()) {
+										i++;
+										break;
+									}
+								}
+								itemCount -= copy.getCount();
+								amount = itemCount / recipeItemCount;
+
+								if(amount > 0){
+									copy = recipe.getOutputItem();
+									copy.setCount(amount * recipeItemCount);
+									for(int j = 0; j < i; j++) copy = container.insertItem(j, copy, false);
+								}
+							} else if(!world.getBlockState(itemOutPos).isCollisionShapeFullBlock(world, itemOutPos)){
+								amount = Math.min(amount, recipe.getOutputItemMaxStack());
+								copy.setCount(amount * copy.getCount());
+
+								Vec3 center = Vec3.atCenterOf(itemOutPos);
+								ItemEntity ent = new ItemEntity(world, center.x, center.y, center.z, copy);
+								ent.setDeltaMovement(0.0, 0.0, 0.0); // Any movement has the potential to end with the stack bouncing all over the place
+								world.addFreshEntity(ent);
+							}else {
+								amount = 0;
+							}
+						}
+						if(amount > 0){
+							this.outputAmount -= amount;
+							update = true;
+						}
 					}
 				}
 				
