@@ -278,9 +278,7 @@ public class CokingChamber{
 					if(this.outputAmount > 0){
 						IMultiblockLevel multiLevel = context.getLevel();
 						Level world = multiLevel.getRawLevel();
-						int amount = Math.min(this.outputAmount, 1);
-						ItemStack copy = this.rHolder.value().getOutputItem();
-						copy.setCount(amount);
+						ItemStack copy = getOutputItem().copy();
 						
 						// Drop item(s) at the designated chamber output location
 						BlockPos itemOutPos = multiLevel.toAbsolute(chamberId == 0 ? CokerUnitLogic.Chamber_A_OUT.posInMultiblock() : CokerUnitLogic.Chamber_B_OUT.posInMultiblock());
@@ -288,7 +286,7 @@ public class CokingChamber{
 						ItemEntity ent = new ItemEntity(world, center.x, center.y, center.z, copy);
 						ent.setDeltaMovement(0.0, 0.0, 0.0); // Any movement has the potential to end with the stack bouncing all over the place
 						world.addFreshEntity(ent);
-						this.outputAmount -= amount;
+						this.outputAmount--;
 						
 						update = true;
 					}
@@ -308,9 +306,7 @@ public class CokingChamber{
 					update = true;
 				}
 				
-				if(update){
-					return true;
-				}
+				return update;
 			}
 		}
 		
