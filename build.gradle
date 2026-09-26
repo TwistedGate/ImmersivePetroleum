@@ -116,6 +116,7 @@ minecraft {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${version_minecraft}-${version_forge}"
+	testImplementation 'junit:junit:4.13.2'
 	
 	implementation fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:${version_ie}")
 	//compile fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.1-7.1.0-145:api")

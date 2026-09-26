@@ -42,10 +42,12 @@ public class ReservoirHandler{
 	private static final Multimap<ResourceKey<Level>, ReservoirIsland> RESERVOIR_ISLAND_LIST = ArrayListMultimap.create();
 	private static final Map<Pair<ResourceKey<Level>, ColumnPos>, ReservoirIsland> CACHE = new HashMap<>();
 	
-	private static Map<ResourceLocation, Map<ResourceLocation, Integer>> totalWeightMap = new HashMap<>();
+	private static final Object totalWeightMapLock = new Object();
+	private static final Object generatorLock = new Object();
+	private static final Map<ResourceLocation, Map<ResourceLocation, Integer>> totalWeightMap = new HashMap<>();
 	
-	private static long lastSeed;
-	private static PerlinSimplexNoise generator;
+	private static volatile long lastSeed;
+	private static volatile PerlinSimplexNoise generator;
 	
 	public static void scanChunkForNewReservoirs(ServerLevel world, ChunkPos chunkPos, Random random){
 		int chunkX = chunkPos.getMinBlockX();
@@ -110,22 +112,24 @@ public class ReservoirHandler{
 	 * @return The total weight associated with the dimension/biome pair
 	 */
 	public static int getTotalWeight(ResourceLocation dimension, ResourceLocation biome){
-		Map<ResourceLocation, Integer> map = totalWeightMap.computeIfAbsent(dimension, k -> new HashMap<>());
-		
-		Integer totalWeight = map.get(biome);
-		if(totalWeight == null){
-			totalWeight = 0;
+		synchronized(totalWeightMapLock){
+			Map<ResourceLocation, Integer> map = totalWeightMap.computeIfAbsent(dimension, k -> new HashMap<>());
 			
-			for(ReservoirType reservoir:ReservoirType.map.values()){
-				if(reservoir.getDimensions().valid(dimension) && reservoir.getBiomes().valid(biome)){
-					totalWeight += reservoir.weight;
+			Integer totalWeight = map.get(biome);
+			if(totalWeight == null){
+				totalWeight = 0;
+
+				for(ReservoirType reservoir:ReservoirType.map.values()){
+					if(reservoir.getDimensions().valid(dimension) && reservoir.getBiomes().valid(biome)){
+						totalWeight += reservoir.weight;
+					}
 				}
+
+				map.put(biome, totalWeight);
 			}
 			
-			map.put(biome, totalWeight);
+			return totalWeight;
 		}
-		
-		return totalWeight;
 	}
 	
 	/** May only be called on the server-side. Returns null on client-side. */
@@ -207,10 +211,12 @@ public class ReservoirHandler{
 	}
 	
 	public static void initGenerator(WorldGenLevel world){
-		if(generator == null || world.getSeed() != lastSeed){
-			lastSeed = world.getSeed();
-			generator = new PerlinSimplexNoise(new WorldgenRandom(new SingleThreadedRandomSource(lastSeed)), ImmutableList.of(0));
-			//generator = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(lastSeed)), ImmutableList.of(0));
+		synchronized(generatorLock){
+			if(generator == null || world.getSeed() != lastSeed){
+				lastSeed = world.getSeed();
+				generator = new PerlinSimplexNoise(new WorldgenRandom(new SingleThreadedRandomSource(lastSeed)), ImmutableList.of(0));
+				//generator = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(lastSeed)), ImmutableList.of(0));
+			}
 		}
 	}
 	
@@ -237,7 +243,9 @@ public class ReservoirHandler{
 	}
 	
 	public static void recalculateChances(){
-		totalWeightMap.clear();
+		synchronized(totalWeightMapLock){
+			totalWeightMap.clear();
+		}
 	}
 	
 	/**
