@@ -56,6 +56,7 @@ public class ReservoirRegionDataStorage extends SavedData{
 	
 	/** Contains existing reservoir-region files */
 	final Map<ColumnPos, RegionData> regions = new HashMap<>();
+	private final Object regionsLock = new Object();
 	final DimensionDataStorage dimData;
 	public ReservoirRegionDataStorage(DimensionDataStorage dimData){
 		this.dimData = dimData;
@@ -68,12 +69,14 @@ public class ReservoirRegionDataStorage extends SavedData{
 	@Override
 	public CompoundTag save(CompoundTag nbt){
 		ListTag list = new ListTag();
-		this.regions.forEach((key, entry) -> {
-			CompoundTag tag = new CompoundTag();
-			tag.putInt("x", key.x);
-			tag.putInt("z", key.z);
-			list.add(tag);
-		});
+		synchronized(this.regionsLock){
+			this.regions.forEach((key, entry) -> {
+				CompoundTag tag = new CompoundTag();
+				tag.putInt("x", key.x);
+				tag.putInt("z", key.z);
+				list.add(tag);
+			});
+		}
 		nbt.put("regions", list);
 		
 		log.debug("Saved regions file.");
@@ -82,14 +85,16 @@ public class ReservoirRegionDataStorage extends SavedData{
 	
 	private void load(CompoundTag nbt){
 		ListTag regions = nbt.getList("regions", Tag.TAG_COMPOUND);
-		for(int i = 0;i < regions.size();i++){
-			CompoundTag tag = regions.getCompound(i);
-			int x = tag.getInt("x");
-			int z = tag.getInt("z");
-			
-			ColumnPos rPos = new ColumnPos(x, z);
-			RegionData rData = getOrCreateRegionData(rPos);
-			this.regions.put(rPos, rData);
+		synchronized(this.regionsLock){
+			for(int i = 0;i < regions.size();i++){
+				CompoundTag tag = regions.getCompound(i);
+				int x = tag.getInt("x");
+				int z = tag.getInt("z");
+
+				ColumnPos rPos = new ColumnPos(x, z);
+				RegionData rData = getOrCreateRegionData(rPos);
+				this.regions.put(rPos, rData);
+			}
 		}
 		
 		log.debug("Loaded regions file.");
@@ -97,8 +102,10 @@ public class ReservoirRegionDataStorage extends SavedData{
 	
 	/** Marks itself and all regions as dirty. (Only to be used by {@link CommonEventHandler#onUnload(net.minecraftforge.event.world.WorldEvent.Unload)}) */
 	public void markAllDirty(){
-		setDirty();
-		this.regions.values().forEach(RegionData::setDirty);
+		synchronized(this.regionsLock){
+			setDirty();
+			this.regions.values().forEach(RegionData::setDirty);
+		}
 	}
 	
 	public void addIsland(ResourceKey<Level> dimensionKey, ReservoirIsland island){
@@ -199,19 +206,21 @@ public class ReservoirRegionDataStorage extends SavedData{
 	
 	@Nullable
 	public RegionData getRegionData(ColumnPos regionPos){
-		RegionData ret = this.regions.getOrDefault(regionPos, null);
-		return ret;
+		synchronized(this.regionsLock){
+			return this.regions.getOrDefault(regionPos, null);
+		}
 	}
 	
-	private RegionData getOrCreateRegionData(ColumnPos regionPos){
-		RegionData ret = this.regions.computeIfAbsent(regionPos, p -> {
-			String fn = getRegionFileName(p);
-			RegionData data = this.dimData.computeIfAbsent(t -> new RegionData(p, t), () -> new RegionData(p), fn);
-			setDirty();
-			log.debug("Created RegionData[{}, {}]", regionPos.x, regionPos.z);
-			return data;
-		});
-		return ret;
+	RegionData getOrCreateRegionData(ColumnPos regionPos){
+		synchronized(this.regionsLock){
+			return this.regions.computeIfAbsent(regionPos, p -> {
+				String fn = getRegionFileName(p);
+				RegionData data = this.dimData.computeIfAbsent(t -> new RegionData(p, t), () -> new RegionData(p), fn);
+				setDirty();
+				log.debug("Created RegionData[{}, {}]", regionPos.x, regionPos.z);
+				return data;
+			});
+		}
 	}
 	
 	private String getRegionFileName(ColumnPos regionPos){

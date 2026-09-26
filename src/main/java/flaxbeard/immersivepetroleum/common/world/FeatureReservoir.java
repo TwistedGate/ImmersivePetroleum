@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 public class FeatureReservoir extends Feature<NoneFeatureConfiguration>{
 	public static HashMultimap<ResourceKey<Level>, ChunkPos> generatedReservoirChunks = HashMultimap.create();
+	private static final Object generatedReservoirChunksLock = new Object();
 	
 	public FeatureReservoir(){
 		super(NoneFeatureConfiguration.CODEC);
@@ -28,12 +29,20 @@ public class FeatureReservoir extends Feature<NoneFeatureConfiguration>{
 		
 		ResourceKey<Level> dimension = reader.getLevel().dimension();
 		ChunkAccess chunk = reader.getChunk(pos);
-		if(!generatedReservoirChunks.containsEntry(dimension, chunk.getPos())){
-			generatedReservoirChunks.put(dimension, chunk.getPos());
-			
+		if(markChunkAsGenerated(dimension, chunk.getPos())){
 			ReservoirHandler.scanChunkForNewReservoirs(reader.getLevel(), chunk.getPos(), pContext.random());
 			return true;
 		}
 		return false;
+	}
+
+	static boolean markChunkAsGenerated(ResourceKey<Level> dimension, ChunkPos chunkPos){
+		synchronized(generatedReservoirChunksLock){
+			if(generatedReservoirChunks.containsEntry(dimension, chunkPos)){
+				return false;
+			}
+			generatedReservoirChunks.put(dimension, chunkPos);
+			return true;
+		}
 	}
 }
