@@ -224,7 +224,7 @@
 	"chat.immersivepetroleum.command.reservoir.get": "%1$s (%2$s%%) of %3$s",
 
 	"key.categories.immersivepetroleum": "Immersive Petroleum",
-	"key.immersivepetroleum.projector.flip": "Зеркальная проекция"
+	"key.immersivepetroleum.projector.flip": "Зеркальная проекция",
 	
 	"death.attack.ipFlarestack": "%1$s сгорел дотла",
 	"death.attack.ipFlarestack.player": "%1$s сгорел дотла из-за %2$s",
@@ -290,17 +290,17 @@
 	"subtitle.immersivepetroleum.flarestack_fire":"Горение газового факела",
 
 	"_comment": "##################### JEI #####################",
-	"desc.immersivepetroleum.compat.jei.distillation.byproduct": "Вторичный выход"
+	"desc.immersivepetroleum.compat.jei.distillation.byproduct": "Вторичный выход",
 	
-		"_comment": "################## Старые части перевода ##################",
+	"_comment": "################## Старые части перевода ##################",
 	
 	"chat.immersivepetroleum.info.coresample.oil": "Месторождение: %s",
 	"chat.immersivepetroleum.info.coresample.oilRep": "Up to %d mB/tick of trace %s",
 	"chat.immersivepetroleum.info.coresample.noOil": "В месторождении отсутствуют жидкости",
 	
-		"_comment":"Replaced the IP with IE to save me from headaches. ~TwistedGate",
+	"_comment":"Replaced the IP with IE to save me from headaches. ~TwistedGate",
 	"desc.immersiveengineering.info.multiblock.IE:DistillationTower": "Ректификационная колонна",
 	"desc.immersiveengineering.info.multiblock.IE:Pumpjack": "Штанговый насос",
 	"desc.immersiveengineering.info.multiblock.IE:CokerUnit": "Установка для коксования",
-	"desc.immersiveengineering.info.multiblock.IE:HydroTreater": "Установка для извлечения серы",
+	"desc.immersiveengineering.info.multiblock.IE:HydroTreater": "Установка для извлечения серы"
 }
